@@ -1,14 +1,14 @@
-import { useState } from "react";
-
 import Home from "./pages/Home.page";
 
-function App() {
-  const [count, setCount] = useState(0);
+import { AppContainer } from "./styles/App.styles";
+import { GlobalStyles } from "./styles/GlobalStyles";
 
+function App() {
   return (
-    <div className="App">
+    <AppContainer>
+      <GlobalStyles />
       <Home />
-    </div>
+    </AppContainer>
   );
 }
 

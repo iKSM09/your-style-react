@@ -14,7 +14,7 @@ const Card = () => {
     <CardContainer>
       <div>
         <h3>Flat 10% Off On Rs.4000+</h3>
-        <h4>Additional 5% Off On Rs.6000</h4>
+        <p>Additional 5% Off On Rs.6000</p>
       </div>
     </CardContainer>
   );
