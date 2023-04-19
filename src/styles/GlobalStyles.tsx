@@ -3,6 +3,10 @@ import ReseterCSS from "./ReseterCSS";
 
 export const GlobalStyles = createGlobalStyle`
 ${ReseterCSS}
+
+:root {
+  font-family: "Schibsted Grotesk", system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
 `;
 
 /* :root {
