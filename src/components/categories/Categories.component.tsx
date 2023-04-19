@@ -19,6 +19,7 @@ const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 12px;
 `;
 
 const IconContainer = styled.div`
@@ -54,6 +55,12 @@ const Categories = () => {
           <MdOutlineLocalOffer />
         </Category>
         <Category title="Women's Top">
+          <MdOutlineLocalOffer />
+        </Category>
+        <Category title="Top Offers">
+          <MdOutlineLocalOffer />
+        </Category>{" "}
+        <Category title="Top Offers">
           <MdOutlineLocalOffer />
         </Category>
         <Category title="Top Offers">

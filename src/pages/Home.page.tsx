@@ -1,19 +1,13 @@
-import styled from "styled-components";
-
 import Navigation from "../components/navigation/Navigation.component";
+import Jumbotron from "../components/jumbotron/Jumbotron.component";
 import Categories from "../components/categories/Categories.component";
 import Card from "../components/card/Card.component";
-
-const Banner = styled.div`
-  height: 280px;
-  background-color: lightblue;
-`;
 
 const Home = () => {
   return (
     <div>
       <Navigation />
-      <Banner></Banner>
+      <Jumbotron />
       <Categories />
       <section title="Current Sales">
         <h2>Current Sales</h2>
