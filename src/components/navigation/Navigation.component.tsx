@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/router";
 
+import Logo from "../logo/Logo.component";
+import SearchBar from "../search-bar/SearchBar.component";
+
 import styled from "styled-components";
 import { MdExpandMore, MdSearch, MdOutlineShoppingCart } from "react-icons/md";
-import SearchBar from "../search-bar/SearchBar.component";
 
 const Nav = styled.nav`
   width: 100%;
@@ -55,16 +57,6 @@ const MainNav = styled(FlexDiv)`
   padding-inline: 1rem;
 `;
 
-const Logo = styled.h3`
-  font-family: "Allura", cursive;
-  font-size: 2em;
-  color: #ffdcc0;
-
-  span {
-    color: #f93889;
-  }
-`;
-
 const UnList = styled.ul`
   padding: 0;
   display: flex;
@@ -96,11 +88,7 @@ const Navigation = () => {
         </UpperNav>
         <Divider />
         <MainNav>
-          <Logo>
-            <Link to="/">
-              your<span>Style</span>
-            </Link>
-          </Logo>
+          <Logo />
           <UnList>
             <li>
               <Link to="/men">Men</Link>

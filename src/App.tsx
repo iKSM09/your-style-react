@@ -1,6 +1,7 @@
 import { Outlet } from "@tanstack/router";
 
 import Navigation from "./components/navigation/Navigation.component";
+import Footer from "./components/footer/Footer.component";
 
 import { GlobalStyles } from "./styles/GlobalStyles";
 import { AppContainer } from "./styles/App.styles";
@@ -11,7 +12,7 @@ function App() {
       <GlobalStyles />
       <Navigation />
       <Outlet />
-      <footer>copyright @yourStyle2023</footer>
+      <Footer />
     </AppContainer>
   );
 }

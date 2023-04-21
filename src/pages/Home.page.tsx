@@ -2,36 +2,35 @@
 import Jumbotron from "../components/jumbotron/Jumbotron.component";
 import Categories from "../components/categories/Categories.component";
 import Card from "../components/card/Card.component";
+import CardSection from "../components/card-section/CardSection.component";
 
 const Home = () => {
   return (
     <div>
       <Jumbotron />
       <Categories />
-      <section title="Current Sales">
-        <h2>Current Sales</h2>
-        <div style={{ display: "flex", gap: "12px", flexWrap: "nowrap" }}>
-          <Card />
-          <Card />
-          <Card />
-        </div>
-      </section>
-      <section title="Best Selling">
-        <h2>Best Selling</h2>
-        <div style={{ display: "flex", gap: "12px", flexWrap: "nowrap" }}>
-          <Card />
-          <Card />
-          <Card />
-        </div>
-      </section>
-      <section title="Featured">
-        <h2>Featured</h2>
-        <div style={{ display: "flex", gap: "12px", flexWrap: "nowrap" }}>
-          <Card />
-          <Card />
-          <Card />
-        </div>
-      </section>
+      <CardSection
+        title="Current Sale"
+        headerComp={<p>CountDown: 02h : 35m : 09s</p>}
+      >
+        <Card />
+      </CardSection>
+      <CardSection
+        title="Best Selling"
+        headerComp={<p>Filter by: Popularity</p>}
+      >
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+      </CardSection>
+      <CardSection
+        title="Featured"
+        headerComp={<p>Filter by: Recommendation</p>}
+      >
+        <Card />
+      </CardSection>
     </div>
   );
 };

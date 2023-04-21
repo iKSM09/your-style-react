@@ -229,7 +229,6 @@ declare module "@tanstack/router" {
     router: typeof router;
   }
 }
-
 const rootElement = document.getElementById("app")!;
 
 if (!rootElement.innerHTML) {
