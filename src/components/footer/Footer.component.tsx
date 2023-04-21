@@ -3,17 +3,68 @@ import { Link } from "@tanstack/router";
 
 import Logo from "../logo/Logo.component";
 
+const men = {
+  Topwear: [
+    "T-Shirts",
+    "Casual Shirts",
+    "Formal Shirts",
+    "Sweatshirts",
+    "Sweaters",
+    "Jackets",
+    "Blazers & Coats",
+    "Suits",
+    "Rain Jackets",
+  ],
+
+  Bottomwear: [
+    "Jeans",
+    "Casual Trousers",
+    "Formal Trousers",
+    "Shorts",
+    "Track Pants & Joggers",
+  ],
+
+  "Indian & Festive Wear": [
+    "Kurtas & Kurta Sets",
+    "Sherwanis",
+    "Nehru Jackets",
+    "Dhotis",
+  ],
+};
+
+const women = {
+  "Indian & Fusion Wear": [
+    "Kurtas & Suits",
+    "Kurtis, Tunics & Tops",
+    "Sarees",
+    "Ethnic Wear",
+    "Leggings, Salwars & Churidars",
+    "Skirts & Palazzos",
+    "Dress Materials",
+    "Lehenga Cholis",
+    "Dupattas & Shawls",
+    "Jackets",
+  ],
+
+  "Western Wear": [
+    "Dresses",
+    "Tops",
+    "Tshirts",
+    "Jeans",
+    "Trousers & Capris",
+    "Shorts & Skirts",
+    "Co-ords",
+    "Playsuits",
+    "Jumpsuits",
+    "Shrugs",
+    "Sweaters & Sweatshirts",
+    "Jackets & Coats",
+    "Blazers & Waistcoats",
+  ],
+};
+
 import styled from "styled-components";
 import PaymentMethods from "../../assets/payment-method.svg";
-
-// const footerData = {
-//   "online_shopping": {
-//     {
-//       "name": "men",
-
-//     }
-//   }
-// }
 
 const FooterContainer = styled.footer`
   padding: 2rem 1rem 8px;
@@ -127,9 +178,9 @@ const Footer = () => {
         <Divider />
         <FlexDiv style={{ alignItems: "center" }}>
           <Logo />
-          <p>© 2023 yourStyle. All rights reserved.</p>
+          <small>© 2023 yourStyle. All rights reserved.</small>
           <img
-            height={24}
+            height={20}
             src={PaymentMethods}
             alt="supported payment methods"
           />
