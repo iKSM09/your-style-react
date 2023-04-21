@@ -1,4 +1,4 @@
-import Navigation from "../components/navigation/Navigation.component";
+// import Navigation from "../components/navigation/Navigation.component";
 import Jumbotron from "../components/jumbotron/Jumbotron.component";
 import Categories from "../components/categories/Categories.component";
 import Card from "../components/card/Card.component";
@@ -6,7 +6,6 @@ import Card from "../components/card/Card.component";
 const Home = () => {
   return (
     <div>
-      <Navigation />
       <Jumbotron />
       <Categories />
       <section title="Current Sales">
@@ -33,11 +32,6 @@ const Home = () => {
           <Card />
         </div>
       </section>
-      <footer>
-        <p>
-          copyright of <span>yourStyle.com</span>
-        </p>
-      </footer>
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/router";
+
 import styled from "styled-components";
 import { MdExpandMore, MdSearch, MdOutlineShoppingCart } from "react-icons/md";
 import SearchBar from "../search-bar/SearchBar.component";
@@ -95,13 +97,23 @@ const Navigation = () => {
         <Divider />
         <MainNav>
           <Logo>
-            your<span>Style</span>
+            <Link to="/">
+              your<span>Style</span>
+            </Link>
           </Logo>
           <UnList>
-            <li>Men</li>
-            <li>Women</li>
-            <li>Kids</li>
-            <li>Explore</li>
+            <li>
+              <Link to="/men">Men</Link>
+            </li>
+            <li>
+              <Link to="/women">Women</Link>
+            </li>
+            <li>
+              <Link to="/kids">Kids</Link>
+            </li>
+            <li>
+              <Link to="/">Explore</Link>
+            </li>
           </UnList>
           <FlexDiv>
             <SearchBar />
