@@ -91,13 +91,13 @@ const Navigation = () => {
           <Logo />
           <UnList>
             <li>
-              <Link to="/men">Men</Link>
+              <Link to="/shop/men">Men</Link>
             </li>
             <li>
-              <Link to="/women">Women</Link>
+              <Link to="/shop/women">Women</Link>
             </li>
             <li>
-              <Link to="/kids">Kids</Link>
+              <Link to="/shop/kids">Kids</Link>
             </li>
             <li>
               <Link to="/">Explore</Link>

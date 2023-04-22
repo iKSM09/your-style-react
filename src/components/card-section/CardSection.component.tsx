@@ -12,6 +12,7 @@ type CardSectionProps = {
 
 const CardSectionContainer = styled.section`
   margin: 24px 18px;
+  /* overflow: hidden; */
 `;
 
 const Header = styled.div`
@@ -21,16 +22,23 @@ const Header = styled.div`
   align-items: center;
 `;
 
+const CardHolder = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  /* grid-template-columns: 1fr 1fr 1fr; */
+  grid-gap: 12px;
+  align-items: end;
+  /* flex-wrap: wrap; */
+`;
+
 const CardSection = ({ title, headerComp, children }: CardSectionProps) => {
   return (
-    <CardSectionContainer title="Current Sales">
+    <CardSectionContainer>
       <Header>
         <h2>{title}</h2>
         {headerComp}
       </Header>
-      <div style={{ display: "flex", gap: "12px", flexWrap: "nowrap" }}>
-        {children}
-      </div>
+      <CardHolder>{children}</CardHolder>
     </CardSectionContainer>
   );
 };

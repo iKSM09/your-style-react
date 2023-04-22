@@ -1,0 +1,43 @@
+{
+  "breadcrum": "Home/Clothing and Accessories/Topwear/T-shirts/Men's T-shirts/Jump Cuts Men's",
+  "name": "Men Printed Hooded Neck White, Black T-Shirt",
+  "category": "Jump Cuts",
+  "price": "1519",
+  "discount": "80% off",
+  "discounted_price": "299",
+  "rating": {
+    "stars": "3.7",
+    "numbers": " 6363",
+    "reviews": "344"
+  },
+  "varients": {
+    "color": {
+      "black": ["./black_01.jpeg", "./black_02.jpeg"],
+      "navy_blue": [
+        "./navy-blue_01.jpeg",
+        "./navy-blue_02.jpeg",
+        "./navy-blue_03.jpeg"
+      ],
+      "olive_green": [
+        "./olive-green_01.jpeg",
+        "./olive-green_02.jpeg",
+        "./olive-green_03.jpeg"
+      ],
+      "yellow": ["./yellow_01.jpeg", "./yellow_02.jpeg"]
+    },
+    "sizes": ["XS", "S", "M", "L", "XL"]
+  },
+  "product-details": {
+    "type": "Hooded Neck",
+    "sleeve": "Full Sleeve",
+    "fit": "Slim",
+    "fabric": "Cotton Blend",
+    "pack_of": "01",
+    "neck_type": "Hooded Neck",
+    "pattern": "Printed",
+    "suitable_for": "Western Wear",
+    "reversible": "No",
+    "fabric_care": "Gentle Machine Wash",
+    "description": "Give your casual outfit an uber-cool update with this Cotton Blend T-Shirt from Jump Cuts, to head out for a soiree in style. Minimally fashionable and super rich in comfort, this 100% Cotton Blend T-Shirt can be worn perfectly with beige chinos and a pair of sneakers"
+  }
+}

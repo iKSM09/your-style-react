@@ -1,8 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-import { Outlet } from "@tanstack/router";
-
-import Jumbotron from "../components/jumbotron/Jumbotron.component";
 
 const BannerSection = styled.section`
   margin: 24px;
@@ -21,10 +17,7 @@ const Shop = () => {
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Outlet />
-        <h1>
-          <pre> Shop</pre>
-        </h1>
+        <h1>Shop</h1>
       </div>
       <BannerSection>
         <BannerMedium></BannerMedium>

@@ -3,6 +3,8 @@ import { Router, Route, RootRoute } from "@tanstack/router";
 import App from "./App";
 import Home from "./pages/Home.page";
 import Shop from "./pages/Shop.page";
+import ProductList from "./pages/ProductList.page";
+import Product from "./pages/Product.page";
 
 const rootRoute = new RootRoute({ component: App });
 
@@ -12,33 +14,54 @@ const indexRoute = new Route({
   component: Home,
 });
 
+const notFoundRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "*",
+  component: () => <h1>404</h1>,
+});
+
 const shopRoute = new Route({
   getParentRoute: () => rootRoute,
-  id: "shop",
-  component: Shop,
+  path: "/shop",
 });
 
 const shopMenRoute = new Route({
   getParentRoute: () => shopRoute,
   path: "/men",
-  component: () => <h1>Men's</h1>,
+});
+
+const menIndexRoute = new Route({
+  getParentRoute: () => shopMenRoute,
+  path: "/",
+  component: ProductList,
+});
+
+const menProductRoute = new Route({
+  getParentRoute: () => shopMenRoute,
+  path: "$productId",
+  component: Product,
 });
 
 const shopWomenRoute = new Route({
   getParentRoute: () => shopRoute,
   path: "/women",
-  component: () => <h1>Women's</h1>,
+  component: Shop,
 });
 
 const shopKidsRoute = new Route({
   getParentRoute: () => shopRoute,
   path: "/kids",
-  component: () => <h1>Kid's</h1>,
+  component: Shop,
 });
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  shopRoute.addChildren([shopMenRoute, shopWomenRoute, shopKidsRoute]),
+  shopRoute.addChildren([
+    shopMenRoute.addChildren([menIndexRoute, menProductRoute]),
+    shopWomenRoute,
+    shopKidsRoute,
+  ]),
+  notFoundRoute,
 ]);
 
 export const router = new Router({

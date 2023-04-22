@@ -9,16 +9,19 @@ const Home = () => {
     <div>
       <Jumbotron />
       <Categories />
-      <CardSection
+      {/* <CardSection
         title="Current Sale"
         headerComp={<p>CountDown: 02h : 35m : 09s</p>}
       >
         <Card />
-      </CardSection>
+      </CardSection> */}
       <CardSection
         title="Best Selling"
         headerComp={<p>Filter by: Popularity</p>}
       >
+        <Card />
+        <Card />
+        <Card />
         <Card />
         <Card />
         <Card />
@@ -29,6 +32,8 @@ const Home = () => {
         title="Featured"
         headerComp={<p>Filter by: Recommendation</p>}
       >
+        <Card />
+        <Card />
         <Card />
       </CardSection>
     </div>
