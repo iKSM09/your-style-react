@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/router";
-
 import styled from "styled-components";
 
 const LogoContainer = styled.h3`

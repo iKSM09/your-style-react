@@ -43,8 +43,6 @@ const routeTree = rootRoute.addChildren([
 
 export const router = new Router({
   routeTree,
-  preload: "intent",
-  preloadDelay: 100,
 });
 
 declare module "@tanstack/router" {

@@ -4,7 +4,7 @@ import Logo from "../logo/Logo.component";
 import SearchBar from "../search-bar/SearchBar.component";
 
 import styled from "styled-components";
-import { MdExpandMore, MdSearch, MdOutlineShoppingCart } from "react-icons/md";
+import { MdExpandMore, MdOutlineShoppingCart } from "react-icons/md";
 
 const Nav = styled.nav`
   width: 100%;
