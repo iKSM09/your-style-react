@@ -91,13 +91,34 @@ const Navigation = () => {
           <Logo />
           <UnList>
             <li>
-              <Link to="/shop/men">Men</Link>
+              <Link
+                to="/shop/$for"
+                params={{
+                  for: "men",
+                }}
+              >
+                Men
+              </Link>
             </li>
             <li>
-              <Link to="/shop/women">Women</Link>
+              <Link
+                to="/shop/$for"
+                params={{
+                  for: "women",
+                }}
+              >
+                Women
+              </Link>
             </li>
             <li>
-              <Link to="/shop/kids">Kids</Link>
+              <Link
+                to="/shop/$for"
+                params={{
+                  for: "kids",
+                }}
+              >
+                Kids
+              </Link>
             </li>
             <li>
               <Link to="/">Explore</Link>

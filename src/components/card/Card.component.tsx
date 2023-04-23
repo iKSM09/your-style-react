@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/router";
 import styled from "styled-components";
 
-import blackJacket from "../../data/black_01.jpeg";
+import blackJacket from "/assets/black_01.jpeg";
+import { productRoute } from "../../pages/Product.page";
 
 const CardContainer = styled.div`
   width: 100%;
@@ -37,7 +38,12 @@ const CardInfo = styled.div`
 const Card = () => {
   return (
     <CardContainer>
-      <Link to="/shop/men/$productId" params={{ productId: "topwear" }}>
+      <Link
+        from={productRoute.id}
+        to="/shop/$for/$productId"
+        params={{ for: "men", productId: "topwear" }}
+        activeOptions={{ exact: true }}
+      >
         <ImageContainer>
           <Image src={blackJacket} alt="black Jacket" />
         </ImageContainer>

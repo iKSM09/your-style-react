@@ -11,20 +11,26 @@
     "reviews": "344"
   },
   "varients": {
-    "color": {
-      "black": ["./black_01.jpeg", "./black_02.jpeg"],
-      "navy_blue": [
-        "./navy-blue_01.jpeg",
-        "./navy-blue_02.jpeg",
-        "./navy-blue_03.jpeg"
-      ],
-      "olive_green": [
-        "./olive-green_01.jpeg",
-        "./olive-green_02.jpeg",
-        "./olive-green_03.jpeg"
-      ],
-      "yellow": ["./yellow_01.jpeg", "./yellow_02.jpeg"]
-    },
+    "colors": [
+      { "color": "Black", "images": ["black_01.jpeg", "black_02.jpeg"] },
+      {
+        "color": "Navy Blue",
+        "images": [
+          "navy-blue_01.jpeg",
+          "navy-blue_02.jpeg",
+          "navy-blue_03.jpeg"
+        ]
+      },
+      {
+        "color": "Olive Green",
+        "images": [
+          "olive-green_01.jpeg",
+          "olive-green_02.jpeg",
+          "olive-green_03.jpeg"
+        ]
+      },
+      { "color": "Yellow", "images": ["yellow_01.jpeg", "yellow_02.jpeg"] }
+    ],
     "sizes": ["XS", "S", "M", "L", "XL"]
   },
   "product-details": {

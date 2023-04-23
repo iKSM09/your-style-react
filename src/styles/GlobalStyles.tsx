@@ -7,6 +7,15 @@ ${ReseterCSS}
 :root {
   font-family: "Schibsted Grotesk", system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
 `;
 
 /* :root {
