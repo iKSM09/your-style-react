@@ -121,7 +121,7 @@ const Navigation = () => {
               </Link>
             </li>
             <li>
-              <Link to="/">Explore</Link>
+              <Link to="/explore">Explore</Link>
             </li>
           </UnList>
           <FlexDiv>

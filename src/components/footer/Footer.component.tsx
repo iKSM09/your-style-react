@@ -147,9 +147,15 @@ const Footer = () => {
         <FlexDiv>
           <FooterLinkSection>
             <h5>ONLINE SHOPPING</h5>
-            <Link to="/men">Men</Link>
-            <Link to="/women">Women</Link>
-            <Link to="/kids">Kids</Link>
+            <Link to="/shop/$for" params={{ for: "men" }}>
+              Men
+            </Link>
+            <Link to="/shop/$for" params={{ for: "women" }}>
+              Women
+            </Link>
+            <Link to="/shop/$for" params={{ for: "kids" }}>
+              Kids
+            </Link>
           </FooterLinkSection>
           <FooterLinkSection>
             <h5>Useful Links</h5>

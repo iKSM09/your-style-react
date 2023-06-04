@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Route } from "@tanstack/router";
 import styled from "styled-components";
 
@@ -41,7 +42,7 @@ const DetailsSection = styled.div`
   text-align: start;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ primary?: boolean }>`
   padding: 1rem 2rem;
   font-size: 1rem;
   background-color: ${(props) => (props.primary ? "#1f383a" : "transparent")};
@@ -73,12 +74,22 @@ const StarsRating = () => {
 };
 
 function Product() {
+  const [clothColor, setClothColor] = useState(productData.varients.colors[0]);
+
+  const handleChangeColor = (color: string) => {
+    const filtered = productData.varients.colors.filter(
+      (index) => index.color === color
+    );
+    setClothColor(filtered[0]);
+    console.log({ clothColor });
+  };
+
   return (
     <div style={{ textAlign: "start" }}>
       <p style={{ padding: "2rem 1rem 0.5rem" }}>{productData.breadcrum}</p>
       <ProductContainer>
         <ImagesSection>
-          {productData.varients.colors[0].images.map((img) => (
+          {clothColor.images.map((img) => (
             <Image src={`/assets/${img}`} alt={img} />
           ))}
         </ImagesSection>
@@ -177,6 +188,7 @@ function Product() {
                 <Image
                   title={color}
                   key={color}
+                  onClick={() => handleChangeColor(color)}
                   src={`/assets/${images[0]}`}
                   alt={color}
                   style={{

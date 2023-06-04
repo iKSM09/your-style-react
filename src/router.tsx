@@ -1,4 +1,4 @@
-import { Router, Route, RootRoute } from "@tanstack/router";
+import { Router, RootRoute } from "@tanstack/router";
 
 import App from "./App";
 import { indexRoute } from "./pages/Home.page";
@@ -10,6 +10,7 @@ import {
   shopForIndexRoute,
 } from "./pages/ProductList.page";
 import { productRoute, productIndexRoute } from "./pages/Product.page";
+import { exploreIndexRoute, exploreRoute } from "./pages/Explore.page";
 
 export const rootRoute = new RootRoute({ component: App });
 
@@ -22,6 +23,7 @@ const routeTree = rootRoute.addChildren([
       productRoute.addChildren([productIndexRoute]),
     ]),
   ]),
+  exploreRoute.addChildren([exploreIndexRoute]),
   notFoundRoute,
 ]);
 

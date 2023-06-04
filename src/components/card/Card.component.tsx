@@ -28,7 +28,10 @@ const Image = styled.img`
 `;
 
 const CardInfo = styled.div`
+  margin-block: 1rem;
   padding-inline: 4px;
+  display: flex;
+  justify-content: space-between;
 
   * {
     margin-bottom: 4px;
@@ -48,8 +51,8 @@ const Card = () => {
           <Image src={blackJacket} alt="black Jacket" />
         </ImageContainer>
         <CardInfo>
-          <h3>Flat 10% Off On Rs.4000+</h3>
-          <p>Additional 5% Off On Rs.6000</p>
+          <h3>Product Name</h3>
+          <p>Price: ₹299</p>
         </CardInfo>
       </Link>
     </CardContainer>

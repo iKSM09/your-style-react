@@ -3,10 +3,10 @@ import styled from "styled-components";
 export const AppContainer = styled.div`
   min-height: 100vh;
   text-align: center;
+  transition: all 0.35s;
+  `;
   /* background-color: ${({ theme }) => theme.background}; */
   /* color: ${({ theme }) => theme.onBackground}; */
-  transition: all 0.35s;
-`;
 
 /* #root {
   max-width: 1280px;
