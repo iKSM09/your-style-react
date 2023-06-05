@@ -10,6 +10,7 @@ const Nav = styled.nav`
   width: 100%;
   position: fixed;
   background-color: #1e484b;
+  color: white;
 `;
 
 const NavPlaceholder = styled.div`

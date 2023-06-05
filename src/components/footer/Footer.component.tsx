@@ -69,6 +69,7 @@ import PaymentMethods from "../../assets/payment-method.svg";
 const FooterContainer = styled.footer`
   padding: 2rem 1rem 8px;
   background-color: #09191a;
+  color: white;
 `;
 
 const FlexDiv = styled.div`
@@ -95,6 +96,7 @@ const FooterLinkSection = styled.section`
 const BenefitsSection = styled.section`
   padding-block: 24px;
   background-color: #1e484b;
+  color: white;
   display: flex;
   justify-content: space-evenly;
   gap: 12px;
