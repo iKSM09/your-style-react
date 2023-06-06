@@ -1,29 +1,18 @@
 import { Route, useParams } from "@tanstack/router";
 
-import { rootRoute } from "../router";
+import { storeRoute } from "./store/Store.page";
 import CardSection from "../components/card-section/CardSection.component";
 import Card from "../components/card/Card.component";
 import RangeSlider from "../components/range-slider/RangeSlider.component";
 import styled from "styled-components";
 
-export const shopRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "/shop",
-});
-
-export const shopIndexRoute = new Route({
-  getParentRoute: () => shopRoute,
-  path: "/",
-  component: () => <h1>Shop</h1>,
-});
-
-export const shopForRoute = new Route({
-  getParentRoute: () => shopRoute,
+export const productListRoute = new Route({
+  getParentRoute: () => storeRoute,
   path: "/$for",
 });
 
-export const shopForIndexRoute = new Route({
-  getParentRoute: () => shopForRoute,
+export const productListIndexRoute = new Route({
+  getParentRoute: () => productListRoute,
   path: "/",
   component: ProductList,
 });
@@ -50,7 +39,7 @@ const FilterSection = styled.section`
 `;
 
 function ProductList() {
-  const params = useParams({ from: shopForRoute.id });
+  const params = useParams({ from: productListRoute.id });
 
   const filterList = {
     categories: [

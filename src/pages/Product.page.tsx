@@ -5,12 +5,12 @@ import styled from "styled-components";
 import { MdStarRate, MdShoppingBag } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
 
-import { shopForRoute } from "./ProductList.page";
+import { productListRoute } from "./ProductList.page";
 
 import productData from "../data/data.json";
 
 export const productRoute = new Route({
-  getParentRoute: () => shopForRoute,
+  getParentRoute: () => productListRoute,
   path: "$productId",
 });
 

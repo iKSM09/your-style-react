@@ -75,7 +75,9 @@ const Navigation = () => {
           <small>This season biggest sale - Up to 60% off</small>
           <ul>
             <li>
-              <small>Seller Register</small>
+              <Link to="/seller-registration">
+                <small>Seller Register</small>
+              </Link>
             </li>
             <li>
               <small>USD</small>
@@ -93,7 +95,7 @@ const Navigation = () => {
           <UnList>
             <li>
               <Link
-                to="/shop/$for"
+                to="/store/$for"
                 params={{
                   for: "men",
                 }}
@@ -103,7 +105,7 @@ const Navigation = () => {
             </li>
             <li>
               <Link
-                to="/shop/$for"
+                to="/store/$for"
                 params={{
                   for: "women",
                 }}
@@ -113,7 +115,7 @@ const Navigation = () => {
             </li>
             <li>
               <Link
-                to="/shop/$for"
+                to="/store/$for"
                 params={{
                   for: "kids",
                 }}
