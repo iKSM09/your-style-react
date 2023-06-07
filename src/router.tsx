@@ -1,19 +1,19 @@
 import { Router, RootRoute } from "@tanstack/router";
 
 import App from "./App";
-import { indexRoute } from "./pages/Home.page";
-import { notFoundRoute } from "./pages/404.page";
+import { indexRoute } from "./pages/home/Home.page";
+import { notFoundRoute } from "./pages/404-not-found/404.page";
 import { storeRoute, storeIndexRoute } from "./pages/store/Store.page";
 import {
   productListRoute,
   productListIndexRoute,
-} from "./pages/ProductList.page";
-import { productRoute, productIndexRoute } from "./pages/Product.page";
-import { exploreIndexRoute, exploreRoute } from "./pages/Explore.page";
+} from "./pages/product-list/ProductList.page";
+import { productRoute, productIndexRoute } from "./pages/product/Product.page";
+import { exploreIndexRoute, exploreRoute } from "./pages/explore/Explore.page";
 import {
   sellerRegisterIndexRoute,
   sellerRegisterRoute,
-} from "./pages/SellerRegister.component";
+} from "./pages/seller-registration/SellerRegister.component";
 
 export const rootRoute = new RootRoute({ component: App });
 
@@ -26,17 +26,18 @@ const routeTree = rootRoute.addChildren([
       productRoute.addChildren([productIndexRoute]),
     ]),
   ]),
+  // checkoutRoute.addChildren([checkoutIndexRoute]),
   exploreRoute.addChildren([exploreIndexRoute]),
-  sellerRegisterRoute.addChildren([sellerRegisterIndexRoute]),
-  // sellerDashboardRoute.addChildren([
-  //   sellerDashboardIndexRoute,
-  //   addProductRoute.addChildren([addProductIndexRoute]),
-  // ]),
   // userProfileRoute.addChildren([
   //   userProfileIndexRoute,
   //   feedRoute.addChildren([feedIndexRoute]),
   //   addPostRoute.addChildren([addPostIndexRoute]),
   //   userSettingsRoute.addChildren([userSettingsIndexRoute])
+  // ]),
+  sellerRegisterRoute.addChildren([sellerRegisterIndexRoute]),
+  // sellerDashboardRoute.addChildren([
+  //   sellerDashboardIndexRoute,
+  //   addProductRoute.addChildren([addProductIndexRoute]),
   // ]),
   notFoundRoute,
 ]);

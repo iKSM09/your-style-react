@@ -1,10 +1,17 @@
 import { Route, useParams } from "@tanstack/router";
 
-import { storeRoute } from "./store/Store.page";
-import CardSection from "../components/card-section/CardSection.component";
-import Card from "../components/card/Card.component";
-import RangeSlider from "../components/range-slider/RangeSlider.component";
-import styled from "styled-components";
+import { storeRoute } from "../store/Store.page";
+import CardSection from "../../components/card-section/CardSection.component";
+import Card from "../../components/card/Card.component";
+import RangeSlider from "../../components/range-slider/RangeSlider.component";
+
+import {
+  FilterSection,
+  Header,
+  ProductListLayout,
+  SortBy,
+} from "./ProductList.styles";
+import Dropdown from "../../components/dropdown/Dropdown.component";
 
 export const productListRoute = new Route({
   getParentRoute: () => storeRoute,
@@ -16,27 +23,6 @@ export const productListIndexRoute = new Route({
   path: "/",
   component: ProductList,
 });
-
-const Header = styled.div`
-  padding-block: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ProductListLayout = styled.div`
-  display: grid;
-  /* grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); */
-  grid-template-columns: 1fr minmax(240px, 4fr);
-  grid-gap: 12px;
-  /* align-items: end; */
-  /* flex-wrap: wrap; */
-`;
-
-const FilterSection = styled.section`
-  margin-block: 24px;
-  margin-inline-start: 18px;
-`;
 
 function ProductList() {
   const params = useParams({ from: productListRoute.id });
@@ -129,7 +115,17 @@ function ProductList() {
           </aside>
         </FilterSection>
 
-        <CardSection title="Topwear" headerComp={<p>Sort by: Recommended</p>}>
+        <CardSection
+          title="Topwear"
+          headerComp={
+            <Dropdown
+              defaultOption="Recommended"
+              options={["Recommended", "Latest First", "Popularity"]}
+              additional="Sort by "
+              title="Sort by"
+            />
+          }
+        >
           <Card />
           <Card />
           <Card />

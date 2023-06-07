@@ -1,5 +1,5 @@
 import { Route } from "@tanstack/router";
-import { rootRoute } from "../router";
+import { rootRoute } from "../../router";
 
 export const sellerRegisterRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -13,7 +13,7 @@ export const sellerRegisterIndexRoute = new Route({
 });
 
 function SellerRegister() {
-  return <div>SellerRegister</div>;
+  return <h1>SellerRegister</h1>;
 }
 
 export default SellerRegister;

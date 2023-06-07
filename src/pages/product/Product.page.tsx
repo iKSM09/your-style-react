@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { Route } from "@tanstack/router";
-import styled from "styled-components";
 
 import { MdStarRate, MdShoppingBag } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
 
-import { productListRoute } from "./ProductList.page";
+import { productListRoute } from "../product-list/ProductList.page";
 
-import productData from "../data/data.json";
+import productData from "../../data/data.json";
+
+import {
+  DetailsSection,
+  Divider,
+  Image,
+  ImagesSection,
+  ProductContainer,
+} from "./Product.styles";
+import { Button } from "../../components/button/Button.styles";
 
 export const productRoute = new Route({
   getParentRoute: () => productListRoute,
@@ -19,44 +27,6 @@ export const productIndexRoute = new Route({
   path: "/",
   component: Product,
 });
-
-const ProductContainer = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-`;
-
-const ImagesSection = styled.div`
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1rem;
-`;
-
-const Image = styled.img`
-  max-width: 100%;
-`;
-
-const DetailsSection = styled.div`
-  padding: 1rem;
-  text-align: start;
-`;
-
-const Button = styled.button<{ primary?: boolean }>`
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  background-color: ${(props) => (props.primary ? "#1f383a" : "transparent")};
-  border: ${(props) => (props.primary ? "none" : "solid 2px white")};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-`;
-
-const Divider = styled.hr`
-  margin-block: 0.5rem;
-  opacity: 0.3;
-`;
 
 const StarsRating = () => {
   return (
@@ -206,10 +176,10 @@ function Product() {
               gap: "12px",
             }}
           >
-            <Button primary style={{ maxWidth: "100%" }}>
+            <Button $color="primary" style={{ maxWidth: "100%" }}>
               <MdShoppingBag /> ADD TO CART
             </Button>
-            <Button style={{ maxWidth: "100%" }}>
+            <Button $outlined style={{ maxWidth: "100%" }}>
               <IoMdHeartEmpty /> WISHLIST
             </Button>
           </div>

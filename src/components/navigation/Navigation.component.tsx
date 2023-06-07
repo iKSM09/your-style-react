@@ -5,6 +5,7 @@ import SearchBar from "../search-bar/SearchBar.component";
 
 import styled from "styled-components";
 import { MdExpandMore, MdOutlineShoppingCart } from "react-icons/md";
+import Dropdown from "../dropdown/Dropdown.component";
 
 const Nav = styled.nav`
   width: 100%;
@@ -80,12 +81,22 @@ const Navigation = () => {
               </Link>
             </li>
             <li>
-              <small>USD</small>
-              <MdExpandMore />
+              <small>
+                <Dropdown
+                  defaultOption="INR"
+                  options={["INR", "USD"]}
+                  title="Select Currency"
+                />
+              </small>
             </li>
             <li>
-              <small>English</small>
-              <MdExpandMore />
+              <small>
+                <Dropdown
+                  defaultOption="English"
+                  options={["English", "Hindi", "Marathi", "Tamil"]}
+                  title="Select Language"
+                />
+              </small>
             </li>
           </ul>
         </UpperNav>

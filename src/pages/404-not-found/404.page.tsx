@@ -1,6 +1,6 @@
 import { Route } from "@tanstack/router";
 
-import { rootRoute } from "../router";
+import { rootRoute } from "../../router";
 
 export const notFoundRoute = new Route({
   getParentRoute: () => rootRoute,

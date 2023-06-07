@@ -149,13 +149,13 @@ const Footer = () => {
         <FlexDiv>
           <FooterLinkSection>
             <h5>ONLINE SHOPPING</h5>
-            <Link to="/shop/$for" params={{ for: "men" }}>
+            <Link to="/store/$for" params={{ for: "men" }}>
               Men
             </Link>
-            <Link to="/shop/$for" params={{ for: "women" }}>
+            <Link to="/store/$for" params={{ for: "women" }}>
               Women
             </Link>
-            <Link to="/shop/$for" params={{ for: "kids" }}>
+            <Link to="/store/$for" params={{ for: "kids" }}>
               Kids
             </Link>
           </FooterLinkSection>
