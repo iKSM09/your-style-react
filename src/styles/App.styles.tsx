@@ -4,9 +4,9 @@ export const AppContainer = styled.div`
   min-height: 100vh;
   text-align: center;
   transition: all 0.35s;
-  `;
-  /* background-color: ${({ theme }) => theme.background}; */
-  /* color: ${({ theme }) => theme.onBackground}; */
+`;
+/* background-color: ${({ theme }) => theme.background}; */
+/* color: ${({ theme }) => theme.onBackground}; */
 
 /* #root {
   max-width: 1280px;

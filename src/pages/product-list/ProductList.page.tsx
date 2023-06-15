@@ -12,6 +12,9 @@ import {
   SortBy,
 } from "./ProductList.styles";
 import Dropdown from "../../components/dropdown/Dropdown.component";
+import { MdFilterList } from "react-icons/md";
+import Sidebar from "../../components/sidebar/Sidebar.component";
+import useSidebar from "../../hooks/useSidebar";
 
 export const productListRoute = new Route({
   getParentRoute: () => storeRoute,
@@ -56,8 +59,8 @@ function ProductList() {
   return (
     <div>
       <h2>{params.for.toUpperCase()}</h2>
-      <ProductListLayout className="grid ">
-        <FilterSection>
+      <ProductListLayout className="grid">
+        <FilterSection className="laptop-only">
           <aside>
             <Header>
               <h2>Filters</h2>
@@ -81,13 +84,13 @@ function ProductList() {
               </Header>
               <div title="price filter">
                 <RangeSlider defaultValue={[0, 20000]} />
-                <input
+                {/* <input
                   type="range"
                   name="price-slider"
                   min="0"
                   max="20000"
                   step="10"
-                />
+                /> */}
               </div>
             </div>
             <div>

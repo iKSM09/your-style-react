@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { MdSearch } from "react-icons/md";
 
 const SearchContainer = styled.div`
-  height: 32px;
+  height: 40px;
   padding: 12px;
   background-color: #09191a;
   display: flex;

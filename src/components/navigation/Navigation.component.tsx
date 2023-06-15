@@ -1,152 +1,151 @@
-import { Link } from "@tanstack/router";
+import { useState } from "react";
+import { Link, useParams } from "@tanstack/router";
 
 import Logo from "../logo/Logo.component";
 import SearchBar from "../search-bar/SearchBar.component";
 
-import styled from "styled-components";
-import { MdExpandMore, MdOutlineShoppingCart } from "react-icons/md";
+import {
+  MdFilterList,
+  MdHome,
+  MdMenu,
+  MdMenuOpen,
+  MdOutlineShoppingCart,
+  MdPerson,
+  MdSearch,
+  MdSettings,
+} from "react-icons/md";
 import Dropdown from "../dropdown/Dropdown.component";
+import {
+  CartButton,
+  LogoContainer,
+  LowerNavContainer,
+  MobileFilters,
+  NavContainer,
+  NavMainContent,
+  UpperNavContainer,
+} from "./Navigation.styles";
+import { Button } from "../button/Button.styles";
+import { productListRoute } from "../../pages/product-list/ProductList.page";
 
-const Nav = styled.nav`
-  width: 100%;
-  position: fixed;
-  background-color: #1e484b;
-  color: white;
-`;
+type NavigationProps = {
+  openModal: () => void;
+  openCart: () => void;
+  sidemenu: boolean;
+  toggleSidemenu: () => void;
+  openFilterMenu: () => void;
+};
 
-const NavPlaceholder = styled.div`
-  width: 100%;
-  height: 87.6px;
-`;
+const Navigation = ({
+  openModal,
+  openCart,
+  sidemenu,
+  toggleSidemenu,
+  openFilterMenu,
+}: NavigationProps) => {
+  const params = useParams({
+    from: productListRoute.id,
+  });
 
-const FlexDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-`;
-
-const UpperNav = styled(FlexDiv)`
-  height: 32px;
-  padding-inline: 1rem;
-  background-color: #062122;
-
-  & > small {
-    font-style: italic;
-  }
-
-  ul {
-    padding: 0;
-    display: flex;
-    gap: 24px;
-    align-items: center;
-    text-decoration: none;
-    list-style: none;
-
-    li {
-      display: flex;
-      align-items: center;
-    }
-  }
-`;
-
-const Divider = styled.hr`
-  opacity: 0.4;
-`;
-
-const MainNav = styled(FlexDiv)`
-  height: 54px;
-  padding-inline: 1rem;
-`;
-
-const UnList = styled.ul`
-  padding: 0;
-  display: flex;
-  gap: 40px;
-  align-items: center;
-  text-decoration: none;
-  list-style: none;
-`;
-
-const Navigation = () => {
   return (
-    <section>
-      <Nav>
-        <UpperNav>
-          <small>This season biggest sale - Up to 60% off</small>
-          <ul>
-            <li>
-              <Link to="/seller-registration">
-                <small>Seller Register</small>
-              </Link>
-            </li>
-            <li>
-              <small>
-                <Dropdown
-                  defaultOption="INR"
-                  options={["INR", "USD"]}
-                  title="Select Currency"
-                />
-              </small>
-            </li>
-            <li>
-              <small>
-                <Dropdown
-                  defaultOption="English"
-                  options={["English", "Hindi", "Marathi", "Tamil"]}
-                  title="Select Language"
-                />
-              </small>
-            </li>
-          </ul>
-        </UpperNav>
-        <Divider />
-        <MainNav>
+    <NavContainer>
+      <UpperNavContainer>
+        <small>This season biggest sale - Up to 60% off</small>
+        <ul>
+          <li>
+            <Link to="/seller-registration">
+              <small>Seller Register</small>
+            </Link>
+          </li>
+          <li>
+            <small>
+              <Dropdown
+                defaultOption="INR"
+                options={["INR", "USD"]}
+                title="Select Currency"
+              />
+            </small>
+          </li>
+          <li>
+            <small>
+              <Dropdown
+                defaultOption="English"
+                options={["English", "Hindi", "Marathi", "Tamil"]}
+                title="Select Language"
+              />
+            </small>
+          </li>
+        </ul>
+      </UpperNavContainer>
+      <LowerNavContainer>
+        <LogoContainer>
+          <span onClick={toggleSidemenu} className="mobile-only">
+            {sidemenu ? (
+              <MdMenuOpen
+                title="Menu Opened"
+                size="32px"
+                color="var(--on-surface)"
+                className="menu"
+              />
+            ) : (
+              <MdMenu
+                title="Menu"
+                size="32px"
+                color="var(--on-surface)"
+                className="menu"
+              />
+            )}
+          </span>
           <Logo />
-          <UnList>
-            <li>
-              <Link
-                to="/store/$for"
-                params={{
-                  for: "men",
-                }}
-              >
-                Men
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/store/$for"
-                params={{
-                  for: "women",
-                }}
-              >
-                Women
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/store/$for"
-                params={{
-                  for: "kids",
-                }}
-              >
-                Kids
-              </Link>
-            </li>
-            <li>
-              <Link to="/explore">Explore</Link>
-            </li>
-          </UnList>
-          <FlexDiv>
+        </LogoContainer>
+        <NavMainContent>
+          <Link
+            to="/store/$for"
+            params={{ for: "men" }}
+            className="hide-from-mobile"
+          >
+            Men
+          </Link>
+          <Link
+            to="/store/$for"
+            params={{ for: "women" }}
+            className="hide-from-mobile"
+          >
+            Women
+          </Link>
+          <Link
+            to="/store/$for"
+            params={{ for: "kids" }}
+            className="hide-from-mobile"
+          >
+            Kids
+          </Link>
+          <Link to="/explore" className="laptop-only">
+            Explore
+          </Link>
+          <span className="laptop-only">
             <SearchBar />
+          </span>
+          <CartButton onClick={openCart} className="laptop-only">
             <MdOutlineShoppingCart size="20px" />
-            <p>Login</p>
-          </FlexDiv>
-        </MainNav>
-      </Nav>
-      <NavPlaceholder></NavPlaceholder>
-    </section>
+          </CartButton>
+          <Button
+            $color="secondary"
+            $radius="curved"
+            onClick={openModal}
+            className="hide-from-mobile"
+          >
+            Login
+          </Button>
+          <MdSettings size="28px" className="mobile-only" />
+        </NavMainContent>
+      </LowerNavContainer>
+      {params.for && !sidemenu && (
+        <MobileFilters onClick={openFilterMenu} $display={sidemenu}>
+          <p>Apply Filters</p>
+          <MdFilterList size="28" />
+        </MobileFilters>
+      )}
+    </NavContainer>
   );
 };
 

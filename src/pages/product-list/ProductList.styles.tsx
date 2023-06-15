@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { deviceWidth } from "../../styles/devices.breakpoints";
 
 export const Header = styled.div`
   padding-block: 16px;
@@ -14,6 +15,10 @@ export const ProductListLayout = styled.div`
   grid-gap: 12px;
   /* align-items: end; */
   /* flex-wrap: wrap; */
+
+  @media screen and (${deviceWidth.ltLaptop}) {
+    display: block;
+  }
 `;
 
 export const FilterSection = styled.section`

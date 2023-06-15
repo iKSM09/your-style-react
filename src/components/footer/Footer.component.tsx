@@ -63,61 +63,17 @@ const women = {
   ],
 };
 
-import styled from "styled-components";
 import PaymentMethods from "../../assets/payment-method.svg";
-
-const FooterContainer = styled.footer`
-  padding: 2rem 1rem 8px;
-  background-color: #09191a;
-  color: white;
-`;
-
-const FlexDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-`;
-
-const Divider = styled.hr`
-  margin-block: 0.5rem;
-  opacity: 0.3;
-`;
-
-const FooterLinkSection = styled.section`
-  margin-bottom: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-`;
-
-// Benefits Section
-const BenefitsSection = styled.section`
-  padding-block: 24px;
-  background-color: #1e484b;
-  color: white;
-  display: flex;
-  justify-content: space-evenly;
-  gap: 12px;
-`;
-
-const IconContainer = styled.div`
-  width: 56px;
-  height: 56px;
-  background-color: #d64d87;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BenefitsCardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-`;
+import {
+  BenefitsCardContainer,
+  BenefitsSection,
+  Divider,
+  FlexDiv,
+  FooterContainer,
+  FooterLinkSection,
+  IconContainer,
+  Image,
+} from "./Footer.styles";
 
 type BenefitsCardProps = {
   icon?: React.ReactNode;
@@ -187,7 +143,7 @@ const Footer = () => {
         <FlexDiv style={{ alignItems: "center" }}>
           <Logo />
           <small>© 2023 yourStyle. All rights reserved.</small>
-          <img
+          <Image
             height={20}
             src={PaymentMethods}
             alt="supported payment methods"

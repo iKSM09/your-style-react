@@ -1,5 +1,7 @@
-import { Link } from "@tanstack/router";
+import { Link, useParams } from "@tanstack/router";
 import styled from "styled-components";
+import { productListRoute } from "../../pages/product-list/ProductList.page";
+import { preprocess } from "zod";
 
 const LogoContainer = styled.h3`
   font-family: "Allura", cursive;
@@ -8,6 +10,11 @@ const LogoContainer = styled.h3`
 
   span {
     color: #f93889;
+  }
+
+  pre {
+    font-family: inherit;
+    font-size: inherit;
   }
 `;
 
@@ -19,10 +26,13 @@ const Logo = () => {
     },
   };
 
+  const params = useParams({ from: productListRoute.id });
+
   return (
     <Link to="/" activeProps={styling} inactiveProps={styling}>
       <LogoContainer>
-        your<span>Style</span>
+        {params.for ? <pre>{params.for}'s </pre> : "your"}
+        <span>Style</span>
       </LogoContainer>
     </Link>
   );

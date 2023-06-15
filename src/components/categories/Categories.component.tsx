@@ -9,10 +9,30 @@ type CategoryProps = {
 };
 
 const CategoriesContainer = styled.div`
+  --gap: 1rem;
+
   margin: 24px 12px;
-  display: flex;
-  gap: 12px;
-  justify-content: space-between;
+  max-width: 100%;
+
+  display: grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+  /* grid-auto-columns: calc(30% - var(--gap) / 2); */
+  grid-auto-columns: calc(120px - var(--gap) / 2);
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding: var(--gap);
+  scrollbar-width: none; /* Firefox */
+
+  & > * {
+    scroll-snap-align: start;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+  }
 `;
 
 const CategoryContainer = styled.div`

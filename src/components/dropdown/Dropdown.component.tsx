@@ -13,7 +13,7 @@ import {
 type DropdownProps = {
   defaultOption: string;
   options: string[];
-  additional: string;
+  additional?: string;
   title: string;
 };
 

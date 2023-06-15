@@ -4,6 +4,7 @@ type Varients = {
   $color?: "primary" | "secondary" | null;
   $outlined?: boolean;
   $radius?: "full" | "curved";
+  // type?: "submit";
 };
 
 // const colors = {
@@ -19,7 +20,8 @@ type Varients = {
 
 export const Button = styled.button<Varients>`
   cursor: pointer;
-  padding: 1rem 2rem;
+
+  padding: 0.7rem 2rem;
   font-size: 1rem;
   background-color: ${({ $color }) => {
     if ($color === "primary") return "#1f383a";
