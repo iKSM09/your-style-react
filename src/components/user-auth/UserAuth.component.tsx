@@ -57,7 +57,7 @@ const UserAuth = ({
   }
 
   return (
-    <Dialog ref={dialogRef} onClick={handleOutsideClick}>
+    <Dialog ref={dialogRef} onClick={(e) => handleOutsideClick}>
       {/* <h1>This is a modal...</h1> */}
       {children}
       {newUser ? (

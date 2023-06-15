@@ -5,12 +5,7 @@ import CardSection from "../../components/card-section/CardSection.component";
 import Card from "../../components/card/Card.component";
 import RangeSlider from "../../components/range-slider/RangeSlider.component";
 
-import {
-  FilterSection,
-  Header,
-  ProductListLayout,
-  SortBy,
-} from "./ProductList.styles";
+import { FilterSection, Header, ProductListLayout } from "./ProductList.styles";
 import Dropdown from "../../components/dropdown/Dropdown.component";
 import { MdFilterList } from "react-icons/md";
 import Sidebar from "../../components/sidebar/Sidebar.component";
