@@ -17,7 +17,6 @@ import {
   ProductSizeButton,
 } from "./Product.styles";
 import { Button } from "../../components/button/Button.styles";
-import { DocumentData } from "firebase/firestore";
 import StarsRating from "../../components/stars-rating/StarsRating.component";
 import { cartStore } from "../../store/cart.store";
 import { ProductDataTypes, productsStore } from "../../store/products.store";
@@ -61,7 +60,7 @@ function Product() {
 
   useEffect(() => {
     let cartItem = cartItems.filter((item) => item.id === product.id)[0];
-    let selectedClothColor = product?.colors.filter(
+    let selectedClothColor = product?.colors?.filter(
       (color) => color?.name === cartItem?.color
     )[0];
 
@@ -113,12 +112,12 @@ function Product() {
       >{`${product?.category}/${product?.name}`}</p>
       <ProductContainer>
         <ImagesSection>
-          {clothColor?.images.map((img, idx) => (
+          {clothColor?.images?.map((img, idx) => (
             <Image key={idx} src={img} alt={`${idx}`} />
           ))}
         </ImagesSection>
         <DetailsSection>
-          <h2>{product?.category.toUpperCase().split("/")[2]}</h2>
+          <h2>{product?.category?.toUpperCase().split("/")[2]}</h2>
           <h1>{product?.name}</h1>
           <small>By {product?.postedBy}</small>
           <p>{product?.description}</p>
@@ -182,7 +181,7 @@ function Product() {
               }}
             >
               {product?.sizes
-                .toUpperCase()
+                ?.toUpperCase()
                 .split(", ")
                 .map((size: string) =>
                   size === selectedSize ? (
@@ -211,7 +210,7 @@ function Product() {
                 gap: "12px",
               }}
             >
-              {product?.colors.map(({ name, images }) => (
+              {product?.colors?.map(({ name, images }) => (
                 <Image
                   title={name}
                   key={name}
