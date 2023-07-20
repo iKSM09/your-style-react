@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Route } from "@tanstack/router";
+import { useEffect, useState } from "react";
+import { Route, useParams } from "@tanstack/router";
 
-import { MdStarRate, MdShoppingBag } from "react-icons/md";
+import { MdShoppingBag } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
 
 import { productListRoute } from "../product-list/ProductList.page";
@@ -14,8 +14,13 @@ import {
   Image,
   ImagesSection,
   ProductContainer,
+  ProductSizeButton,
 } from "./Product.styles";
 import { Button } from "../../components/button/Button.styles";
+import { DocumentData } from "firebase/firestore";
+import StarsRating from "../../components/stars-rating/StarsRating.component";
+import { cartStore } from "../../store/cart.store";
+import { ProductDataTypes, productsStore } from "../../store/products.store";
 
 export const productRoute = new Route({
   getParentRoute: () => productListRoute,
@@ -28,45 +33,95 @@ export const productIndexRoute = new Route({
   component: Product,
 });
 
-const StarsRating = () => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "4px",
-      }}
-    >
-      <MdStarRate />
-      <p>{productData.rating.stars}</p>
-    </div>
-  );
-};
-
 function Product() {
-  const [clothColor, setClothColor] = useState(productData.varients.colors[0]);
+  const params = useParams({ from: productIndexRoute.id });
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [toCart, setToCart] = useState(false);
+  const [clothColor, setClothColor] = useState(
+    {} as {
+      images: string[];
+      name: string;
+    }
+  );
 
-  const handleChangeColor = (color: string) => {
-    const filtered = productData.varients.colors.filter(
-      (index) => index.color === color
+  const [product, filterSelectedProduct] = productsStore((state) => [
+    state.selectedProduct,
+    state.filterSelectedProduct,
+  ]);
+
+  const [cartItems, addToCart] = cartStore((state) => [
+    state.cartItems,
+    state.addToCart,
+  ]);
+
+  useEffect(() => {
+    filterSelectedProduct(params.productId);
+  }, [params.productId]);
+
+  useEffect(() => {
+    let cartItem = cartItems.filter((item) => item.id === product.id)[0];
+    let selectedClothColor = product?.colors.filter(
+      (color) => color?.name === cartItem?.color
+    )[0];
+
+    setSelectedSize(
+      cartItem === undefined ? product?.sizes.split(", ")[0] : cartItem.size
     );
-    setClothColor(filtered[0]);
-    console.log({ clothColor });
+    setSelectedColor(
+      cartItem === undefined ? product?.colors[0].name : cartItem.color
+    );
+    setClothColor(
+      cartItem === undefined ? product?.colors[0] : selectedClothColor
+    );
+    setToCart(cartItems.filter((item) => item.id === product?.id).length === 1);
+  }, [product, cartItems]);
+
+  const handleChangeColor = (selectedColor: string) => {
+    const filtered = product?.colors.filter(
+      (color) => color.name === selectedColor
+    )[0];
+
+    setClothColor(filtered);
+    setSelectedColor(selectedColor);
+  };
+
+  const handleAddToCart = (product: ProductDataTypes) => {
+    const selectedImage = product?.colors.filter(
+      (color) => color.name === selectedColor
+    )[0].images[0];
+
+    addToCart({
+      id: product.id,
+      category: product.category,
+      name: product.name,
+      postedBy: product.postedBy,
+      color: selectedColor,
+      image: selectedImage,
+      size: selectedSize,
+      price: product.price,
+      quantity: 1,
+      totalPrice: product?.price,
+    });
+    setToCart(true);
   };
 
   return (
     <div style={{ textAlign: "start" }}>
-      <p style={{ padding: "2rem 1rem 0.5rem" }}>{productData.breadcrum}</p>
+      <p
+        style={{ padding: "2rem 1rem 0.5rem" }}
+      >{`${product?.category}/${product?.name}`}</p>
       <ProductContainer>
         <ImagesSection>
-          {clothColor.images.map((img) => (
-            <Image src={`/assets/${img}`} alt={img} />
+          {clothColor?.images.map((img, idx) => (
+            <Image key={idx} src={img} alt={`${idx}`} />
           ))}
         </ImagesSection>
         <DetailsSection>
-          <h2>{productData.category}</h2>
-          <h1>{productData.name}</h1>
-          <small>{productData["product-details"].description}</small>
+          <h2>{product?.category.toUpperCase().split("/")[2]}</h2>
+          <h1>{product?.name}</h1>
+          <small>By {product?.postedBy}</small>
+          <p>{product?.description}</p>
           <div
             style={{
               marginBlock: "16px",
@@ -83,7 +138,7 @@ function Product() {
                 gap: "8px",
               }}
             >
-              <StarsRating />
+              <StarsRating ratingStars={productData.rating.stars} />
               <p>|</p>
               <p style={{ margin: "0" }}>
                 {productData.rating.numbers} Ratings
@@ -110,7 +165,7 @@ function Product() {
                 color: "#7e7e7e",
               }}
             >
-              MRP ₹{productData.price}
+              MRP ₹{product?.price}
             </p>
             <small style={{ margin: "0", color: "#0cc258" }}>
               ({productData.discount})
@@ -126,22 +181,24 @@ function Product() {
                 gap: "12px",
               }}
             >
-              {productData.varients.sizes.map((size) => (
-                <button
-                  key={size}
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    padding: "12px",
-                    fontSize: "14px",
-                    borderStyle: "solid",
-                    borderColor: "white",
-                    textAlign: "center",
-                  }}
-                >
-                  {size}
-                </button>
-              ))}
+              {product?.sizes
+                .toUpperCase()
+                .split(", ")
+                .map((size: string) =>
+                  size === selectedSize ? (
+                    <ProductSizeButton $selected={true} key={size}>
+                      {size}
+                    </ProductSizeButton>
+                  ) : (
+                    <ProductSizeButton
+                      $selected={false}
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </ProductSizeButton>
+                  )
+                )}
             </div>
           </div>
           <div>
@@ -154,13 +211,13 @@ function Product() {
                 gap: "12px",
               }}
             >
-              {productData.varients.colors.map(({ color, images }) => (
+              {product?.colors.map(({ name, images }) => (
                 <Image
-                  title={color}
-                  key={color}
-                  onClick={() => handleChangeColor(color)}
-                  src={`/assets/${images[0]}`}
-                  alt={color}
+                  title={name}
+                  key={name}
+                  onClick={() => handleChangeColor(name)}
+                  src={images[0]}
+                  alt={name}
                   style={{
                     maxWidth: "100%",
                   }}
@@ -176,9 +233,17 @@ function Product() {
               gap: "12px",
             }}
           >
-            <Button $color="primary" style={{ maxWidth: "100%" }}>
-              <MdShoppingBag /> ADD TO CART
-            </Button>
+            {toCart ? (
+              <Button $color="secondary">Added to Cart</Button>
+            ) : (
+              <Button
+                $color="primary"
+                style={{ maxWidth: "100%" }}
+                onClick={() => handleAddToCart(product!)}
+              >
+                <MdShoppingBag /> ADD TO CART
+              </Button>
+            )}
             <Button $outlined style={{ maxWidth: "100%" }}>
               <IoMdHeartEmpty /> WISHLIST
             </Button>

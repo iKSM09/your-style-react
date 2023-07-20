@@ -36,29 +36,40 @@ const Dropdown = ({
   };
 
   return (
-    <DropdownContainer title={title}>
-      <DropdownButton>
-        <UnstyledButton onClick={handleState}>
-          {additional + selected}
-        </UnstyledButton>
-        {open ? <MdExpandLess size="1rem" /> : <MdExpandMore size="1rem" />}
-      </DropdownButton>
-      {open ? (
-        <DropdownOptionsBox>
-          <DropdownOptionBoxArrow />
-          <DropdownOptions>
-            {options.map((option, index) => (
-              <li key={index}>
-                <DropdownOptionButton onClick={() => handleSelected(option)}>
-                  {option}
-                </DropdownOptionButton>
-              </li>
-            ))}
-          </DropdownOptions>
-        </DropdownOptionsBox>
-      ) : null}
-    </DropdownContainer>
+    <>
+      {/* <label htmlFor={title}>{title}</label> */}
+      <select name={additional + title} id={title}>
+        {options.map((option) => (
+          <option value={option} key={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </>
   );
 };
 
 export default Dropdown;
+
+// <DropdownContainer title={title}>
+//   <DropdownButton>
+//     <UnstyledButton onClick={handleState}>
+//       {additional + selected}
+//     </UnstyledButton>
+//     {open ? <MdExpandLess size="1rem" /> : <MdExpandMore size="1rem" />}
+//   </DropdownButton>
+//   {open ? (
+//     <DropdownOptionsBox>
+//       <DropdownOptionBoxArrow />
+//       <DropdownOptions>
+//         {options.map((option, index) => (
+//           <li key={index}>
+//             <DropdownOptionButton onClick={() => handleSelected(option)}>
+//               {option}
+//             </DropdownOptionButton>
+//           </li>
+//         ))}
+//       </DropdownOptions>
+//     </DropdownOptionsBox>
+//   ) : null}
+// </DropdownContainer>

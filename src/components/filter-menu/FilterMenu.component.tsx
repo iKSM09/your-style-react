@@ -1,13 +1,20 @@
+import { MdClose } from "react-icons/md";
 import { Header } from "../../pages/product-list/ProductList.styles";
 import RangeSlider from "../range-slider/RangeSlider.component";
-import Sidebar from "../sidebar/Sidebar.component";
+import {
+  CheckList,
+  CheckListItem,
+  FilterMenuContainer,
+  FilterMenuHeader,
+  FilterSection,
+} from "./FilterMenu.styles";
+import CloseIcon from "../button/CloseIcon.component";
 
 type FilterMenuProps = {
-  sidebar: boolean;
-  closeSidebar: () => void;
+  closeSidebar?: () => void;
 };
 
-const FilterMenu = ({ sidebar, closeSidebar }: FilterMenuProps) => {
+const FilterMenu = ({ closeSidebar }: FilterMenuProps) => {
   const filterList = {
     categories: [
       {
@@ -35,65 +42,60 @@ const FilterMenu = ({ sidebar, closeSidebar }: FilterMenuProps) => {
   };
 
   return (
-    <>
-      <Sidebar sidebar={sidebar} closeSidebar={closeSidebar} position="right">
-        <aside>
-          <Header>
-            <h2>Filters</h2>
-          </Header>
-          <div>
-            <Header>
-              <h3>Categories</h3>
-            </Header>
-            <div title="categories filter">
-              {filterList.categories.map((category) => (
-                <div key={category.name}>
-                  <input type="checkbox" name={category.name} />
-                  <label htmlFor={category.name}>{category.label}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <Header>
-              <h3>Price</h3>
-            </Header>
-            <div title="price filter">
-              <RangeSlider defaultValue={[0, 20000]} />
-              {/* <input
-                  type="range"
-                  name="price-slider"
-                  min="0"
-                  max="20000"
-                  step="10"
-                /> */}
-            </div>
-          </div>
-          <div>
-            <Header>
-              <h3>Colors</h3>
-            </Header>
-            <div title="colors filter">
-              {filterList.colors.map((color, index) => (
-                <div key={index}>
-                  <input type="checkbox" name={color} />
-                  <label htmlFor={color}>{color}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <Header>
-              <h3>Discount</h3>
-            </Header>
-            <div title="discount filter">
-              <input type="radio" name="discount" id="" />
-              <label htmlFor="discount">30% or more</label>
-            </div>
-          </div>
-        </aside>
-      </Sidebar>
-    </>
+    <FilterMenuContainer>
+      <FilterMenuHeader>
+        <Header>
+          <h2>Filters</h2>
+        </Header>
+        {closeSidebar && (
+          <span onClick={closeSidebar}>
+            <CloseIcon />
+          </span>
+        )}
+      </FilterMenuHeader>
+      <FilterSection>
+        <Header>
+          <h3>Categories</h3>
+        </Header>
+        <CheckList title="categories filter">
+          {filterList.categories.map((category) => (
+            <CheckListItem key={category.name}>
+              <label htmlFor={category.name}>{category.label}</label>
+              <input type="checkbox" name={category.name} />
+            </CheckListItem>
+          ))}
+        </CheckList>
+      </FilterSection>
+      <FilterSection>
+        <Header>
+          <h3>Price</h3>
+        </Header>
+        {/* <div title="price filter"></div> */}
+        <RangeSlider defaultValue={[0, 20000]} />
+      </FilterSection>
+      <FilterSection>
+        <Header>
+          <h3>Colors</h3>
+        </Header>
+        <CheckList title="colors filter">
+          {filterList.colors.map((color, index) => (
+            <CheckListItem key={index}>
+              <label htmlFor={color}>{color}</label>
+              <input type="checkbox" name={color} />
+            </CheckListItem>
+          ))}
+        </CheckList>
+      </FilterSection>
+      <FilterSection>
+        <Header>
+          <h3>Discount</h3>
+        </Header>
+        <div title="discount filter">
+          <label htmlFor="discount">30% or more</label>
+          <input type="radio" name="discount" id="" />
+        </div>
+      </FilterSection>
+    </FilterMenuContainer>
   );
 };
 

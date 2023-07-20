@@ -8,6 +8,9 @@ import CardSection from "../../components/card-section/CardSection.component";
 import { rootRoute } from "../../router";
 import Dropdown from "../../components/dropdown/Dropdown.component";
 
+import { useEffect } from "react";
+import { productsStore } from "../../store/products.store";
+
 export const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
@@ -15,6 +18,15 @@ export const indexRoute = new Route({
 });
 
 function Home() {
+  const [products, setProducts] = productsStore((state) => [
+    state.products,
+    state.setProducts,
+  ]);
+
+  useEffect(() => {
+    setProducts();
+  }, []);
+
   return (
     <div>
       <Jumbotron />
@@ -31,14 +43,9 @@ function Home() {
           />
         }
       >
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {products?.map((product) => {
+          return <Card key={product.id} productInfo={product} />;
+        })}
       </CardSection>
       <CardSection
         title="Featured"
@@ -51,9 +58,9 @@ function Home() {
           />
         }
       >
-        <Card />
-        <Card />
-        <Card />
+        {products?.map((product) => (
+          <Card key={product.id} productInfo={product} />
+        ))}
       </CardSection>
     </div>
   );

@@ -1,24 +1,35 @@
 import { Link } from "@tanstack/router";
 
-import blackJacket from "/assets/black_01.jpeg";
 import { productRoute } from "../../pages/product/Product.page";
 import { CardContainer, CardInfo, Image, ImageContainer } from "./Card.styles";
+import { AddProductTypes } from "../../pages/add-product/AddProduct.page";
 
-const Card = () => {
+type CardProps = {
+  productInfo: AddProductTypes;
+};
+
+const Card = ({ productInfo }: CardProps) => {
+  const previewsImage = productInfo.colors[0].images[0];
+  // const category = productInfo.category.split("/")[0];
+
   return (
     <CardContainer>
       <Link
         from={productRoute.id}
         to="/store/$for/$productId"
-        params={{ for: "men", productId: "topwear" }}
+        params={{
+          for: productInfo.category.split("/")[0],
+          productId: productInfo.id,
+        }}
+        // search={productInfo}
         activeOptions={{ exact: true }}
       >
         <ImageContainer>
-          <Image src={blackJacket} alt="black Jacket" />
+          <Image src={previewsImage} alt={`${productInfo.name} preview`} />
         </ImageContainer>
         <CardInfo>
-          <h3>Product Name</h3>
-          <p>Price: ₹299</p>
+          <h3>{productInfo.name}</h3>
+          <p>Price: ₹{productInfo.price}</p>
         </CardInfo>
       </Link>
     </CardContainer>

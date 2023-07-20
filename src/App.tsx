@@ -8,15 +8,20 @@ import Footer from "./components/footer/Footer.component";
 
 import { GlobalStyles } from "./styles/GlobalStyles";
 import { AppContainer } from "./styles/App.styles";
-import UserAuth from "./components/user-auth/UserAuth.component";
+import UserAuth from "./components/auth/UserAuth.component";
 
 import Appbar from "./components/appbar/Appbar.component";
 
 import Sidemenu from "./components/sidemenu/Sidemenu.component";
 import useSidebar from "./hooks/useSidebar";
-import FilterMenu from "./components/filter-menu/FilterMenu.component";
+import FilterMenuSidebar from "./components/filter-menu/FilterMenuSidebar.component";
 
 function App() {
+  // const [values, loading, error, snapshot] = useCollectionData(
+  //   collection(db, "products")
+  // );
+  // const setProducts = useProductsStore((state) => state.setProducts);
+
   const [cart, openCart, closeCart] = useSidebar();
   const [sidemenu, openSidemenu, closeSidemenu, toggleSidemenu] = useSidebar();
   const [filterMenu, openFilterMenu, closeFilterMenu] = useSidebar();
@@ -25,6 +30,10 @@ function App() {
 
   const toggleModal = () => setModalOpen((bool) => !bool);
   const closeModal = () => setModalOpen(false);
+
+  // useEffect(() => {
+  //   setProducts(values!);
+  // }, [values]);
 
   return (
     <AppContainer>
@@ -36,7 +45,7 @@ function App() {
         toggleSidemenu={toggleSidemenu}
         openFilterMenu={openFilterMenu}
       />
-      <FilterMenu sidebar={filterMenu} closeSidebar={closeFilterMenu} />
+      <FilterMenuSidebar sidebar={filterMenu} closeSidebar={closeFilterMenu} />
       <Appbar openModal={toggleModal} openCart={openCart} />
       <Outlet />
 

@@ -18,6 +18,7 @@ export const Form = styled.form`
 export const InputContainer = styled.section`
   display: grid;
   grid-template-columns: 1fr 2fr;
+  grid-auto-flow: column dense;
   align-items: start;
   justify-items: start;
 

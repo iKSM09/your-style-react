@@ -14,6 +14,9 @@ import { Button } from "../button/Button.styles";
 
 import Sidebar from "../sidebar/Sidebar.component";
 import useSidebar from "../../hooks/useSidebar";
+import CloseIcon from "../button/CloseIcon.component";
+import { CartItemType, cartStore } from "../../store/cart.store";
+import { useEffect, useState } from "react";
 
 export const CartContainer = styled.div<{ $open: boolean }>`
   position: fixed;
@@ -73,26 +76,6 @@ export const CartFooter = styled.div`
   }
 `;
 
-export const CloseIcon = styled.button`
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  background-color: transparent;
-  color: inherit;
-  border: unset;
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  :hover {
-    background-color: #ffdcc0;
-    color: #062122;
-  }
-`;
-
 export const CartItems = styled.div`
   margin: 1rem;
   height: 80%;
@@ -114,7 +97,7 @@ export const CartItem = styled.section`
   border: 1.5px solid rgb(255, 255, 255, 0.3);
   border-radius: 12px;
 
-  :hover {
+  &:hover {
     background-color: #1e484b;
   }
 
@@ -170,181 +153,90 @@ type CartProps = {
 };
 
 const Cart = ({ sidebar, closeSidebar }: CartProps) => {
+  const [total, setTotal] = useState(0);
+  const [cartItems, cartTotalPrice, removeFromCart, resetCart, updateQuantity] =
+    cartStore((state) => [
+      state.cartItems,
+      state.cartTotalPrice,
+      state.removeFromCart,
+      state.resetCart,
+      state.updateQuantity,
+    ]);
+
   return (
     <Sidebar sidebar={sidebar} closeSidebar={closeSidebar} position="right">
       <CartHeader>
         <div>
           <MdOutlineShoppingCart size="2rem" />
           <h1>Cart</h1>
-          <p>(3 items)</p>
+          <p>({cartItems.length} items)</p>
         </div>
-        <CloseIcon onClick={closeSidebar}>
-          <MdClose size="2rem" />
-        </CloseIcon>
+        <span onClick={closeSidebar}>
+          <CloseIcon />
+        </span>
       </CartHeader>
 
       <CartItems>
-        <CartItem>
-          <div className="flex m12">
-            <h3>Product Name</h3>
-            <Icon>
-              <MdDeleteOutline size="20px" />
-            </Icon>
-          </div>
-          <hr className="m12" />
-          <div className="details">
-            <ImageContainer>
-              <Image src={blackJacket} alt="black Jacket" />
-            </ImageContainer>
-            <div>
-              <div className="m12 grid-of-3">
-                <p className="bold">Quantity</p>
-                <small>x</small>
-                <p className="bold">Price</p>
-              </div>
-              <div className="m12 grid-of-3">
-                <div className="flex">
-                  <Icon className="m0">
-                    <MdArrowLeft size="24px" />
-                  </Icon>
-                  <p>02</p>
-                  <Icon className="m0">
-                    <MdArrowRight size="24px" />
-                  </Icon>
+        {cartItems.map((item) => (
+          <CartItem key={item.id}>
+            <div className="flex m12">
+              <h3>
+                {item.name}
+                <small style={{ marginLeft: "8px" }}>
+                  ({item.category.toUpperCase().split("/")[2]})
+                </small>
+              </h3>
+              <Icon onClick={() => removeFromCart(item.id)}>
+                <MdDeleteOutline size="20px" />
+              </Icon>
+            </div>
+            <hr className="m12" />
+            <div className="details">
+              <ImageContainer>
+                <Image
+                  src={item.image}
+                  alt={`${item.color} ${item.name} preview image`}
+                />
+              </ImageContainer>
+              <div>
+                <div className="m12 grid-of-3">
+                  <p className="bold">Quantity</p>
+                  <small>x</small>
+                  <p className="bold">Price</p>
                 </div>
-                <small>x</small>
-                <p>₹299</p>
-              </div>
-              <hr className="m12" />
-              <div className="flex">
-                <p className="bold">Total Price: </p>
-                <p>₹598</p>
+                <div className="m12 grid-of-3">
+                  <div className="flex">
+                    <Icon
+                      className="m0"
+                      onClick={() => updateQuantity("-", item)}
+                    >
+                      <MdArrowLeft size="24px" />
+                    </Icon>
+                    <p>{item.quantity}</p>
+                    <Icon
+                      className="m0"
+                      onClick={() => updateQuantity("+", item)}
+                    >
+                      <MdArrowRight size="24px" />
+                    </Icon>
+                  </div>
+                  <small>x</small>
+                  <p>₹{item.price}</p>
+                </div>
+                <hr className="m12" />
+                <div className="flex">
+                  <p className="bold">Total Price: </p>
+                  <p>₹{item.totalPrice}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </CartItem>
-        <CartItem>
-          <div className="flex m12">
-            <h3>Product Name</h3>
-            <Icon>
-              <MdDeleteOutline size="20px" />
-            </Icon>
-          </div>
-          <hr className="m12" />
-          <div className="details">
-            <ImageContainer>
-              <Image src={blackJacket} alt="black Jacket" />
-            </ImageContainer>
-            <div>
-              <div className="m12 grid-of-3">
-                <p className="bold">Quantity</p>
-                <small>x</small>
-                <p className="bold">Price</p>
-              </div>
-              <div className="m12 grid-of-3">
-                <div className="flex">
-                  <Icon className="m0">
-                    <MdArrowLeft size="24px" />
-                  </Icon>
-                  <p>02</p>
-                  <Icon className="m0">
-                    <MdArrowRight size="24px" />
-                  </Icon>
-                </div>
-                <small>x</small>
-                <p>₹299</p>
-              </div>
-              <hr className="m12" />
-              <div className="flex">
-                <p className="bold">Total Price: </p>
-                <p>₹598</p>
-              </div>
-            </div>
-          </div>
-        </CartItem>
-        <CartItem>
-          <div className="flex m12">
-            <h3>Product Name</h3>
-            <Icon>
-              <MdDeleteOutline size="20px" />
-            </Icon>
-          </div>
-          <hr className="m12" />
-          <div className="details">
-            <ImageContainer>
-              <Image src={blackJacket} alt="black Jacket" />
-            </ImageContainer>
-            <div>
-              <div className="m12 grid-of-3">
-                <p className="bold">Quantity</p>
-                <small>x</small>
-                <p className="bold">Price</p>
-              </div>
-              <div className="m12 grid-of-3">
-                <div className="flex">
-                  <Icon className="m0">
-                    <MdArrowLeft size="24px" />
-                  </Icon>
-                  <p>02</p>
-                  <Icon className="m0">
-                    <MdArrowRight size="24px" />
-                  </Icon>
-                </div>
-                <small>x</small>
-                <p>₹299</p>
-              </div>
-              <hr className="m12" />
-              <div className="flex">
-                <p className="bold">Total Price: </p>
-                <p>₹598</p>
-              </div>
-            </div>
-          </div>
-        </CartItem>
-        <CartItem>
-          <div className="flex m12">
-            <h3>Product Name</h3>
-            <Icon>
-              <MdDeleteOutline size="20px" />
-            </Icon>
-          </div>
-          <hr className="m12" />
-          <div className="details">
-            <ImageContainer>
-              <Image src={blackJacket} alt="black Jacket" />
-            </ImageContainer>
-            <div>
-              <div className="m12 grid-of-3">
-                <p className="bold">Quantity</p>
-                <small>x</small>
-                <p className="bold">Price</p>
-              </div>
-              <div className="m12 grid-of-3">
-                <div className="flex">
-                  <Icon className="m0">
-                    <MdArrowLeft size="24px" />
-                  </Icon>
-                  <p>02</p>
-                  <Icon className="m0">
-                    <MdArrowRight size="24px" />
-                  </Icon>
-                </div>
-                <small>x</small>
-                <p>₹299</p>
-              </div>
-              <hr className="m12" />
-              <div className="flex">
-                <p className="bold">Total Price: </p>
-                <p>₹598</p>
-              </div>
-            </div>
-          </div>
-        </CartItem>
+          </CartItem>
+        ))}
       </CartItems>
 
       <CartFooter>
         <small>
-          <h2>₹1,196</h2>
+          <h2>₹{cartTotalPrice}</h2>
         </small>
         <Button $color="secondary" $radius="curved">
           Proceed

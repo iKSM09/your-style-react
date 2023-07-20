@@ -2,17 +2,19 @@ import ReactSlider from "react-slider";
 import styled from "styled-components";
 
 const StyledSlider = styled(ReactSlider)`
-  width: 100%;
-  height: 25px;
+  /* width: 100%; */
+  height: 12px;
+  display: flex;
+  align-items: center;
 `;
 
 const StyledThumb = styled.div`
-  height: 25px;
-  line-height: 25px;
-  width: 25px;
+  height: 26px;
+  line-height: 26px;
+  width: 26px;
   text-align: center;
-  background-color: #000;
-  color: #fff;
+  background-color: var(--surface);
+  color: var(--on-surface);
   border-radius: 50%;
   cursor: grab;
 `;
@@ -25,7 +27,11 @@ const StyledTrack = styled.div<{ index: number }>`
   top: 0;
   bottom: 0;
   background: ${(props) =>
-    props.index === 2 ? "#f00" : props.index === 1 ? "#0f0" : "#ddd"};
+    props.index === 2
+      ? "var(--primary)"
+      : props.index === 1
+      ? "var(--primary-container)"
+      : "var(--primary)"};
   border-radius: 999px;
 `;
 

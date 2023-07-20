@@ -1,7 +1,13 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import {
+  MouseEvent,
+  MouseEventHandler,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import Register from "./Register.component";
-import { Button } from "../button/Button.styles";
 import SignIn from "./SignIn.component";
 
 export const Dialog = styled.dialog`
@@ -33,7 +39,6 @@ const UserAuth = ({
 }: UserAuthProps) => {
   const [newUser, setNewUser] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null!);
-  // const lastActiveElement = useRef<HTMLElement>(null!);
 
   const isNewUser = () => setNewUser((bool) => !bool);
 
@@ -41,33 +46,35 @@ const UserAuth = ({
     const dialogNode = dialogRef.current;
 
     if (open) {
-      // lastActiveElement.current = document.activeElement as HTMLElement;
       dialogNode.showModal();
     } else {
       dialogNode.close();
-      // lastActiveElement.current.focus();
     }
   }, [open]);
 
-  function handleOutsideClick(e: MouseEvent) {
+  function handleOutsideClick(e: MouseEvent<HTMLDialogElement>) {
     const dialogNode = dialogRef.current;
+
     if (closeOnOutsideClick && e.target === dialogNode) {
       onRequestClose();
     }
   }
 
   return (
-    <Dialog ref={dialogRef} onClick={(e) => handleOutsideClick}>
-      {/* <h1>This is a modal...</h1> */}
+    <Dialog
+      ref={dialogRef}
+      onClick={(e: MouseEvent<HTMLDialogElement>) => handleOutsideClick(e)}
+    >
       {children}
       {newUser ? (
-        <Register isNewUser={isNewUser} onRequestClose={onRequestClose} />
+        <Register
+          isNewUser={isNewUser}
+          isVendor={false}
+          onRequestClose={onRequestClose}
+        />
       ) : (
         <SignIn isNewUser={isNewUser} onRequestClose={onRequestClose} />
       )}
-      {/* <Button $color="primary" $radius="curved" onClick={onRequestClose}>
-        Create Account
-      </Button> */}
     </Dialog>
   );
 };

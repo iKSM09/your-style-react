@@ -2,11 +2,13 @@ import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { FirebaseError } from "firebase/app";
+import { userRegister } from "../../utils/firebase/auth.firebase";
 import { Button } from "../button/Button.styles";
+import { Form, InputContainer, Small } from "./Auth.styles";
+import CloseIcon from "../button/CloseIcon.component";
 
-import { createNewUser } from "../../utils/firebase/userAuth.firebase";
-
-import { Form, InputContainer, Small } from "./UserAuth.styles";
+import useCurrentUser from "../../hooks/useAuthStateChange";
 
 const schema = z
   .object({
@@ -27,14 +29,17 @@ const schema = z
     path: ["confirmPassword"],
   });
 
-type FormDataType = z.infer<typeof schema>;
+export type FormDataType = z.infer<typeof schema>;
 
 type RegisterProps = {
   isNewUser: () => void;
-  onRequestClose: () => void;
+  isVendor: boolean;
+  onRequestClose?: () => void;
 };
 
-const Register = ({ isNewUser, onRequestClose }: RegisterProps) => {
+const Register = ({ isNewUser, isVendor, onRequestClose }: RegisterProps) => {
+  const currentUser = useCurrentUser();
+
   const { register, handleSubmit, formState, reset } = useForm<FormDataType>({
     mode: "onBlur",
     defaultValues: {
@@ -49,18 +54,37 @@ const Register = ({ isNewUser, onRequestClose }: RegisterProps) => {
   const { errors, isDirty, isSubmitting } = formState;
 
   const onSubmitSuccess = async ({ name, email, password }: FormDataType) => {
-    // await createUserWithEmailAndPassword(data.email, data.password);
-    await createNewUser(name, email, password);
-    console.log(name, email, password);
-    reset();
-    onRequestClose();
+    try {
+      await userRegister(name, email, password, isVendor);
+      reset();
+      onRequestClose?.();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/email-already-in-use")
+          return alert("Cannot create user, email is already in use.");
+      }
+      console.error("user creation encountered an error", error);
+    }
   };
 
   const onSubmitError = (errors: FieldErrors<FormDataType>) => {
     console.log(errors);
   };
 
-  return (
+  return currentUser ? (
+    <section
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <p>Welcome {currentUser.displayName}</p>
+      <span onClick={onRequestClose}>
+        <CloseIcon />
+      </span>
+    </section>
+  ) : (
     <Form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
       <h2>Register</h2>
 

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/router";
 import Sidebar from "../sidebar/Sidebar.component";
 import styled from "styled-components";
+import useCurrentUser from "../../hooks/useAuthStateChange";
 
 const SidemenuContainer = styled.section`
   margin: 3.5rem 1rem 5rem;
@@ -19,6 +20,8 @@ type SidemenuProps = {
 };
 
 const Sidemenu = ({ sidebar, closeSidebar }: SidemenuProps) => {
+  const currentUser = useCurrentUser();
+
   return (
     <Sidebar sidebar={sidebar} index={5} closeSidebar={closeSidebar}>
       <SidemenuContainer onClick={closeSidebar}>
@@ -32,6 +35,16 @@ const Sidemenu = ({ sidebar, closeSidebar }: SidemenuProps) => {
           Kids
         </Link>
         <Link to="/explore">Explore</Link>
+        {currentUser ? (
+          <Link
+            params={{ userId: `${currentUser.email}` }}
+            to="/user/$userId/dashboard"
+          >
+            Dashboard
+          </Link>
+        ) : (
+          <Link to="/seller-registration">Seller Register</Link>
+        )}
       </SidemenuContainer>
     </Sidebar>
   );

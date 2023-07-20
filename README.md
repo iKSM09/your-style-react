@@ -1,4 +1,4 @@
-# yourStyle App
+# yourStyle App (w/React)
 
 > E-commerce + Instagram Project
 
@@ -24,9 +24,13 @@ The following features are implemented in this project:
 
 - [React.js](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Firebase](https://firebase.google.com/)
+- [TanStack Router](https://tanstack.com/router/v1)
+- [React Hook Form](https://react-hook-form.com/)
+- [Jotai](https://jotai.org/)
+- [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+- [React Slider](https://zillow.github.io/react-slider/)
 - [React Icons](https://react-icons.github.io/react-icons/)
 - [Styled Components](https://styled-components.com/)
-- [React Slider](https://zillow.github.io/react-slider/)
-- [TanStack Router](https://tanstack.com/router/v1)
-- [TanStack Query](https://tanstack.com/query/latest)
-- [Firebase](https://firebase.google.com/)
+- [zod](https://zod.dev/)
+<!-- - [TanStack Query](https://tanstack.com/query/latest) -->

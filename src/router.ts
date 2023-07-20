@@ -14,6 +14,20 @@ import {
   sellerRegisterIndexRoute,
   sellerRegisterRoute,
 } from "./pages/seller-registration/SellerRegister.component";
+import {
+  sellerDashboardIndexRoute,
+  sellerDashboardRoute,
+} from "./pages/dashboard/Dashboard.page";
+import {
+  addProductIndexRoute,
+  addProductRoute,
+} from "./pages/add-product/AddProduct.page";
+import { feedIndexRoute, feedRoute } from "./pages/user-feed/Feed.page";
+import {
+  addPostIndexRoute,
+  addPostRoute,
+} from "./pages/add-user-post/AddUserPost";
+import { userRoute } from "./pages/user/user-route";
 
 export const rootRoute = new RootRoute({ component: App });
 
@@ -28,17 +42,17 @@ const routeTree = rootRoute.addChildren([
   ]),
   // checkoutRoute.addChildren([checkoutIndexRoute]),
   exploreRoute.addChildren([exploreIndexRoute]),
-  // userProfileRoute.addChildren([
-  //   userProfileIndexRoute,
-  //   feedRoute.addChildren([feedIndexRoute]),
-  //   addPostRoute.addChildren([addPostIndexRoute]),
-  //   userSettingsRoute.addChildren([userSettingsIndexRoute])
-  // ]),
   sellerRegisterRoute.addChildren([sellerRegisterIndexRoute]),
-  // sellerDashboardRoute.addChildren([
-  //   sellerDashboardIndexRoute,
-  //   addProductRoute.addChildren([addProductIndexRoute]),
-  // ]),
+  userRoute.addChildren([
+    // userIndexRoute,
+    feedRoute.addChildren([feedIndexRoute]),
+    addPostRoute.addChildren([addPostIndexRoute]),
+    // userSettingsRoute.addChildren([userSettingsIndexRoute]),
+    sellerDashboardRoute.addChildren([
+      sellerDashboardIndexRoute,
+      addProductRoute.addChildren([addProductIndexRoute]),
+    ]),
+  ]),
   notFoundRoute,
 ]);
 

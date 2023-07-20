@@ -21,6 +21,7 @@ export const Image = styled.img`
   height: 312px; */
   max-width: 100%;
   object-fit: cover;
+  aspect-ratio: 4 / 5;
 `;
 
 export const CardInfo = styled.div`

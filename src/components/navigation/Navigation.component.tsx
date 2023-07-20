@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useParams } from "@tanstack/router";
 
 import Logo from "../logo/Logo.component";
@@ -6,12 +5,10 @@ import SearchBar from "../search-bar/SearchBar.component";
 
 import {
   MdFilterList,
-  MdHome,
   MdMenu,
   MdMenuOpen,
   MdOutlineShoppingCart,
   MdPerson,
-  MdSearch,
   MdSettings,
 } from "react-icons/md";
 import Dropdown from "../dropdown/Dropdown.component";
@@ -26,6 +23,8 @@ import {
 } from "./Navigation.styles";
 import { Button } from "../button/Button.styles";
 import { productListRoute } from "../../pages/product-list/ProductList.page";
+import { userSignOut } from "../../utils/firebase/auth.firebase";
+import useCurrentUser from "../../hooks/useAuthStateChange";
 
 type NavigationProps = {
   openModal: () => void;
@@ -42,6 +41,9 @@ const Navigation = ({
   toggleSidemenu,
   openFilterMenu,
 }: NavigationProps) => {
+  const currentUser = useCurrentUser();
+  console.log(currentUser);
+
   const params = useParams({
     from: productListRoute.id,
   });
@@ -52,9 +54,18 @@ const Navigation = ({
         <small>This season biggest sale - Up to 60% off</small>
         <ul>
           <li>
-            <Link to="/seller-registration">
-              <small>Seller Register</small>
-            </Link>
+            {currentUser ? (
+              <Link
+                to="/user/$userId/dashboard"
+                params={{ userId: `${currentUser.email}` }}
+              >
+                <small>Dashboard</small>
+              </Link>
+            ) : (
+              <Link to="/seller-registration">
+                <small>Seller Register</small>
+              </Link>
+            )}
           </li>
           <li>
             <small>
@@ -128,14 +139,33 @@ const Navigation = ({
           <CartButton onClick={openCart} className="laptop-only">
             <MdOutlineShoppingCart size="20px" />
           </CartButton>
-          <Button
-            $color="secondary"
-            $radius="curved"
-            onClick={openModal}
-            className="hide-from-mobile"
-          >
-            Login
-          </Button>
+          {currentUser && (
+            <Link
+              to="/user/$userId/feed"
+              params={{ userId: `${currentUser?.email}` }}
+              className="hide-from-tablet"
+            >
+              <MdPerson size="26px" />
+            </Link>
+          )}
+          {currentUser ? (
+            <Button
+              $outlined
+              onClick={userSignOut}
+              className="hide-from-mobile"
+            >
+              Sign Out
+            </Button>
+          ) : (
+            <Button
+              $color="secondary"
+              $radius="curved"
+              onClick={openModal}
+              className="hide-from-mobile"
+            >
+              Login
+            </Button>
+          )}
           <MdSettings size="28px" className="mobile-only" />
         </NavMainContent>
       </LowerNavContainer>

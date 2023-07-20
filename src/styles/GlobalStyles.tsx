@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import ReseterCSS from "./ReseterCSS";
-import { Size, deviceWidth } from "./devices.breakpoints";
+import { deviceWidth } from "./devices.breakpoints";
 
 export const GlobalStyles = createGlobalStyle`
 ${ReseterCSS}
@@ -130,7 +130,7 @@ ${ReseterCSS}
 }
 
 .mobile-only { // only visible on mobile
-  @media screen and (${deviceWidth.gtMobileL}) {
+  @media screen and (${deviceWidth.gteTablet}) {
     display: none;
   }
 }
@@ -178,6 +178,12 @@ a {
     text-decoration: underline;
   }
 }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
 `;
 
 /* :root {
