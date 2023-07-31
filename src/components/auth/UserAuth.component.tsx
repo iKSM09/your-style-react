@@ -1,14 +1,9 @@
-import {
-  MouseEvent,
-  MouseEventHandler,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEvent, ReactNode, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Register from "./Register.component";
 import SignIn from "./SignIn.component";
+import { authModalAtom } from "../../store/atoms";
+import { useAtom } from "jotai";
 
 export const Dialog = styled.dialog`
   position: fixed;
@@ -26,37 +21,31 @@ export const Dialog = styled.dialog`
 
 type UserAuthProps = {
   children?: ReactNode;
-  open: boolean;
-  onRequestClose: () => void;
   closeOnOutsideClick: any;
 };
 
-const UserAuth = ({
-  children,
-  open,
-  onRequestClose,
-  closeOnOutsideClick,
-}: UserAuthProps) => {
+const UserAuth = ({ children, closeOnOutsideClick }: UserAuthProps) => {
   const [newUser, setNewUser] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null!);
+  const [modalState, toggleModalState] = useAtom(authModalAtom);
 
   const isNewUser = () => setNewUser((bool) => !bool);
 
   useEffect(() => {
     const dialogNode = dialogRef.current;
 
-    if (open) {
+    if (modalState) {
       dialogNode.showModal();
     } else {
       dialogNode.close();
     }
-  }, [open]);
+  }, [modalState]);
 
   function handleOutsideClick(e: MouseEvent<HTMLDialogElement>) {
     const dialogNode = dialogRef.current;
 
     if (closeOnOutsideClick && e.target === dialogNode) {
-      onRequestClose();
+      toggleModalState(false);
     }
   }
 
@@ -70,10 +59,13 @@ const UserAuth = ({
         <Register
           isNewUser={isNewUser}
           isVendor={false}
-          onRequestClose={onRequestClose}
+          onRequestClose={() => toggleModalState(false)}
         />
       ) : (
-        <SignIn isNewUser={isNewUser} onRequestClose={onRequestClose} />
+        <SignIn
+          isNewUser={isNewUser}
+          onRequestClose={() => toggleModalState(false)}
+        />
       )}
     </Dialog>
   );

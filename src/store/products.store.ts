@@ -1,48 +1,78 @@
 import { StateCreator, create } from "zustand";
 import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
-import { collection, getDocs, query } from "firebase/firestore";
-import { db } from "../utils/firebase/db.firebase";
+import { getCollectionDocsFor } from "../utils/firebase/db.firebase";
+import { z } from "zod";
 
-export type ProductDataTypes = {
-  category: string;
-  colors: {
-    images: string[];
-    name: string;
-  }[];
-  description: string;
-  id: string;
-  name: string;
-  postedBy: string;
-  price: number;
-  sizes: string;
-};
+const MAX_FILE_SIZE = 15000000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
+export const productDataSchema = z.object({
+  id: z.string().uuid().nonempty("ID is required."),
+  postedBy: z
+    .string()
+    .nonempty("Email is required")
+    .email("Not a valid Email id."),
+  name: z.string().nonempty("Name is required."),
+  category: z
+    .string()
+    .nonempty(
+      "Category is required. It helps people to discover your product easily."
+    ),
+  description: z
+    .string()
+    .nonempty("Description is required.")
+    .max(1000, "Description should be lesser than 1000 words."),
+  price: z
+    .number({
+      required_error: "Price is required.",
+    })
+    .int()
+    .positive({ message: "Please select an positive number." }),
+  sizes: z.string().nonempty("Sizes are required."),
+  colors: z.array(
+    z.object({
+      name: z.string().nonempty(),
+      images: z.string().array(),
+      // .refine(
+      //   (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      //   "Max image size is 5MB."
+      // )
+      // .refine(
+      //   (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      //   "Only .jpg, .jpeg, .png and .webp formats are supported."
+      // ),
+    })
+  ),
+});
+
+export type ProductDataTypes = z.infer<typeof productDataSchema>;
 
 type State = {
   products: ProductDataTypes[];
   productsByCategory: ProductDataTypes[];
   productsBySubCategory: ProductDataTypes[];
   selectedProduct: ProductDataTypes;
+  productFilters: string[];
 };
 
 type Action = {
-  setProducts: (/* allProducts: State["products"] */) => void;
+  setProducts: () => void;
   filterProductsByCategrory: (category: string) => void;
   filterProductsBySubCategory: (subCategory: string) => void;
+  // filterProductsByFilter: (filters: { [key: string]: boolean }) => void;
   filterSelectedProduct: (id: string) => void;
+  setProductFilters: (filters: string[]) => void;
 };
 
 type PersistTypes = (
   config: StateCreator<State & Action>,
   options: PersistOptions<State & Action>
 ) => StateCreator<State & Action>;
-
-const getAllProducts = async () => {
-  const collectionRef = collection(db, "products");
-  const collectionQuery = query(collectionRef);
-  const collectionSnapshot = await getDocs(collectionQuery);
-
-  return collectionSnapshot.docs.map((doc) => doc.data());
-};
 
 export const productsStore = create<State & Action>(
   (persist as PersistTypes)(
@@ -51,9 +81,14 @@ export const productsStore = create<State & Action>(
       productsByCategory: [],
       productsBySubCategory: [],
       selectedProduct: {} as ProductDataTypes,
+      productFilters: [],
 
-      setProducts: async (/* allProducts */) =>
-        set({ products: (await getAllProducts()) as ProductDataTypes[] }),
+      setProducts: async () =>
+        set({
+          products: (await getCollectionDocsFor(
+            "products"
+          )) as ProductDataTypes[],
+        }),
       filterProductsByCategrory: (category) =>
         set(({ products, setProducts }) => {
           if (products.length === 0) setProducts();
@@ -74,6 +109,9 @@ export const productsStore = create<State & Action>(
             ),
           };
         }),
+      // filterProductsByFilter: (filters) => set(state => {
+
+      // }),
       filterSelectedProduct: (id) =>
         set(({ products, setProducts }) => {
           if (products.length === 0) setProducts();
@@ -85,6 +123,10 @@ export const productsStore = create<State & Action>(
           return {
             selectedProduct: { ...filteredProduct },
           };
+        }),
+      setProductFilters: (filters) =>
+        set({
+          productFilters: filters,
         }),
     }),
     {

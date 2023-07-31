@@ -43,7 +43,7 @@ export const CheckListItem = styled.div`
     color: var(--outlined);
     background-color: var(--form-background);
     font: inherit;
-    appearance: none;
+    /* appearance: none; */
 
     border: 0.12rem solid currentColor;
     border-radius: 0.12rem;

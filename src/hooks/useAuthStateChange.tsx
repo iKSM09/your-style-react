@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 
 import { onAuthStateChangedListner } from "../utils/firebase/auth.firebase";
 import { getUserData } from "../utils/firebase/db.firebase";
-import { userAtom } from "../atoms";
+import { userAtom } from "../store/atoms";
 
 const useCurrentUser = () => {
   const [currentUser, setCurrentUser] = useAtom(userAtom);

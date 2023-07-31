@@ -9,15 +9,13 @@ import {
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 import { AppbarContainer } from "./Appbar.styles";
-import useSidebar from "../../hooks/useSidebar";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 
 type AppbarProps = {
-  openModal: () => void;
   openCart: () => void;
 };
 
-const Appbar = ({ openModal, openCart }: AppbarProps) => {
+const Appbar = ({ openCart }: AppbarProps) => {
   const user = useCurrentUser();
 
   return (

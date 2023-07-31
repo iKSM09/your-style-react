@@ -6,10 +6,10 @@ import CardSection from "../../components/card-section/CardSection.component";
 import { FilterSection, ProductListLayout } from "./ProductList.styles";
 import Dropdown from "../../components/dropdown/Dropdown.component";
 import FilterMenu from "../../components/filter-menu/FilterMenu.component";
-import { useEffect } from "react";
-import { paths } from "../add-product/AddProduct.page";
+import { useEffect, useState } from "react";
 import Card from "../../components/card/Card.component";
-import { productsStore } from "../../store/products.store";
+import { ProductDataTypes, productsStore } from "../../store/products.store";
+import { set } from "zod";
 
 export const productListRoute = new Route({
   getParentRoute: () => storeRoute,
@@ -24,46 +24,66 @@ export const productListIndexRoute = new Route({
 
 function ProductList() {
   const params = useParams({ from: productListRoute.id });
-  const categoryPath = paths.filter((path) => path.category === params.for);
-
-  const [productsByCategory, filterProductsByCategrory] = productsStore(
-    (state) => [state.productsByCategory, state.filterProductsByCategrory]
-  );
+  const [
+    productsByCategory,
+    productFilters,
+    filterProductsByCategrory,
+    setProductFilters,
+  ] = productsStore((state) => [
+    state.productsByCategory,
+    state.productFilters,
+    state.filterProductsByCategrory,
+    state.setProductFilters,
+  ]);
+  const [products, setProducts] =
+    useState<ProductDataTypes[]>(productsByCategory);
 
   useEffect(() => {
+    setProductFilters([]);
     filterProductsByCategrory(params.for);
+    setProducts(productsByCategory);
   }, [params.for]);
+
+  useEffect(() => {
+    const filteredProd =
+      productFilters.length == 0
+        ? productsByCategory
+        : productsByCategory.filter((product) =>
+            productFilters.includes(product.category.split("/")[1])
+          );
+
+    setProducts(filteredProd);
+  }, [productFilters]);
 
   return (
     <div>
-      <h2>{params.for.toUpperCase()}</h2>
       <ProductListLayout className="grid">
         <FilterSection className="laptop-only">
-          <FilterMenu />
+          <FilterMenu
+            filterFor={
+              (params.for === "men" || "women" || "kids") &&
+              (params.for as "men" | "women" | "kids")
+            }
+          />
         </FilterSection>
         <div>
-          {categoryPath.map(({ subCategory }) =>
-            subCategory.map((list) => (
-              <CardSection
-                key={list.name}
-                title={list.name.toUpperCase()}
-                headerComp={
-                  <Dropdown
-                    defaultOption="Recommended"
-                    options={["Recommended", "Latest First", "Popularity"]}
-                    additional="Sort by "
-                    title="Sort by"
-                  />
-                }
-              >
-                {productsByCategory
-                  ?.filter((data) => data.category.split("/")[1] === list.name)
-                  .map((product) => (
-                    <Card key={product.id} productInfo={product} />
-                  ))}
-              </CardSection>
-            ))
-          )}
+          <CardSection
+            title={`All Products for ${params.for?.toUpperCase()}`}
+            headerComp={
+              <Dropdown
+                defaultOption="Recommended"
+                options={["Recommended", "Latest First", "Popularity"]}
+                additional="Sort by "
+                title="Sort by"
+              />
+            }
+          >
+            {products
+              .sort((a, b) => (a.name < b.name ? -1 : 1))
+              .map((product) => (
+                <Card key={product.id} productInfo={product} />
+              ))}
+          </CardSection>
         </div>
       </ProductListLayout>
     </div>

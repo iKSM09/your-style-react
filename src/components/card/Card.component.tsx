@@ -9,7 +9,7 @@ type CardProps = {
 };
 
 const Card = ({ productInfo }: CardProps) => {
-  const previewsImage = productInfo.colors[0].images[0];
+  const previewsImage = productInfo?.colors?.[0]?.images[0];
   // const category = productInfo.category.split("/")[0];
 
   return (
@@ -18,7 +18,7 @@ const Card = ({ productInfo }: CardProps) => {
         from={productRoute.id}
         to="/store/$for/$productId"
         params={{
-          for: productInfo.category.split("/")[0],
+          for: productInfo?.category?.split("/")[0],
           productId: productInfo.id,
         }}
         // search={productInfo}
@@ -28,8 +28,8 @@ const Card = ({ productInfo }: CardProps) => {
           <Image src={previewsImage} alt={`${productInfo.name} preview`} />
         </ImageContainer>
         <CardInfo>
-          <h3>{productInfo.name}</h3>
-          <p>Price: ₹{productInfo.price}</p>
+          <p className="title">{`${productInfo.name.slice(0, 18)}...`}</p>
+          <p>₹{productInfo.price}</p>
         </CardInfo>
       </Link>
     </CardContainer>

@@ -5,10 +5,12 @@ import {
   setDoc,
   collection,
   getDocs,
+  query,
 } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { firebaseApp } from ".";
-import { AddProductTypes } from "../../pages/add-product/AddProduct.page";
+import { ProductDataTypes } from "../../store/products.store";
+import { UserPostTypes } from "../../store/posts.store";
 
 export const db = getFirestore(firebaseApp);
 
@@ -47,24 +49,17 @@ export const createNewUserDoc = async (user: User, vendor: boolean) => {
   }
 };
 
-// Get Product Data from db
-export const getAllProducts = async () => {
-  const collectionRef = collection(db, "products");
-  const collectionSnapshot = await getDocs(collectionRef);
-  return collectionSnapshot.docs;
+// Get all Collection Docs
+export const getCollectionDocsFor = async (collectionID: string) => {
+  const collectionRef = collection(db, collectionID);
+  const collectionQuery = query(collectionRef);
+  const collectionSnapshot = await getDocs(collectionQuery);
 
-  console.log(
-    "collection",
-    collectionSnapshot.docs.forEach((doc) => ({ ...doc.data(), id: doc.id }))
-  );
-
-  // return collectionSnapshot.docs.map((doc) =>
-  //   console.log({ ...doc.data(), id: doc.id })
-  // );
+  return collectionSnapshot.docs.map((doc) => doc.data());
 };
 
 // Creating Product collection in FireStore
-export const createNewProductDoc = async (product: AddProductTypes) => {
+export const createNewProductDoc = async (product: ProductDataTypes) => {
   if (!product) return;
   // const path = product.category;
   const path = "products";
@@ -76,6 +71,25 @@ export const createNewProductDoc = async (product: AddProductTypes) => {
   if (!productSnapshot.exists()) {
     try {
       await setDoc(productDocRef, product);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};
+
+// Creating User Post collection in FireStore
+export const createNewUserPostDoc = async (post: UserPostTypes) => {
+  if (!post) return;
+
+  const path = "posts";
+
+  const postDocRef = doc(db, path, post.id);
+  const postSnapshot = await getDoc(postDocRef);
+
+  // if post doc doesn't exist
+  if (!postSnapshot.exists()) {
+    try {
+      await setDoc(postDocRef, post);
     } catch (error) {
       console.error(error);
     }

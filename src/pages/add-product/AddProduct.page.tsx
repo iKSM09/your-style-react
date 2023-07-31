@@ -1,21 +1,17 @@
 import { FieldErrors, useFieldArray, useForm } from "react-hook-form";
 import { Route } from "@tanstack/router";
 import { sellerDashboardRoute } from "../dashboard/Dashboard.page";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
 import { storage } from "../../utils/firebase/storage.firebase";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
-import Categories from "../../components/categories/Categories.component";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { createNewProductDoc } from "../../utils/firebase/db.firebase";
 import useCurrentUser from "../../hooks/useAuthStateChange";
-import { FormDataType } from "../../components/auth/Register.component";
+import {
+  ProductDataTypes,
+  productDataSchema,
+} from "../../store/products.store";
 
 export const Form = styled.form`
   margin: 1rem;
@@ -42,56 +38,6 @@ export const addProductIndexRoute = new Route({
   path: "/",
   component: AddProduct,
 });
-
-const MAX_FILE_SIZE = 15000000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
-const addProductSchema = z.object({
-  id: z.string().uuid().nonempty("ID is required."),
-  postedBy: z
-    .string()
-    .nonempty("Email is required")
-    .email("Not a valid Email id."),
-  name: z.string().nonempty("Name is required."),
-  category: z
-    .string()
-    .nonempty(
-      "Category is required. It helps people to discover your product easily."
-    ),
-  description: z
-    .string()
-    .nonempty("Description is required.")
-    .max(1000, "Description should be lesser than 1000 words."),
-  price: z
-    .number({
-      required_error: "Price is required.",
-      // invalid_type_error: "Age must be a number.",
-    })
-    .int()
-    .positive({ message: "Please select an positive number." }),
-  sizes: z.string().nonempty("Sizes are required."),
-  colors: z.array(
-    z.object({
-      name: z.string().nonempty(),
-      images: z.any(),
-      // .refine(
-      //   (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      //   "Max image size is 5MB."
-      // )
-      // .refine(
-      //   (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      //   "Only .jpg, .jpeg, .png and .webp formats are supported."
-      // ),
-    })
-  ),
-});
-
-export type AddProductTypes = z.infer<typeof addProductSchema>;
 
 export const paths = [
   {
@@ -203,7 +149,7 @@ export default function AddProduct() {
   const [path, setPath] = useState<string[] | null>([]);
 
   const { register, control, setValue, handleSubmit, formState, reset } =
-    useForm<AddProductTypes>({
+    useForm<ProductDataTypes>({
       mode: "onBlur",
       defaultValues: {
         id: crypto.randomUUID(),
@@ -220,7 +166,7 @@ export default function AddProduct() {
           },
         ],
       },
-      resolver: zodResolver(addProductSchema),
+      resolver: zodResolver(productDataSchema),
     });
 
   const { errors, isLoading, isSubmitting } = formState;
@@ -273,7 +219,7 @@ export default function AddProduct() {
     return imagesURL;
   };
 
-  const onSubmitSuccess = async (data: AddProductTypes) => {
+  const onSubmitSuccess = async (data: ProductDataTypes) => {
     try {
       data.colors.map((color, index) => (color.images = images[index]));
       console.log("submitted!!", data);
@@ -284,8 +230,8 @@ export default function AddProduct() {
     }
   };
 
-  const onSubmitError = (errors: FieldErrors<AddProductTypes>) => {
-    console.log(errors);
+  const onSubmitError = (errors: FieldErrors<ProductDataTypes>) => {
+    console.error("submit failed errors:", errors);
   };
 
   return (

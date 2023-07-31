@@ -30,7 +30,11 @@ export const CardInfo = styled.div`
   display: flex;
   justify-content: space-between;
 
-  * {
-    margin-bottom: 4px;
+  p + p {
+    margin: 0;
+  }
+
+  .title {
+    font-weight: 500;
   }
 `;

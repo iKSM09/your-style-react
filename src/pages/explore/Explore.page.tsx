@@ -1,9 +1,16 @@
-import { Route } from "@tanstack/router";
+import { Link, Route } from "@tanstack/router";
 
 import { rootRoute } from "../../router";
 import { styled } from "styled-components";
-import { productsStore } from "../../store/products.store";
+import { ProductDataTypes, productsStore } from "../../store/products.store";
 import { deviceWidth } from "../../styles/devices.breakpoints";
+import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { useEffect, useState } from "react";
+import { productRoute } from "../product/Product.page";
+import { MdProductionQuantityLimits, MdShoppingBag } from "react-icons/md";
+import UserPost from "../../components/user-post/UserPost.component";
+import { useAtom, useSetAtom } from "jotai";
+import { postModalAtom } from "../../store/atoms";
 
 export const ImageGallery = styled.section`
   width: 100%;
@@ -31,14 +38,21 @@ export const ImageContainer = styled.div`
     grid-row: span 2;
   }
 
-  img {
+  .icon {
+    margin: 8px;
+    position: absolute;
+    bottom: 0;
+    text-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+  }
+
+  img.gallery {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: all 0.5s ease;
   }
 
-  &:hover img {
+  &:hover img.gallery {
     transform: scale(1.1);
   }
 `;
@@ -55,53 +69,63 @@ export const exploreIndexRoute = new Route({
 });
 
 function Explore() {
+  const [modalState, toggleModalState] = useAtom(postModalAtom);
   const products = productsStore((state) => state.products);
+  const posts = postsStore((state) => state.allPosts);
+  const [selectedPost, setSelectedPost] = useState<UserPostTypes | null>(null!);
+  const [explorationPost, setExplorationPost] = useState<
+    (ProductDataTypes | UserPostTypes)[]
+  >([]);
+
+  useEffect(() => {
+    const shuffled: (ProductDataTypes | UserPostTypes)[] = [
+      ...posts,
+      ...products,
+    ].sort(() => 0.5 - Math.random());
+    // shuffled.slice(0, num)
+    setExplorationPost(shuffled);
+  }, []);
+
+  const handleOpenModal = (userPost: UserPostTypes) => {
+    toggleModalState((bool) => !bool);
+    setSelectedPost(userPost);
+  };
+
+  console.log({ explorationPost });
+  console.log({ selectedPost });
 
   return (
     <div>
-      <h2>
-        This is an Instagram explore like page, that shows the pictures user
-        have put on the platform.
-      </h2>
+      {modalState && <UserPost post={selectedPost!} closeOnOutsideClick />}
       <ImageGallery>
-        {products.map((product) => (
-          <ImageContainer key={product.id}>
-            <img
-              src={product.colors[0].images[0]}
-              alt={`${product.name} preview image`}
-            />
-          </ImageContainer>
-        ))}
-        {products.map((product) => (
-          <ImageContainer key={product.id + product.name}>
-            <img
-              src={product.colors[0].images[0]}
-              alt={`${product.name} preview image`}
-            />
-          </ImageContainer>
-        ))}
-        {products.map((product) => (
-          <ImageContainer key={product.id + product.category}>
-            <img
-              src={product.colors[0].images[0]}
-              alt={`${product.name} preview image`}
-            />
-          </ImageContainer>
-        ))}
-        {products.map((product) => (
-          <ImageContainer key={product.id + product.category + product.name}>
-            <img
-              src={product.colors[0].images[0]}
-              alt={`${product.name} preview image`}
-            />
-          </ImageContainer>
-        ))}
-        {products.map((product) => (
-          <ImageContainer key={product.id + product.name + product.category}>
-            <img
-              src={product.colors[0].images[0]}
-              alt={`${product.name} preview image`}
-            />
+        {explorationPost.map((post) => (
+          <ImageContainer key={`product__${post?.id}`}>
+            {"name" in post ? (
+              <Link
+                from={productRoute.id}
+                to="/store/$for/$productId"
+                params={{
+                  for: post?.category?.split("/")[0],
+                  productId: post.id,
+                }}
+                // search={productInfo}
+                activeOptions={{ exact: true }}
+              >
+                <MdShoppingBag className="icon" />
+                <img
+                  className="gallery"
+                  src={post?.colors[0].images[0]}
+                  alt={`${post?.name} preview image`}
+                />
+              </Link>
+            ) : (
+              <img
+                className="gallery"
+                onClick={() => handleOpenModal(post)}
+                src={post?.image}
+                alt={`a photo by ${post?.postedBy}`}
+              />
+            )}
           </ImageContainer>
         ))}
       </ImageGallery>

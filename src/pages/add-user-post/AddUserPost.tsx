@@ -4,6 +4,11 @@ import { ChangeEvent, useState } from "react";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../utils/firebase/storage.firebase";
+import { MdAddCircleOutline } from "react-icons/md";
+import { FieldErrors, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createNewUserPostDoc } from "../../utils/firebase/db.firebase";
+import { UserPostTypes, userPostSchema } from "../../store/posts.store";
 
 export const addPostRoute = new Route({
   getParentRoute: () => userRoute,
@@ -18,11 +23,28 @@ export const addPostIndexRoute = new Route({
 
 function AddUserPost() {
   const user = useCurrentUser();
-  const [images, setImages] = useState<string[]>([]);
+  const [imageURL, setImageURL] = useState("");
+
+  const { register, trigger, handleSubmit, formState, setValue, reset } =
+    useForm<UserPostTypes>({
+      mode: "onBlur",
+      defaultValues: {
+        id: crypto.randomUUID(),
+        postedBy: user?.email,
+        postDate: new Date(),
+        image: "",
+        caption: "",
+        productLink: "",
+      },
+      resolver: zodResolver(userPostSchema),
+    });
+
+  const { errors, isLoading, isSubmitting } = formState;
 
   const handleImagesAsFile = (e: ChangeEvent<HTMLInputElement>) => {
-    // if (e.target.files == null) return;
-    const imagesURL: string[] = [];
+    setValue("postedBy", user?.email);
+
+    if (e.target.files == null) return;
     const imgFiles: FileList = e.target.files!;
 
     for (let i = 0; i < imgFiles.length; i++) {
@@ -45,57 +67,106 @@ function AddUserPost() {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
             console.log("File available at ", downloadUrl);
-            imagesURL.push(downloadUrl);
-            setImages(imagesURL);
+            setImageURL(downloadUrl);
+            setValue("image", downloadUrl);
           });
         }
       );
     }
   };
 
-  console.log({ images }, images.length);
-  console.log("0:", images[0]);
-  console.log("1:", images[1]);
+  console.log({ imageURL });
+
+  const onSubmitSuccess = async (data: UserPostTypes) => {
+    try {
+      await createNewUserPostDoc(data);
+      console.log("submitted!!", data);
+      setImageURL("");
+      reset();
+    } catch (error) {
+      console.error("submit error:", error);
+    }
+  };
+
+  const onSubmitError = (errors: FieldErrors<UserPostTypes>) => {
+    console.error("submit failed errors:", errors);
+  };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
       <h2>Add New Post (WIP)</h2>
-      <ul>
-        <li>
-          <div>
-            <input
-              name="post"
-              id="post"
-              type="file"
-              multiple
-              accept="image/jpeg,image/jpg,image/png,image/webp"
-              onChange={(e) => handleImagesAsFile(e)}
-            />
-            <div>
-              {images?.map((image, index) => (
-                <img
-                  key={index}
-                  width={120}
-                  src={image}
-                  alt={`preview image ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </li>
-        <li>
-          <textarea
-            name="caption"
-            id="caption"
-            cols={32}
-            rows={0o5}
-            placeholder="write your cation..."
-          ></textarea>
-        </li>
-        <li>Product Reference</li>
-        <li>Post</li>
-      </ul>
-    </div>
+
+      <div>
+        <div
+          onClick={() => {
+            trigger("image");
+          }}
+          style={{
+            marginInline: "auto",
+            width: "320px",
+            backgroundColor: "var(--secondary)",
+            border: "solid 1px #fff",
+            borderRadius: "4px",
+            aspectRatio: "1 / 1.3",
+            overflow: "hidden",
+          }}
+        >
+          <input
+            hidden
+            id="user-post"
+            type="file"
+            accept="image/jpeg,image/jpg,image/png,image/webp"
+            {...register("image", {
+              onChange: (e) => handleImagesAsFile(e),
+            })}
+          />
+          {imageURL === "" ? (
+            <span
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                color: "var(--primary)",
+              }}
+            >
+              <MdAddCircleOutline size={40} />
+              <label
+                htmlFor="user-post"
+                style={{ fontWeight: "500", margin: "12px" }}
+              >
+                Add an Image...
+              </label>
+            </span>
+          ) : (
+            <img width="100%" src={imageURL} alt={`preview image`} />
+          )}
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="caption">Caption</label>
+        <textarea
+          cols={32}
+          rows={0o5}
+          {...register("caption")}
+          placeholder="write your cation..."
+        ></textarea>
+      </div>
+
+      <div>
+        <label htmlFor="product-link">Product Reference</label>
+        <input
+          type="text"
+          {...register("productLink")}
+          placeholder="link to the product you use"
+        />
+      </div>
+
+      <button type="submit">Post</button>
+    </form>
   );
 }
 

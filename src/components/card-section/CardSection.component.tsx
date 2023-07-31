@@ -17,6 +17,7 @@ const CardSectionContainer = styled.section`
 
 const Header = styled.div`
   padding-block: 16px;
+  margin-bottom: 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

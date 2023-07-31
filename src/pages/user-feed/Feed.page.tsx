@@ -2,6 +2,9 @@ import { Route } from "@tanstack/router";
 import { userRoute } from "../user/user-route";
 import { styled } from "styled-components";
 import { deviceWidth } from "../../styles/devices.breakpoints";
+import { postsStore } from "../../store/posts.store";
+import { useEffect } from "react";
+import useCurrentUser from "../../hooks/useAuthStateChange";
 
 export const ImageGallery = styled.section`
   width: 100%;
@@ -75,6 +78,18 @@ export const feedIndexRoute = new Route({
 });
 
 function Feed() {
+  const user = useCurrentUser();
+  const [allPosts, setPosts] = postsStore((state) => [
+    state.allPosts,
+    state.setPosts,
+  ]);
+
+  useEffect(() => {
+    setPosts();
+  }, []);
+
+  console.log({ user }, { allPosts });
+
   return (
     <div>
       <ProfileContainer>
@@ -82,6 +97,13 @@ function Feed() {
         <ProfileDetails></ProfileDetails>
       </ProfileContainer>
       <ImageGallery>
+        {allPosts
+          .filter((post) => post.postedBy === user?.email)
+          .map((post) => (
+            <ImageContainer key={post.id}>
+              <img src={post.image} alt={`a photo by ${post.postedBy}`} />
+            </ImageContainer>
+          ))}
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
           (num) => (
             <ImageContainer key={num}></ImageContainer>

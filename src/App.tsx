@@ -15,13 +15,9 @@ import Appbar from "./components/appbar/Appbar.component";
 import Sidemenu from "./components/sidemenu/Sidemenu.component";
 import useSidebar from "./hooks/useSidebar";
 import FilterMenuSidebar from "./components/filter-menu/FilterMenuSidebar.component";
+import UserPost from "./components/user-post/UserPost.component";
 
 function App() {
-  // const [values, loading, error, snapshot] = useCollectionData(
-  //   collection(db, "products")
-  // );
-  // const setProducts = useProductsStore((state) => state.setProducts);
-
   const [cart, openCart, closeCart] = useSidebar();
   const [sidemenu, openSidemenu, closeSidemenu, toggleSidemenu] = useSidebar();
   const [filterMenu, openFilterMenu, closeFilterMenu] = useSidebar();
@@ -31,29 +27,20 @@ function App() {
   const toggleModal = () => setModalOpen((bool) => !bool);
   const closeModal = () => setModalOpen(false);
 
-  // useEffect(() => {
-  //   setProducts(values!);
-  // }, [values]);
-
   return (
     <AppContainer>
       <GlobalStyles />
       <Navigation
-        openModal={toggleModal}
         openCart={openCart}
         sidemenu={sidemenu}
         toggleSidemenu={toggleSidemenu}
         openFilterMenu={openFilterMenu}
       />
       <FilterMenuSidebar sidebar={filterMenu} closeSidebar={closeFilterMenu} />
-      <Appbar openModal={toggleModal} openCart={openCart} />
+      <Appbar openCart={openCart} />
       <Outlet />
 
-      <UserAuth
-        open={modalOpen}
-        onRequestClose={closeModal}
-        closeOnOutsideClick
-      />
+      <UserAuth closeOnOutsideClick />
 
       <Cart sidebar={cart} closeSidebar={closeCart} />
       <Sidemenu sidebar={sidemenu} closeSidebar={closeSidemenu} />

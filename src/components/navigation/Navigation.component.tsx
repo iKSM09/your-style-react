@@ -25,9 +25,10 @@ import { Button } from "../button/Button.styles";
 import { productListRoute } from "../../pages/product-list/ProductList.page";
 import { userSignOut } from "../../utils/firebase/auth.firebase";
 import useCurrentUser from "../../hooks/useAuthStateChange";
+import { useSetAtom } from "jotai";
+import { authModalAtom } from "../../store/atoms";
 
 type NavigationProps = {
-  openModal: () => void;
   openCart: () => void;
   sidemenu: boolean;
   toggleSidemenu: () => void;
@@ -35,14 +36,13 @@ type NavigationProps = {
 };
 
 const Navigation = ({
-  openModal,
   openCart,
   sidemenu,
   toggleSidemenu,
   openFilterMenu,
 }: NavigationProps) => {
   const currentUser = useCurrentUser();
-  console.log(currentUser);
+  const toggleModalState = useSetAtom(authModalAtom);
 
   const params = useParams({
     from: productListRoute.id,
@@ -148,25 +148,25 @@ const Navigation = ({
               <MdPerson size="26px" />
             </Link>
           )}
+          <MdSettings size="28px" className="mobile-only" />
           {currentUser ? (
             <Button
               $outlined
               onClick={userSignOut}
-              className="hide-from-mobile"
+              // className="hide-from-mobile"
             >
-              Sign Out
+              Logout
             </Button>
           ) : (
             <Button
               $color="secondary"
               $radius="curved"
-              onClick={openModal}
-              className="hide-from-mobile"
+              onClick={() => toggleModalState((bool) => !bool)}
+              // className="hide-from-mobile"
             >
               Login
             </Button>
           )}
-          <MdSettings size="28px" className="mobile-only" />
         </NavMainContent>
       </LowerNavContainer>
       {params.for && !sidemenu && (
