@@ -2,10 +2,10 @@ import { Link } from "@tanstack/router";
 
 import { productRoute } from "../../pages/product/Product.page";
 import { CardContainer, CardInfo, Image, ImageContainer } from "./Card.styles";
-import { AddProductTypes } from "../../pages/add-product/AddProduct.page";
+import { ProductDataTypes } from "../../store/products.store";
 
 type CardProps = {
-  productInfo: AddProductTypes;
+  productInfo: ProductDataTypes;
 };
 
 const Card = ({ productInfo }: CardProps) => {

@@ -356,7 +356,7 @@ export default function AddProduct() {
                     onChange: (e) =>
                       setValue(
                         `colors.${index}.images`,
-                        handleImagesAsFile(e, index)
+                        handleImagesAsFile(e, index)!
                       ),
                   })}
                   placeholder="Select images"
