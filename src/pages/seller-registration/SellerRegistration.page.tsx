@@ -1,7 +1,4 @@
-import { useState } from "react";
-
-import Register from "../../components/auth/Register.component";
-import SignIn from "../../components/auth/SignIn.component";
+import { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import AuthState from "../../components/auth/AuthState.component";
@@ -12,6 +9,13 @@ const VendorAuthContainer = styled.main`
 `;
 
 const SellerRegistration = () => {
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
+
   return (
     <VendorAuthContainer>
       <AuthState isVendor={true} />

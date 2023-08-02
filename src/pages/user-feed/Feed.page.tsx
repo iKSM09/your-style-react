@@ -98,6 +98,13 @@ const Feed = () => {
     setPosts();
   }, []);
 
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
+
   const handleShowPost = (userPost: UserPostTypes) => {
     setModalState((bool) => !bool);
     setSelectedPost(userPost);

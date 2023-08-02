@@ -1,4 +1,4 @@
-import { Route } from "@tanstack/router";
+import { Route, useParams } from "@tanstack/router";
 
 import Jumbotron from "../../components/jumbotron/Jumbotron.component";
 import Categories from "../../components/categories/Categories.component";
@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { productsStore } from "../../store/products.store";
 
 const Home = () => {
+  const params = useParams();
   const [products, setProducts] = productsStore((state) => [
     state.products,
     state.setProducts,
@@ -19,6 +20,13 @@ const Home = () => {
 
   useEffect(() => {
     setProducts();
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
   }, []);
 
   return (

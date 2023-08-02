@@ -27,6 +27,13 @@ const ProductList = () => {
     useState<ProductDataTypes[]>(productsByCategory);
 
   useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
+
+  useEffect(() => {
     setProductFilters([]);
     filterProductsByCategrory(params.for);
     setProducts(productsByCategory);

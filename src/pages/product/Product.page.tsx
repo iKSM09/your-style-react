@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "@tanstack/router";
+import { useNavigate, useParams } from "@tanstack/router";
 
 import { MdShoppingBag } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
@@ -48,6 +48,13 @@ const Product = () => {
   useEffect(() => {
     setProducts();
   }, []);
+
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, [params, selectedColor]);
 
   useEffect(() => {
     setProducts();

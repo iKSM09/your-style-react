@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../utils/firebase/storage.firebase";
@@ -31,6 +31,13 @@ const AddUserPost = () => {
     });
 
   const { errors, isLoading, isSubmitting } = formState;
+
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
 
   const handleImagesAsFile = (e: ChangeEvent<HTMLInputElement>) => {
     setValue("postedBy", user?.email);
@@ -65,8 +72,6 @@ const AddUserPost = () => {
       );
     }
   };
-
-  console.log({ imageURL });
 
   const onSubmitSuccess = async (data: UserPostTypes) => {
     try {

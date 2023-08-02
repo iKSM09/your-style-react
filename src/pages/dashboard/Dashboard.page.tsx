@@ -7,6 +7,7 @@ import { getAllPaths } from "../add-product/AddProduct.page";
 import { productsStore } from "../../store/products.store";
 import { userRoute } from "../user/User.route";
 import { productRoute } from "../product/Product.route";
+import { useEffect } from "react";
 
 export const DashboardContainer = styled.main`
   margin: 1rem;
@@ -54,6 +55,13 @@ const Dashboard = () => {
   const allPaths = getAllPaths();
   const user = useCurrentUser();
   const products = productsStore((state) => state.products);
+
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
 
   return (
     <DashboardContainer>

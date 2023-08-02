@@ -68,6 +68,13 @@ const Explore = () => {
   >([]);
 
   useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
+
+  useEffect(() => {
     const shuffled: (ProductDataTypes | UserPostTypes)[] = [
       ...posts,
       ...products,
@@ -81,10 +88,6 @@ const Explore = () => {
     setModalState((bool) => !bool);
     setSelectedPost(userPost);
   };
-
-  console.log({ posts });
-  console.log({ explorationPost });
-  console.log({ selectedPost });
 
   return (
     <div>

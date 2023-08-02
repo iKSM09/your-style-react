@@ -1,7 +1,7 @@
 import { FieldErrors, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styled from "styled-components";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { storage } from "../../utils/firebase/storage.firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { createNewProductDoc } from "../../utils/firebase/db.firebase";
@@ -166,6 +166,13 @@ const AddProduct = () => {
     name: "colors",
     control,
   });
+
+  useEffect(() => {
+    document.documentElement.scrollTo({
+      top: 0,
+      left: 0,
+    });
+  }, []);
 
   const handleImagesAsFile = (
     e: ChangeEvent<HTMLInputElement>,

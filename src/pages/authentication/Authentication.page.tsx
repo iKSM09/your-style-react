@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const Checkout = () => {
+const Authentication = () => {
   useEffect(() => {
     document.documentElement.scrollTo({
       top: 0,
@@ -8,7 +8,7 @@ const Checkout = () => {
     });
   }, []);
 
-  return <div>Checkout Cart</div>;
+  return <div>Authentication (Login / Register)</div>;
 };
 
-export default Checkout;
+export default Authentication;
