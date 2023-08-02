@@ -1,10 +1,13 @@
-import { Route } from "@tanstack/router";
-import { userRoute } from "../user/user-route";
 import { styled } from "styled-components";
 import { deviceWidth } from "../../styles/devices.breakpoints";
-import { postsStore } from "../../store/posts.store";
-import { useEffect } from "react";
+import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { useEffect, useState } from "react";
 import useCurrentUser from "../../hooks/useAuthStateChange";
+import AuthState from "../../components/auth/AuthState.component";
+import UserPlaceholderImage from "../../assets/user-placeholder-image.jpg";
+import { useAtom } from "jotai";
+import { postModalAtom } from "../../store/atoms";
+import UserPost from "../../components/user-post/UserPost.component";
 
 export const ImageGallery = styled.section`
   width: 100%;
@@ -23,7 +26,7 @@ export const ImageGallery = styled.section`
 
 export const ImageContainer = styled.div`
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 2 / 3;
   background-color: #d7d7d8;
   overflow: hidden;
 
@@ -56,62 +59,84 @@ export const ProfileContainer = styled.section`
 
 export const ProfilePicture = styled.div`
   aspect-ratio: 1 / 1;
-  background-color: #d7d7d8;
   overflow: hidden;
   border-radius: 50%;
+
+  img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
 `;
 
 export const ProfileDetails = styled.div`
+  padding: 1rem;
   grid-column: span 2;
-  background-color: #d7d7d8;
+  /* text-align: start; */
+  display: flex;
+  flex-direction: column;
+  /* justify-content: start; */
+  align-items: start;
+
+  h4 {
+    margin-block: 8px;
+    font-size: 20px;
+    font-weight: bold;
+  }
 `;
 
-export const feedRoute = new Route({
-  getParentRoute: () => userRoute,
-  path: "/feed",
-});
-
-export const feedIndexRoute = new Route({
-  getParentRoute: () => feedRoute,
-  path: "/",
-  component: Feed,
-});
-
-function Feed() {
+const Feed = () => {
   const user = useCurrentUser();
+  const [modalState, setModalState] = useAtom(postModalAtom);
   const [allPosts, setPosts] = postsStore((state) => [
     state.allPosts,
     state.setPosts,
   ]);
+  const [selectedPost, setSelectedPost] = useState<UserPostTypes | null>(null!);
 
   useEffect(() => {
     setPosts();
   }, []);
 
-  console.log({ user }, { allPosts });
+  const handleShowPost = (userPost: UserPostTypes) => {
+    setModalState((bool) => !bool);
+    setSelectedPost(userPost);
+  };
 
   return (
-    <div>
-      <ProfileContainer>
-        <ProfilePicture />
-        <ProfileDetails></ProfileDetails>
-      </ProfileContainer>
-      <ImageGallery>
-        {allPosts
-          .filter((post) => post.postedBy === user?.email)
-          .map((post) => (
-            <ImageContainer key={post.id}>
-              <img src={post.image} alt={`a photo by ${post.postedBy}`} />
-            </ImageContainer>
-          ))}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
-          (num) => (
-            <ImageContainer key={num}></ImageContainer>
-          )
-        )}
-      </ImageGallery>
-    </div>
+    <>
+      {modalState && <UserPost post={selectedPost!} closeOnOutsideClick />}
+      {user ? (
+        <div>
+          <ProfileContainer>
+            <ProfilePicture>
+              <img src={UserPlaceholderImage} alt="user profile image" />
+            </ProfilePicture>
+            <ProfileDetails>
+              <small>{user.email}</small>
+              <h4>{user.displayName}</h4>
+              <p>User bio...</p>
+            </ProfileDetails>
+          </ProfileContainer>
+          <ImageGallery>
+            {allPosts
+              .filter((post) => post.postedBy === user?.email)
+              .map((post) => (
+                <ImageContainer key={post.id}>
+                  <img
+                    src={post.image}
+                    alt={`a photo by ${post.postedBy}`}
+                    onClick={() => handleShowPost(post)}
+                  />
+                </ImageContainer>
+              ))}
+          </ImageGallery>
+        </div>
+      ) : (
+        <AuthState />
+      )}
+    </>
   );
-}
+};
 
 export default Feed;

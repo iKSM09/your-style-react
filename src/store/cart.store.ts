@@ -50,7 +50,10 @@ export const cartStore = create<State & Action>(
         set((state) => ({
           cartItems: state.cartItems.filter((item) => item.id !== id),
         })),
-      resetCart: () => set(initialState),
+      resetCart: () => {
+        set(initialState);
+        get().reCalCartTotalPrice();
+      },
       // updateProduct: (updatedProduct) =>
       //   set(({ cartItems }) => {
       //     let currentCartList = cartItems.map((item) =>
@@ -71,12 +74,10 @@ export const cartStore = create<State & Action>(
               );
               return { cartItems: currentCartList };
             });
-
-        get().reCalCartTotalPrice();
       },
       reCalCartTotalPrice: () =>
-        set((state) => ({
-          cartTotalPrice: state.cartItems.reduce(
+        set(({ cartItems }) => ({
+          cartTotalPrice: cartItems.reduce(
             (acc, item) => acc + item.totalPrice,
             0
           ),

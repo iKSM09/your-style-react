@@ -10,19 +10,9 @@ import { useEffect, useState } from "react";
 import Card from "../../components/card/Card.component";
 import { ProductDataTypes, productsStore } from "../../store/products.store";
 import { set } from "zod";
+import { productListRoute } from "./ProductList.route";
 
-export const productListRoute = new Route({
-  getParentRoute: () => storeRoute,
-  path: "/$for",
-});
-
-export const productListIndexRoute = new Route({
-  getParentRoute: () => productListRoute,
-  path: "/",
-  component: ProductList,
-});
-
-function ProductList() {
+const ProductList = () => {
   const params = useParams({ from: productListRoute.id });
   const [
     productsByCategory,
@@ -88,6 +78,6 @@ function ProductList() {
       </ProductListLayout>
     </div>
   );
-}
+};
 
 export default ProductList;

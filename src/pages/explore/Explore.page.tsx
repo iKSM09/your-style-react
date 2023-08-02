@@ -1,16 +1,14 @@
-import { Link, Route } from "@tanstack/router";
-
-import { rootRoute } from "../../router";
+import { Link } from "@tanstack/router";
 import { styled } from "styled-components";
 import { ProductDataTypes, productsStore } from "../../store/products.store";
 import { deviceWidth } from "../../styles/devices.breakpoints";
 import { UserPostTypes, postsStore } from "../../store/posts.store";
 import { useEffect, useState } from "react";
-import { productRoute } from "../product/Product.page";
-import { MdProductionQuantityLimits, MdShoppingBag } from "react-icons/md";
+import { MdShoppingBag } from "react-icons/md";
 import UserPost from "../../components/user-post/UserPost.component";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { postModalAtom } from "../../store/atoms";
+import { productRoute } from "../product/Product.route";
 
 export const ImageGallery = styled.section`
   width: 100%;
@@ -29,7 +27,7 @@ export const ImageGallery = styled.section`
 
 export const ImageContainer = styled.div`
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 2 / 3;
   background-color: #d7d7d8;
   overflow: hidden;
 
@@ -57,21 +55,13 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const exploreRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "/explore",
-});
-
-export const exploreIndexRoute = new Route({
-  getParentRoute: () => exploreRoute,
-  path: "/",
-  component: Explore,
-});
-
-function Explore() {
-  const [modalState, toggleModalState] = useAtom(postModalAtom);
+const Explore = () => {
+  const [modalState, setModalState] = useAtom(postModalAtom);
   const products = productsStore((state) => state.products);
-  const posts = postsStore((state) => state.allPosts);
+  const [posts, setPosts] = postsStore((state) => [
+    state.allPosts,
+    state.setPosts,
+  ]);
   const [selectedPost, setSelectedPost] = useState<UserPostTypes | null>(null!);
   const [explorationPost, setExplorationPost] = useState<
     (ProductDataTypes | UserPostTypes)[]
@@ -84,13 +74,15 @@ function Explore() {
     ].sort(() => 0.5 - Math.random());
     // shuffled.slice(0, num)
     setExplorationPost(shuffled);
+    setPosts();
   }, []);
 
-  const handleOpenModal = (userPost: UserPostTypes) => {
-    toggleModalState((bool) => !bool);
+  const handleShowPost = (userPost: UserPostTypes) => {
+    setModalState((bool) => !bool);
     setSelectedPost(userPost);
   };
 
+  console.log({ posts });
   console.log({ explorationPost });
   console.log({ selectedPost });
 
@@ -121,9 +113,9 @@ function Explore() {
             ) : (
               <img
                 className="gallery"
-                onClick={() => handleOpenModal(post)}
                 src={post?.image}
                 alt={`a photo by ${post?.postedBy}`}
+                onClick={() => handleShowPost(post)}
               />
             )}
           </ImageContainer>
@@ -131,6 +123,6 @@ function Explore() {
       </ImageGallery>
     </div>
   );
-}
+};
 
 export default Explore;

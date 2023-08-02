@@ -154,14 +154,25 @@ type CartProps = {
 
 const Cart = ({ sidebar, closeSidebar }: CartProps) => {
   const [total, setTotal] = useState(0);
-  const [cartItems, cartTotalPrice, removeFromCart, resetCart, updateQuantity] =
-    cartStore((state) => [
-      state.cartItems,
-      state.cartTotalPrice,
-      state.removeFromCart,
-      state.resetCart,
-      state.updateQuantity,
-    ]);
+  const [
+    cartItems,
+    cartTotalPrice,
+    removeFromCart,
+    resetCart,
+    updateQuantity,
+    reCalCartTotalPrice,
+  ] = cartStore((state) => [
+    state.cartItems,
+    state.cartTotalPrice,
+    state.removeFromCart,
+    state.resetCart,
+    state.updateQuantity,
+    state.reCalCartTotalPrice,
+  ]);
+
+  useEffect(() => {
+    reCalCartTotalPrice();
+  }, [cartItems]);
 
   return (
     <Sidebar sidebar={sidebar} closeSidebar={closeSidebar} position="right">

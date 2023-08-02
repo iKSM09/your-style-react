@@ -1,33 +1,33 @@
 import { Router, RootRoute } from "@tanstack/router";
 
 import App from "./App";
-import { indexRoute } from "./pages/home/Home.page";
-import { notFoundRoute } from "./pages/404-not-found/404.page";
-import { storeRoute, storeIndexRoute } from "./pages/store/Store.page";
+import { indexRoute } from "./pages/home/Home.route";
+import { storeIndexRoute, storeRoute } from "./pages/store/Store.route";
 import {
-  productListRoute,
   productListIndexRoute,
-} from "./pages/product-list/ProductList.page";
-import { productRoute, productIndexRoute } from "./pages/product/Product.page";
-import { exploreIndexRoute, exploreRoute } from "./pages/explore/Explore.page";
+  productListRoute,
+} from "./pages/product-list/ProductList.route";
+import { productIndexRoute, productRoute } from "./pages/product/Product.route";
+import { exploreIndexRoute, exploreRoute } from "./pages/explore/Explore.route";
 import {
-  sellerRegisterIndexRoute,
-  sellerRegisterRoute,
-} from "./pages/seller-registration/SellerRegister.component";
-import {
-  sellerDashboardIndexRoute,
-  sellerDashboardRoute,
-} from "./pages/dashboard/Dashboard.page";
-import {
-  addProductIndexRoute,
-  addProductRoute,
-} from "./pages/add-product/AddProduct.page";
-import { feedIndexRoute, feedRoute } from "./pages/user-feed/Feed.page";
+  sellerRegistrationIndexRoute,
+  sellerRegistrationRoute,
+} from "./pages/seller-registration/SellerRegistration.route";
+import { userRoute } from "./pages/user/User.route";
+import { feedIndexRoute, feedRoute } from "./pages/user-feed/Feed.route";
 import {
   addPostIndexRoute,
   addPostRoute,
-} from "./pages/add-user-post/AddUserPost";
-import { userRoute } from "./pages/user/user-route";
+} from "./pages/add-user-post/AddUserPost.route";
+import {
+  sellerDashboardIndexRoute,
+  sellerDashboardRoute,
+} from "./pages/dashboard/Dashboard.route";
+import {
+  addProductIndexRoute,
+  addProductRoute,
+} from "./pages/add-product/AddProduct.route";
+import { notFoundRoute } from "./pages/404-not-found/NotFound.route";
 
 export const rootRoute = new RootRoute({ component: App });
 
@@ -42,7 +42,7 @@ const routeTree = rootRoute.addChildren([
   ]),
   // checkoutRoute.addChildren([checkoutIndexRoute]),
   exploreRoute.addChildren([exploreIndexRoute]),
-  sellerRegisterRoute.addChildren([sellerRegisterIndexRoute]),
+  sellerRegistrationRoute.addChildren([sellerRegistrationIndexRoute]),
   userRoute.addChildren([
     // userIndexRoute,
     feedRoute.addChildren([feedIndexRoute]),

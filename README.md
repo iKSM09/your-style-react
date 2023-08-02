@@ -1,6 +1,7 @@
 # yourStyle App (w/React)
 
-> E-commerce + Instagram Project
+> **E-commerce + Social Media Project**
+> A simple e-commerce web app where user can buy products and post their review and photos just like in social media (Instagram).
 
 This is a sample e-commerce project that demonstrates how to build an online store using the React.js, TypeScript and Firebase.
 
@@ -33,4 +34,5 @@ The following features are implemented in this project:
 - [React Icons](https://react-icons.github.io/react-icons/)
 - [Styled Components](https://styled-components.com/)
 - [zod](https://zod.dev/)
-<!-- - [TanStack Query](https://tanstack.com/query/latest) -->
+  <!-- - [TanStack Query](https://tanstack.com/query/latest) -->
+  <!-- - [React Firebase Hooks](https://github.com/CSFrequency/react-firebase-hooks) -->

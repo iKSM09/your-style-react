@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { deviceWidth } from "../../styles/devices.breakpoints";
 import AddProductIcon from "../../components/button/AddProductIcon.component";
 import { getAllPaths } from "../add-product/AddProduct.page";
-import { productRoute } from "../product/Product.page";
 import { productsStore } from "../../store/products.store";
-import { userRoute } from "../user/user-route";
+import { userRoute } from "../user/User.route";
+import { productRoute } from "../product/Product.route";
 
 export const DashboardContainer = styled.main`
   margin: 1rem;
@@ -50,18 +50,7 @@ export const ButtonLink = styled(Link)`
   }
 `;
 
-export const sellerDashboardRoute = new Route({
-  getParentRoute: () => userRoute,
-  path: "/dashboard",
-});
-
-export const sellerDashboardIndexRoute = new Route({
-  getParentRoute: () => sellerDashboardRoute,
-  path: "/",
-  component: Dashboard,
-});
-
-export default function Dashboard() {
+const Dashboard = () => {
   const allPaths = getAllPaths();
   const user = useCurrentUser();
   const products = productsStore((state) => state.products);
@@ -138,4 +127,6 @@ export default function Dashboard() {
       </section>
     </DashboardContainer>
   );
-}
+};
+
+export default Dashboard;

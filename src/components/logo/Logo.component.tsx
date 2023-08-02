@@ -1,7 +1,6 @@
 import { Link, useParams } from "@tanstack/router";
 import styled from "styled-components";
-import { productListRoute } from "../../pages/product-list/ProductList.page";
-import { preprocess } from "zod";
+import { productListRoute } from "../../pages/product-list/ProductList.route";
 
 const LogoContainer = styled.h3`
   font-family: "Allura", cursive;

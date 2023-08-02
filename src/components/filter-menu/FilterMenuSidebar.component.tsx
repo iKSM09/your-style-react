@@ -3,7 +3,7 @@ import { MdClose } from "react-icons/md";
 import Sidebar from "../sidebar/Sidebar.component";
 import FilterMenu from "./FilterMenu.component";
 import { useParams } from "@tanstack/router";
-import { productListRoute } from "../../pages/product-list/ProductList.page";
+import { productListRoute } from "../../pages/product-list/ProductList.route";
 
 type FilterMenuProps = {
   sidebar: boolean;

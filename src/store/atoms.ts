@@ -12,5 +12,7 @@ const UserSchema = z.object({
 export type UserSchemaType = z.infer<typeof UserSchema>;
 
 export const userAtom = atom<DocumentData | null>(null);
+export const newUserAtom = atom(false);
+export const modalAtom = atom(false);
 export const authModalAtom = atom(false);
 export const postModalAtom = atom(false);

@@ -20,19 +20,9 @@ import { Button } from "../../components/button/Button.styles";
 import StarsRating from "../../components/stars-rating/StarsRating.component";
 import { cartStore } from "../../store/cart.store";
 import { ProductDataTypes, productsStore } from "../../store/products.store";
+import { productIndexRoute } from "./Product.route";
 
-export const productRoute = new Route({
-  getParentRoute: () => productListRoute,
-  path: "$productId",
-});
-
-export const productIndexRoute = new Route({
-  getParentRoute: () => productRoute,
-  path: "/",
-  component: Product,
-});
-
-function Product() {
+const Product = () => {
   const params = useParams({ from: productIndexRoute.id });
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -44,10 +34,13 @@ function Product() {
     }
   );
 
-  const [product, filterSelectedProduct] = productsStore((state) => [
-    state.selectedProduct,
-    state.filterSelectedProduct,
-  ]);
+  const [product, setProducts, filterSelectedProduct] = productsStore(
+    (state) => [
+      state.selectedProduct,
+      state.setProducts,
+      state.filterSelectedProduct,
+    ]
+  );
 
   const [cartItems, addToCart] = cartStore((state) => [
     state.cartItems,
@@ -55,6 +48,7 @@ function Product() {
   ]);
 
   useEffect(() => {
+    setProducts();
     filterSelectedProduct(params.productId);
   }, [params.productId]);
 
@@ -251,6 +245,6 @@ function Product() {
       </ProductContainer>
     </div>
   );
-}
+};
 
 export default Product;

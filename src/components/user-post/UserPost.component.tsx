@@ -1,28 +1,15 @@
 import { useAtom } from "jotai";
-import { MouseEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { postModalAtom } from "../../store/atoms";
 import { UserPostTypes } from "../../store/posts.store";
 import { Link } from "@tanstack/router";
-import { productRoute } from "../../pages/product/Product.page";
 import { productsStore } from "../../store/products.store";
 import { MdMoreHoriz, MdOutlineShare } from "react-icons/md";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-
-export const Dialog = styled.dialog`
-  position: fixed;
-  width: 400px;
-  border-radius: 8px;
-  border: 1px solid rgba(136, 136, 136, 0.344);
-  background-color: var(--surface);
-  color: var(--on-surface);
-
-  ::backdrop {
-    width: 100vw;
-    height: 100vh;
-    background: rgb(0, 0, 0, 0.3);
-  }
-`;
+import { productRoute } from "../../pages/product/Product.route";
+import Dialog from "../dialog/Dialog.component";
+import UserPlaceholderImage from "../../assets/user-placeholder-image.jpg";
 
 export const PostHeadSection = styled.section`
   margin-bottom: 12px;
@@ -107,8 +94,7 @@ type UserPostProps = {
 };
 
 const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
-  const dialogRef = useRef<HTMLDialogElement>(null!);
-  const [modalState, toggleModalState] = useAtom(postModalAtom);
+  const [modalState, setModalState] = useAtom(postModalAtom);
   const [selectedProduct, filterSelectedProduct] = productsStore((state) => [
     state.selectedProduct,
     state.filterSelectedProduct,
@@ -119,34 +105,15 @@ const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
     filterSelectedProduct(post.productLink.split("/").pop()!);
   }, [post.id]);
 
-  useEffect(() => {
-    const dialogNode = dialogRef.current;
-
-    if (modalState) {
-      dialogNode.showModal();
-    } else {
-      dialogNode.close();
-    }
-  }, [modalState]);
-
-  function handleOutsideClick(e: MouseEvent<HTMLDialogElement>) {
-    const dialogNode = dialogRef.current;
-
-    if (closeOnOutsideClick && e.target === dialogNode) {
-      toggleModalState(false);
-    }
-  }
-
-  console.log({ post });
-
   return (
     <Dialog
-      ref={dialogRef}
-      onClick={(e: MouseEvent<HTMLDialogElement>) => handleOutsideClick(e)}
+      modalState={modalState}
+      closeModal={() => setModalState(false)}
+      closeOnOutsideClick={closeOnOutsideClick}
     >
       <PostHeadSection>
         <div>
-          <img src={post.image} alt="user photo" />
+          <img src={UserPlaceholderImage} alt="user profile image" />
           <p>{post.postedBy}</p>
         </div>
         <MdMoreHoriz size={24} />

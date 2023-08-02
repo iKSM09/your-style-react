@@ -22,11 +22,11 @@ import {
   UpperNavContainer,
 } from "./Navigation.styles";
 import { Button } from "../button/Button.styles";
-import { productListRoute } from "../../pages/product-list/ProductList.page";
 import { userSignOut } from "../../utils/firebase/auth.firebase";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 import { useSetAtom } from "jotai";
 import { authModalAtom } from "../../store/atoms";
+import { productListRoute } from "../../pages/product-list/ProductList.route";
 
 type NavigationProps = {
   openCart: () => void;

@@ -11,13 +11,7 @@ import Dropdown from "../../components/dropdown/Dropdown.component";
 import { useEffect } from "react";
 import { productsStore } from "../../store/products.store";
 
-export const indexRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "/",
-  component: Home,
-});
-
-function Home() {
+const Home = () => {
   const [products, setProducts] = productsStore((state) => [
     state.products,
     state.setProducts,
@@ -64,6 +58,6 @@ function Home() {
       </CardSection>
     </div>
   );
-}
+};
 
 export default Home;

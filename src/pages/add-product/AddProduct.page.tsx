@@ -1,6 +1,4 @@
 import { FieldErrors, useFieldArray, useForm } from "react-hook-form";
-import { Route } from "@tanstack/router";
-import { sellerDashboardRoute } from "../dashboard/Dashboard.page";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
@@ -27,17 +25,6 @@ export const Form = styled.form`
     flex-basis: 1;
   }
 `;
-
-export const addProductRoute = new Route({
-  getParentRoute: () => sellerDashboardRoute,
-  path: "/addProduct",
-});
-
-export const addProductIndexRoute = new Route({
-  getParentRoute: () => addProductRoute,
-  path: "/",
-  component: AddProduct,
-});
 
 export const paths = [
   {
@@ -142,7 +129,7 @@ export const getAllPaths = () => {
 
 const pathCollection = [];
 
-export default function AddProduct() {
+const AddProduct = () => {
   const currentUser = useCurrentUser();
   const [images, setImages] = useState<{ [myKey: number]: string[] }>({});
   const [selectedCategory, setSelectedCategory] = useState("men");
@@ -382,4 +369,6 @@ export default function AddProduct() {
       <button type="submit">Submit product</button>
     </Form>
   );
-}
+};
+
+export default AddProduct;
