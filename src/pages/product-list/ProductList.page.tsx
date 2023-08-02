@@ -1,6 +1,5 @@
-import { Route, useParams } from "@tanstack/router";
+import { useParams } from "@tanstack/router";
 
-import { storeRoute } from "../store/Store.page";
 import CardSection from "../../components/card-section/CardSection.component";
 
 import { FilterSection, ProductListLayout } from "./ProductList.styles";
@@ -9,7 +8,6 @@ import FilterMenu from "../../components/filter-menu/FilterMenu.component";
 import { useEffect, useState } from "react";
 import Card from "../../components/card/Card.component";
 import { ProductDataTypes, productsStore } from "../../store/products.store";
-import { set } from "zod";
 import { productListRoute } from "./ProductList.route";
 
 const ProductList = () => {

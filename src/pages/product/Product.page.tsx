@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { Route, useParams } from "@tanstack/router";
+import { useParams } from "@tanstack/router";
 
 import { MdShoppingBag } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
-
-import { productListRoute } from "../product-list/ProductList.page";
 
 import productData from "../../data/data.json";
 
