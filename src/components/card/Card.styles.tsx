@@ -11,17 +11,17 @@ export const CardContainer = styled.div`
 export const ImageContainer = styled.div`
   /* width: 240px;
   height: 312px; */
+  aspect-ratio: 2 / 3;
   background-color: lightgoldenrodyellow;
   border-radius: 12px;
   overflow: hidden;
 `;
 
 export const Image = styled.img`
-  /* width: 240px;
-  height: 312px; */
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  aspect-ratio: 4 / 5;
+  /* transition: all 0.5s ease; */
 `;
 
 export const CardInfo = styled.div`

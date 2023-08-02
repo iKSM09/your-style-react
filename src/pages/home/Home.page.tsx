@@ -41,7 +41,7 @@ const Home = () => {
           return <Card key={product.id} productInfo={product} />;
         })}
       </CardSection>
-      <CardSection
+      {/* <CardSection
         title="Featured"
         headerComp={
           <Dropdown
@@ -55,7 +55,7 @@ const Home = () => {
         {products?.map((product) => (
           <Card key={product.id} productInfo={product} />
         ))}
-      </CardSection>
+      </CardSection> */}
     </div>
   );
 };

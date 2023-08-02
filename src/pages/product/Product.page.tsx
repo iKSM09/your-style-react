@@ -47,6 +47,10 @@ const Product = () => {
 
   useEffect(() => {
     setProducts();
+  }, []);
+
+  useEffect(() => {
+    setProducts();
     filterSelectedProduct(params.productId);
   }, [params.productId]);
 

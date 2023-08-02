@@ -28,7 +28,7 @@ const Card = ({ productInfo }: CardProps) => {
           <Image src={previewsImage} alt={`${productInfo.name} preview`} />
         </ImageContainer>
         <CardInfo>
-          <p className="title">{`${productInfo.name.slice(0, 18)}...`}</p>
+          <p className="title">{`${productInfo.name.slice(0, 12)}...`}</p>
           <p>₹{productInfo.price}</p>
         </CardInfo>
       </Link>
