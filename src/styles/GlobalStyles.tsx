@@ -152,7 +152,7 @@ ${ReseterCSS}
 }
 
 .hide-from-mobile {
-  @media screen and (${deviceWidth.approxMobile}) {
+  @media screen and (width <= 560px) {
     display: none;
   }
 }

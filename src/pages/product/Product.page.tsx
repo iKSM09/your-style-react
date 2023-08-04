@@ -179,6 +179,7 @@ const Product = () => {
               style={{
                 marginBlock: "16px",
                 display: "flex",
+                flexWrap: "wrap",
                 alignItems: "center",
                 gap: "12px",
               }}

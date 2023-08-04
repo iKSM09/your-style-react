@@ -38,9 +38,9 @@ export const Divider = styled.hr`
 `;
 
 export const ProductSizeButton = styled.button<{ $selected: boolean }>`
-  width: 48px;
+  min-width: 48px;
   height: 48px;
-  padding: 12px;
+  padding: 8px 12px;
   font-size: 14px;
   background-color: ${({ $selected = false }) =>
     $selected ? "var(--on-primary)" : "transparent"};

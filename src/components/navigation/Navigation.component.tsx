@@ -143,7 +143,7 @@ const Navigation = ({
             <Link
               to="/user/$userId/feed"
               params={{ userId: `${currentUser?.email}` }}
-              className="hide-from-tablet"
+              className="laptop-only"
             >
               <MdPerson size="26px" />
             </Link>
@@ -153,7 +153,7 @@ const Navigation = ({
             <Button
               $outlined
               onClick={userSignOut}
-              // className="hide-from-mobile"
+              className="hide-from-mobile"
             >
               Logout
             </Button>
@@ -162,7 +162,7 @@ const Navigation = ({
               $color="secondary"
               $radius="curved"
               onClick={() => toggleModalState((bool) => !bool)}
-              // className="hide-from-mobile"
+              className="hide-from-mobile"
             >
               Login
             </Button>
