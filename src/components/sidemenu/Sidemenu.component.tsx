@@ -2,6 +2,8 @@ import { Link } from "@tanstack/router";
 import Sidebar from "../sidebar/Sidebar.component";
 import styled from "styled-components";
 import useCurrentUser from "../../hooks/useAuthStateChange";
+import { userSignOut } from "../../utils/firebase/auth.firebase";
+import { Button, IconButton } from "../_ui/button/Button.styles";
 
 const SidemenuContainer = styled.section`
   margin: 3.5rem 1rem 5rem;
@@ -25,6 +27,11 @@ const Sidemenu = ({ sidebar, closeSidebar }: SidemenuProps) => {
   return (
     <Sidebar sidebar={sidebar} index={5} closeSidebar={closeSidebar}>
       <SidemenuContainer onClick={closeSidebar}>
+        {currentUser && (
+          <Button $secondary $outlined $curved onClick={userSignOut}>
+            Logout
+          </Button>
+        )}
         <Link to="/store/$for" params={{ for: "men" }}>
           Men
         </Link>

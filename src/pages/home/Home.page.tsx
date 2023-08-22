@@ -13,13 +13,13 @@ import { productsStore } from "../../store/products.store";
 
 const Home = () => {
   const params = useParams();
-  const [products, setProducts] = productsStore((state) => [
+  const [products, getAllProducts] = productsStore((state) => [
     state.products,
-    state.setProducts,
+    state.getAllProducts,
   ]);
 
   useEffect(() => {
-    setProducts();
+    if (products.length === 0) getAllProducts();
   }, []);
 
   useEffect(() => {

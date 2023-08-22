@@ -4,11 +4,12 @@ import { z } from "zod";
 
 import { FirebaseError } from "firebase/app";
 import { userRegister } from "../../utils/firebase/auth.firebase";
-import { Button } from "../button/Button.styles";
-import { Form, InputContainer, Small } from "./Auth.styles";
-import CloseIcon from "../button/CloseIcon.component";
 
 import useCurrentUser from "../../hooks/useAuthStateChange";
+import Input from "../_ui/form/Input.component";
+import Form from "../_ui/form/Form.component";
+import Icon from "../_ui/button/Icon.components";
+import { Button } from "../_ui/button/Button.styles";
 
 const schema = z
   .object({
@@ -80,71 +81,64 @@ const Register = ({ isNewUser, isVendor, onRequestClose }: RegisterProps) => {
       }}
     >
       <p>Welcome {currentUser.displayName}</p>
-      <span onClick={onRequestClose}>
-        <CloseIcon />
-      </span>
+      <Icon.Close $curved onClick={onRequestClose} />
     </section>
   ) : (
-    <Form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
-      <h2>Register</h2>
+    <Form
+      formTitle="Register"
+      onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}
+    >
+      <Input
+        label="Name:"
+        type="text"
+        fieldName="name"
+        formRegister={register("name")}
+        placeholder="Fullname"
+        error={errors.name}
+      />
 
-      <InputContainer>
-        <label htmlFor="name">Name:</label>
-        <div>
-          <input type="text" {...register("name")} placeholder="Fullname" />
-          {errors.name && <small>{errors.name.message}</small>}
-        </div>
-      </InputContainer>
+      <Input
+        label="Email:"
+        type="email"
+        fieldName="email"
+        formRegister={register("email")}
+        placeholder="Email"
+        error={errors.email}
+      />
 
-      <InputContainer>
-        <label htmlFor="email">Email:</label>
-        <div>
-          <input type="email" {...register("email")} placeholder="Email" />
-          {errors.email && <small>{errors.email.message}</small>}
-        </div>
-      </InputContainer>
+      <Input
+        label="Password:"
+        type="password"
+        fieldName="password"
+        formRegister={register("password")}
+        placeholder="Password"
+        error={errors.password}
+      />
 
-      <InputContainer>
-        <label htmlFor="password">Password:</label>
-        <div>
-          <input
-            type="password"
-            {...register("password")}
-            placeholder="Password"
-          />
-          {errors.password && <small>{errors.password.message}</small>}
-        </div>
-      </InputContainer>
-
-      <InputContainer>
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <div>
-          <input
-            type="password"
-            {...register("confirmPassword")}
-            placeholder="Confirm Password"
-          />
-          {errors.confirmPassword && (
-            <small>{errors.confirmPassword.message}</small>
-          )}
-        </div>
-      </InputContainer>
+      <Input
+        label="Confirm Password:"
+        type="password"
+        fieldName="confirmPassword"
+        formRegister={register("confirmPassword")}
+        placeholder="Confirm Password"
+        error={errors.confirmPassword}
+      />
 
       <Button
-        $color="primary"
-        $radius="curved"
+        $curved
         type="submit"
         style={{ padding: "16px 8px" }}
         disabled={!isDirty || isSubmitting}
       >
         Create Account
       </Button>
-      <Small>
+
+      <Form.Footer>
         Already have an account.{" "}
         <a onClick={isNewUser} href="#user-login">
           Login
         </a>
-      </Small>
+      </Form.Footer>
     </Form>
   );
 };

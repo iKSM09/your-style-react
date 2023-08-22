@@ -9,12 +9,13 @@ import UserPost from "../../components/user-post/UserPost.component";
 import { useAtom } from "jotai";
 import { postModalAtom } from "../../store/atoms";
 import { productRoute } from "../product/Product.route";
+import SearchBar from "../../components/search-bar/SearchBar.component";
 
 export const ImageGallery = styled.section`
   width: 100%;
   max-width: 950px;
   margin: 0 auto;
-  padding: 50px 20px;
+  padding: 8px;
   display: grid;
   grid-template-columns: repeat(3, minmax(150px, 1fr));
   grid-auto-flow: dense;
@@ -22,6 +23,15 @@ export const ImageGallery = styled.section`
 
   @media screen and (${deviceWidth.gteTablet}) {
     grid-template-columns: repeat(4, minmax(150px, 1fr));
+  }
+`;
+
+const SearchContainer = styled.section`
+  margin-block: 12px 8px;
+  padding: 8px;
+
+  @media screen and (${deviceWidth.gteTablet}) {
+    display: none;
   }
 `;
 
@@ -92,6 +102,10 @@ const Explore = () => {
   return (
     <div>
       {modalState && <UserPost post={selectedPost!} closeOnOutsideClick />}
+
+      <SearchContainer>
+        <SearchBar />
+      </SearchContainer>
       <ImageGallery>
         {explorationPost.map((post) => (
           <ImageContainer key={`product__${post?.id}`}>

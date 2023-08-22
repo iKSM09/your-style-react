@@ -3,13 +3,13 @@ import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Button } from "../button/Button.styles";
-
-import { Form, InputContainer, Small } from "./Auth.styles";
 import { userSignIn } from "../../utils/firebase/auth.firebase";
 
 import useCurrentUser from "../../hooks/useAuthStateChange";
-import CloseIcon from "../button/CloseIcon.component";
+import { MdClose, MdLogin } from "react-icons/md";
+import Input from "../_ui/form/Input.component";
+import Form from "../_ui/form/Form.component";
+import { Button, IconButton } from "../_ui/button/Button.styles";
 
 const schema = z.object({
   email: z
@@ -68,48 +68,50 @@ const SignIn = ({ isNewUser, onRequestClose }: RegisterProps) => {
     >
       <p>Welcome {currentUser.displayName}</p>
       <span onClick={onRequestClose}>
-        <CloseIcon />
+        <Button $curved>
+          <MdClose size={24} />
+        </Button>
       </span>
     </section>
   ) : (
-    <Form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
-      <h2>Login</h2>
+    <Form
+      formTitle="Login"
+      onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}
+    >
+      <Input
+        label="Email:"
+        type="email"
+        fieldName="email"
+        formRegister={register("email")}
+        placeholder="Email"
+        error={errors.email}
+      />
 
-      <InputContainer>
-        <label htmlFor="email">Email:</label>
-        <div>
-          <input type="email" {...register("email")} placeholder="Email" />
-          {errors.email && <small>{errors.email.message}</small>}
-        </div>
-      </InputContainer>
+      <Input
+        label="Password:"
+        type="password"
+        fieldName="password"
+        formRegister={register("password")}
+        placeholder="Password"
+        error={errors.password}
+      />
 
-      <InputContainer>
-        <label htmlFor="password">Password:</label>
-        <div>
-          <input
-            type="password"
-            {...register("password")}
-            placeholder="Password"
-          />
-          {errors.password && <small>{errors.password.message}</small>}
-        </div>
-      </InputContainer>
-
-      <Button
-        $color="primary"
-        $radius="curved"
+      <IconButton
+        $curved
         type="submit"
         style={{ padding: "16px 8px" }}
         disabled={!isDirty || isSubmitting}
       >
+        <MdLogin size={18} />
         Login
-      </Button>
-      <Small>
+      </IconButton>
+
+      <Form.Footer>
         Don't have an account.{" "}
         <a onClick={isNewUser} href="#user-register">
           Register
         </a>
-      </Small>
+      </Form.Footer>
     </Form>
   );
 };

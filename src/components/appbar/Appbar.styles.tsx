@@ -17,6 +17,16 @@ export const AppbarContainer = styled.section`
   display: flex;
   justify-content: space-around;
 
+  * {
+    color: var(--on-tertiary);
+
+    :focus,
+    :hover,
+    :active {
+      color: var(--on-primary-container);
+    }
+  }
+
   @media screen and (${deviceWidth.approxLaptop}) {
     display: none;
   }

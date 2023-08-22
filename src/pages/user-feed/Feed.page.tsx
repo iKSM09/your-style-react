@@ -8,6 +8,8 @@ import UserPlaceholderImage from "../../assets/user-placeholder-image.jpg";
 import { useAtom } from "jotai";
 import { postModalAtom } from "../../store/atoms";
 import UserPost from "../../components/user-post/UserPost.component";
+import { userSignOut } from "../../utils/firebase/auth.firebase";
+import { Button } from "../../components/_ui/button/Button.styles";
 
 export const ImageGallery = styled.section`
   width: 100%;
@@ -70,18 +72,22 @@ export const ProfilePicture = styled.div`
 `;
 
 export const ProfileDetails = styled.div`
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   grid-column: span 2;
-  /* text-align: start; */
   display: flex;
   flex-direction: column;
-  /* justify-content: start; */
-  align-items: start;
+  justify-content: space-between;
 
-  h4 {
-    margin-block: 8px;
-    font-size: 20px;
-    font-weight: bold;
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    h4 {
+      margin-block: 8px;
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
 `;
 
@@ -120,11 +126,19 @@ const Feed = () => {
               <img src={UserPlaceholderImage} alt="user profile image" />
             </ProfilePicture>
             <ProfileDetails>
-              <small>{user.email}</small>
-              <h4>{user.displayName}</h4>
-              <p>User bio...</p>
+              <div>
+                <small>{user.email}</small>
+                <h4>{user.displayName}</h4>
+                <p>User bio...</p>
+              </div>
+              {user && (
+                <Button $outlined onClick={userSignOut}>
+                  Logout
+                </Button>
+              )}
             </ProfileDetails>
           </ProfileContainer>
+
           <ImageGallery>
             {allPosts
               .filter((post) => post.postedBy === user?.email)

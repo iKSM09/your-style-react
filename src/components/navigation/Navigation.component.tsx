@@ -13,7 +13,6 @@ import {
 } from "react-icons/md";
 import Dropdown from "../dropdown/Dropdown.component";
 import {
-  CartButton,
   LogoContainer,
   LowerNavContainer,
   MobileFilters,
@@ -21,12 +20,11 @@ import {
   NavMainContent,
   UpperNavContainer,
 } from "./Navigation.styles";
-import { Button } from "../button/Button.styles";
-import { userSignOut } from "../../utils/firebase/auth.firebase";
 import useCurrentUser from "../../hooks/useAuthStateChange";
-import { useSetAtom } from "jotai";
-import { authModalAtom } from "../../store/atoms";
+
 import { productListRoute } from "../../pages/product-list/ProductList.route";
+import UserLogButton from "../_ui/button/UserLogButton.component";
+import Icon from "../_ui/button/Icon.components";
 
 type NavigationProps = {
   openCart: () => void;
@@ -42,7 +40,6 @@ const Navigation = ({
   openFilterMenu,
 }: NavigationProps) => {
   const currentUser = useCurrentUser();
-  const toggleModalState = useSetAtom(authModalAtom);
 
   const params = useParams({
     from: productListRoute.id,
@@ -91,88 +88,86 @@ const Navigation = ({
         <LogoContainer>
           <span onClick={toggleSidemenu} className="mobile-only">
             {sidemenu ? (
-              <MdMenuOpen
-                title="Menu Opened"
-                size="32px"
-                color="var(--on-surface)"
-                className="menu"
-              />
+              <Icon.MenuOpen size="32px" $highlight $ghosted $curved />
             ) : (
-              <MdMenu
-                title="Menu"
-                size="32px"
-                color="var(--on-surface)"
-                className="menu"
-              />
+              // <MdMenuOpen
+              //   title="Menu Opened"
+              //
+              //   color="var(--on-surface)"
+              //   // className="menu"
+              // />
+              <Icon.Menu size="32px" $highlight $ghosted $curved />
+              // <MdMenu
+              //   title="Menu"
+              //
+              //   color="var(--on-surface)"
+              //   // className="menu"
+              // />
             )}
           </span>
           <Logo />
         </LogoContainer>
         <NavMainContent>
-          <Link
-            to="/store/$for"
-            params={{ for: "men" }}
-            className="hide-from-mobile"
-          >
-            Men
-          </Link>
-          <Link
-            to="/store/$for"
-            params={{ for: "women" }}
-            className="hide-from-mobile"
-          >
-            Women
-          </Link>
-          <Link
-            to="/store/$for"
-            params={{ for: "kids" }}
-            className="hide-from-mobile"
-          >
-            Kids
-          </Link>
-          <Link to="/explore" className="laptop-only">
-            Explore
-          </Link>
+          <div className="nav-links">
+            <Link
+              to="/store/$for"
+              params={{ for: "men" }}
+              className="hide-from-mobile"
+            >
+              Men
+            </Link>
+            <Link
+              to="/store/$for"
+              params={{ for: "women" }}
+              className="hide-from-mobile"
+            >
+              Women
+            </Link>
+            <Link
+              to="/store/$for"
+              params={{ for: "kids" }}
+              className="hide-from-mobile"
+            >
+              Kids
+            </Link>
+            <Link to="/explore" className="laptop-only">
+              Explore
+            </Link>
+          </div>
           <span className="laptop-only">
             <SearchBar />
           </span>
-          <CartButton onClick={openCart} className="laptop-only">
-            <MdOutlineShoppingCart size="20px" />
-          </CartButton>
+          <Icon.Heart size={20} $secondary $curved $ghosted />
+          <Icon.Cart
+            $secondary
+            $curved
+            $ghosted
+            onClick={openCart}
+            className="laptop-only"
+          />
           {currentUser && (
             <Link
               to="/user/$userId/feed"
               params={{ userId: `${currentUser?.email}` }}
               className="laptop-only"
             >
-              <MdPerson size="26px" />
+              <Icon.User $secondary $ghosted $curved />
             </Link>
           )}
-          <MdSettings size="28px" className="mobile-only" />
-          {currentUser ? (
-            <Button
-              $outlined
-              onClick={userSignOut}
-              className="hide-from-mobile"
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button
-              $color="secondary"
-              $radius="curved"
-              onClick={() => toggleModalState((bool) => !bool)}
-              className="hide-from-mobile"
-            >
-              Login
-            </Button>
-          )}
+          <Icon.Settings
+            size={22}
+            $secondary
+            $curved
+            $ghosted
+            className="hide-from-laptop"
+          />
+          <UserLogButton cssClass="hide-from-mobile" />
         </NavMainContent>
       </LowerNavContainer>
       {params.for && !sidemenu && (
         <MobileFilters onClick={openFilterMenu} $display={sidemenu}>
           <p>Apply Filters</p>
-          <MdFilterList size="28" />
+          <Icon.FilterList $ghosted $highlight size={28} />
         </MobileFilters>
       )}
     </NavContainer>

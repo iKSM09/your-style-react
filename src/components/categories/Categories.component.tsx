@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import styled from "styled-components";
 import { IconContext } from "react-icons";
 import { MdOutlineLocalOffer } from "react-icons/md";
+import { Link } from "@tanstack/router";
 
 type CategoryProps = {
   children: ReactNode;
@@ -68,7 +69,7 @@ const Categories = () => {
         <Category title="Top Offers">
           <MdOutlineLocalOffer />
         </Category>
-        <Category title="Men's Suits">
+        {/* <Category title="Men's Suits">
           <MdOutlineLocalOffer />
         </Category>
         <Category title="Women's Dresses">
@@ -85,7 +86,32 @@ const Categories = () => {
         </Category>
         <Category title="Top Offers">
           <MdOutlineLocalOffer />
-        </Category>
+        </Category> */}
+        <Link
+          to="/store/$for"
+          params={{ for: "men" }}
+          className="hide-from-mobile"
+        >
+          <Category title="Men">
+            <MdOutlineLocalOffer />
+          </Category>
+        </Link>
+
+        <Link
+          to="/store/$for"
+          params={{ for: "women" }}
+          className="hide-from-mobile"
+        >
+          <Category title="Women">
+            <MdOutlineLocalOffer />
+          </Category>
+        </Link>
+
+        <Link to="/explore" className="laptop-only">
+          <Category title="Explore">
+            <MdOutlineLocalOffer />
+          </Category>
+        </Link>
       </CategoriesContainer>
     </IconContext.Provider>
   );

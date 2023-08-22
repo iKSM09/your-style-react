@@ -27,6 +27,7 @@ import {
   addProductIndexRoute,
   addProductRoute,
 } from "./pages/add-product/AddProduct.route";
+import { uiRoute } from "./pages/_ui-components/UI.route";
 import { notFoundRoute } from "./pages/404-not-found/NotFound.route";
 
 export const rootRoute = new RootRoute({ component: App });
@@ -53,6 +54,7 @@ const routeTree = rootRoute.addChildren([
       addProductRoute.addChildren([addProductIndexRoute]),
     ]),
   ]),
+  uiRoute,
   notFoundRoute,
 ]);
 

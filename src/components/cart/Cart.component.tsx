@@ -1,22 +1,13 @@
-import {
-  MdArrowLeft,
-  MdArrowRight,
-  MdClose,
-  MdDeleteOutline,
-  MdOutlineShoppingCart,
-} from "react-icons/md";
-
-import blackJacket from "/assets/black_01.jpeg";
 import { Image, ImageContainer } from "../card/Card.styles";
 
 import styled from "styled-components";
-import { Button } from "../button/Button.styles";
 
 import Sidebar from "../sidebar/Sidebar.component";
-import useSidebar from "../../hooks/useSidebar";
-import CloseIcon from "../button/CloseIcon.component";
-import { CartItemType, cartStore } from "../../store/cart.store";
+
+import { cartStore } from "../../store/cart.store";
 import { useEffect, useState } from "react";
+import Icon from "../_ui/button/Icon.components";
+import { Button } from "../_ui/button/Button.styles";
 
 export const CartContainer = styled.div<{ $open: boolean }>`
   position: fixed;
@@ -26,8 +17,8 @@ export const CartContainer = styled.div<{ $open: boolean }>`
   width: 425px;
   width: min(100vw, 425px);
   height: 100vh;
-  background-color: #062122;
-  color: #ffffff;
+  color: var(--on-surface);
+  background-color: var(--surface);
   z-index: 20;
   translate: ${({ $open }) => ($open ? "0%" : "-100%")};
   transition: all 0.4s;
@@ -35,14 +26,15 @@ export const CartContainer = styled.div<{ $open: boolean }>`
 
 export const CartHeader = styled.div`
   position: sticky;
-  height: 12%;
+  height: 56px;
   height: max-content;
-  background-color: #062122;
+  color: var(--on-secondary-container);
+  background-color: var(--secondary-container); // #062122
   padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #1e484b;
+  border-bottom: 1px solid var(--outline);
 
   div {
     display: flex;
@@ -63,13 +55,14 @@ export const CartFooter = styled.div`
   position: fixed;
   z-index: 1;
   width: 100%;
-  height: 8%;
-  background-color: #062122;
+  height: 48px;
+  color: var(--on-secondary-container);
+  background-color: var(--secondary-container);
   padding: 2rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #1e484b;
+  border-top: 1px solid var(--outline);
 
   p {
     font-weight: bold;
@@ -77,11 +70,13 @@ export const CartFooter = styled.div`
 `;
 
 export const CartItems = styled.div`
-  margin: 1rem;
-  height: 80%;
+  padding: 1rem;
+  height: calc(100% - (56px + 48px));
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  color: var(--on-surface-variant);
+  background-color: var(--surface-variant);
 
   ::-webkit-scrollbar {
     display: none;
@@ -94,19 +89,25 @@ export const CartItems = styled.div`
 
 export const CartItem = styled.section`
   padding: 12px;
-  border: 1.5px solid rgb(255, 255, 255, 0.3);
+  /* border: 1.5px solid rgb(255, 255, 255, 0.3); */
   border-radius: 12px;
+  text-align: start;
+  color: var(--on-secondary-container);
+  background-color: var(--secondary-container);
 
-  &:hover {
-    background-color: #1e484b;
-  }
+  /* &:hover,
+  &:focus,
+  &:active {
+    color: var(--on-secondary);
+    background-color: var(--secondary);
+  } */
 
   hr {
-    border: 1px solid rgb(255, 255, 255, 0.1);
+    border: 1px solid var(--outline);
   }
 
   .m12 {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   p,
@@ -133,19 +134,20 @@ export const CartItem = styled.section`
 
   div.grid-of-3 {
     display: grid;
+    align-items: center;
     grid-template-columns: 2fr 1fr 2fr;
     gap: 1rem;
     text-align: center;
   }
 `;
 
-export const Icon = styled.span`
-  cursor: pointer;
+// export const Icon = styled.span`
+//   cursor: pointer;
 
-  :hover {
-    color: #f93889;
-  }
-`;
+//   :hover {
+//     color: #f93889;
+//   }
+// `;
 
 type CartProps = {
   sidebar: boolean;
@@ -178,13 +180,11 @@ const Cart = ({ sidebar, closeSidebar }: CartProps) => {
     <Sidebar sidebar={sidebar} closeSidebar={closeSidebar} position="right">
       <CartHeader>
         <div>
-          <MdOutlineShoppingCart size="2rem" />
+          <Icon.Cart size="2rem" $secondary $ghosted $highlight />
           <h1>Cart</h1>
           <p>({cartItems.length} items)</p>
         </div>
-        <span onClick={closeSidebar}>
-          <CloseIcon />
-        </span>
+        <Icon.Close $secondary $ghosted $pilled onClick={closeSidebar} />
       </CartHeader>
 
       <CartItems>
@@ -197,9 +197,12 @@ const Cart = ({ sidebar, closeSidebar }: CartProps) => {
                   ({item.category.toUpperCase().split("/")[2]})
                 </small>
               </h3>
-              <Icon onClick={() => removeFromCart(item.id)}>
-                <MdDeleteOutline size="20px" />
-              </Icon>
+              <Icon.Delete
+                size={20}
+                $ghosted
+                $highlight
+                onClick={() => removeFromCart(item.id)}
+              />
             </div>
             <hr className="m12" />
             <div className="details">
@@ -217,19 +220,19 @@ const Cart = ({ sidebar, closeSidebar }: CartProps) => {
                 </div>
                 <div className="m12 grid-of-3">
                   <div className="flex">
-                    <Icon
+                    <Icon.ArrowLeft
+                      $ghosted
+                      $highlight
                       className="m0"
                       onClick={() => updateQuantity("-", item)}
-                    >
-                      <MdArrowLeft size="24px" />
-                    </Icon>
+                    />
                     <p>{item.quantity}</p>
-                    <Icon
+                    <Icon.ArrowRight
+                      $ghosted
+                      $highlight
                       className="m0"
                       onClick={() => updateQuantity("+", item)}
-                    >
-                      <MdArrowRight size="24px" />
-                    </Icon>
+                    />
                   </div>
                   <small>x</small>
                   <p>₹{item.price}</p>
@@ -249,9 +252,7 @@ const Cart = ({ sidebar, closeSidebar }: CartProps) => {
         <small>
           <h2>₹{cartTotalPrice}</h2>
         </small>
-        <Button $color="secondary" $radius="curved">
-          Proceed
-        </Button>
+        <Button $curved>Proceed</Button>
       </CartFooter>
     </Sidebar>
   );

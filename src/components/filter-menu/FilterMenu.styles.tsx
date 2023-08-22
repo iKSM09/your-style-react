@@ -2,10 +2,14 @@ import styled from "styled-components";
 import { Header } from "../../pages/product-list/ProductList.styles";
 
 export const FilterMenuContainer = styled.aside`
-  margin-inline: 1rem;
+  height: 100%;
+  /* color: var(--on-secondary-container);
+  background-color: var(--secondary-container); */
 `;
 
 export const FilterMenuHeader = styled.section`
+  padding-block: 12px 4px;
+  padding-inline: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,6 +17,7 @@ export const FilterMenuHeader = styled.section`
 
 export const FilterSection = styled.section`
   margin-bottom: 0.5rem;
+  padding-inline: 1rem;
 `;
 
 export const CheckList = styled.div`

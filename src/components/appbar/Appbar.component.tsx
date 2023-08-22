@@ -10,6 +10,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 
 import { AppbarContainer } from "./Appbar.styles";
 import useCurrentUser from "../../hooks/useAuthStateChange";
+import Icon from "../_ui/button/Icon.components";
 
 type AppbarProps = {
   openCart: () => void;
@@ -21,17 +22,17 @@ const Appbar = ({ openCart }: AppbarProps) => {
   return (
     <AppbarContainer>
       <Link to="/">
-        <MdHome size="32px" />
+        <Icon.Home size={32} $ghosted $highlight />
       </Link>
       <Link to="/explore">
-        <MdSearch size="32px" />
+        <Icon.Search size={32} $ghosted $highlight />
       </Link>
       <Link to="/user/$userId/add-post" params={{ userId: `${user?.email}` }}>
-        <IoMdAddCircleOutline size="32px" />
+        <Icon.AddPost size={32} $ghosted $highlight />
       </Link>
-      <MdOutlineShoppingCart size="32px" onClick={openCart} />
+      <Icon.Cart size={32} $ghosted $highlight onClick={openCart} />
       <Link to="/user/$userId/feed" params={{ userId: `${user?.email}` }}>
-        <MdPerson size="32px" />
+        <Icon.User size={32} $ghosted $highlight />
       </Link>
     </AppbarContainer>
   );

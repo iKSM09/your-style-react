@@ -2,12 +2,13 @@ import { Link, Route } from "@tanstack/router";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 import styled from "styled-components";
 import { deviceWidth } from "../../styles/devices.breakpoints";
-import AddProductIcon from "../../components/button/AddProductIcon.component";
 import { getAllPaths } from "../add-product/AddProduct.page";
 import { productsStore } from "../../store/products.store";
-import { userRoute } from "../user/User.route";
 import { productRoute } from "../product/Product.route";
 import { useEffect } from "react";
+import { MdOutlineLibraryAdd } from "react-icons/md";
+import { Button } from "../../components/_ui/button/Button.styles";
+import Icon from "../../components/_ui/button/Icon.components";
 
 export const DashboardContainer = styled.main`
   margin: 1rem;
@@ -31,6 +32,45 @@ export const DashboardTitle = styled.div`
   display: flex;
   gap: 8px;
   align-items: baseline;
+`;
+
+export const ProductCard = styled.div`
+  margin: 1rem 0;
+  height: fit-content;
+  color: var(--on-secondary-container);
+  background-color: var(--secondary-container);
+  display: flex;
+  align-items: flex-start;
+  border-radius: var(--border-curved);
+  overflow: hidden;
+
+  img {
+    padding: 0;
+    width: 9rem;
+    height: 100%;
+    object-fit: contain;
+    /* aspect-ratio: 2 / 3; */
+  }
+`;
+
+export const ProductDetails = styled.div`
+  padding: 0.7rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  justify-content: space-between;
+  align-items: stretch;
+  text-align: start;
+
+  /* .product-info {
+  } */
+
+  .product-btns {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.7rem;
+  }
 `;
 
 export const ButtonLink = styled(Link)`
@@ -86,7 +126,7 @@ const Dashboard = () => {
               userId: `${user?.email}`,
             }}
           >
-            <AddProductIcon size="1.5rem" />
+            <Icon.AddProduct $curved />
           </Link>
         </div>
         {/* <div>Your product list</div> */}
@@ -94,42 +134,33 @@ const Dashboard = () => {
           {products
             .filter((product) => product.postedBy === user?.email)
             .map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  margin: "0.5rem",
-                  backgroundColor: "var(--primary)",
-                  display: "flex",
-                  gap: "1rem",
-                  alignItems: "flex-start",
-                }}
-              >
+              <ProductCard key={item.id}>
                 <img
                   src={item.colors[0].images[0]}
                   alt={`${item.name} preview image`}
-                  style={{
-                    width: "10rem",
-                    objectFit: "contain",
-                    aspectRatio: "4 / 5",
-                  }}
                 />
 
-                <div style={{ textAlign: "start", paddingTop: "1rem" }}>
-                  <Link
-                    from={productRoute.id}
-                    to="/store/$for/$productId"
-                    params={{
-                      for: item.category.split("/")[0],
-                      productId: item.id,
-                    }}
-                  >
-                    <h4>{item.name}</h4>
-                  </Link>
-                  <p>{item.description}</p>
-                  <p>Product Price: {item.price}</p>
-                  <p>Available Sizes: {item.sizes}</p>
-                </div>
-              </div>
+                <ProductDetails>
+                  <div className="product-info">
+                    <Link
+                      from={productRoute.id}
+                      to="/store/$for/$productId"
+                      params={{
+                        for: item.category.split("/")[0],
+                        productId: item.id,
+                      }}
+                    >
+                      <h4>{item.name}</h4>
+                    </Link>
+                    <p>Product Price: {item.price}</p>
+                    <p>Available Sizes: {item.sizes}</p>
+                  </div>
+                  <div className="product-btns">
+                    <Icon.Delete $secondary $curved />
+                    <Button $curved>Edit Details</Button>
+                  </div>
+                </ProductDetails>
+              </ProductCard>
             ))}
         </section>
       </section>

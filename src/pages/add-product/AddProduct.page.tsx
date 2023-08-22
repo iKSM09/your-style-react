@@ -4,14 +4,19 @@ import styled from "styled-components";
 import { ChangeEvent, useEffect, useState } from "react";
 import { storage } from "../../utils/firebase/storage.firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { createNewProductDoc } from "../../utils/firebase/db.firebase";
+import { createNewProductDoc } from "../../utils/firebase/db.products.firebase";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 import {
   ProductDataTypes,
   productDataSchema,
 } from "../../store/products.store";
+import Form from "../../components/_ui/form/Form.component";
+import Input from "../../components/_ui/form/Input.component";
+import { Button } from "../../components/_ui/button/Button.styles";
+import Select from "../../components/_ui/form/Select.component";
+import Icon from "../../components/_ui/button/Icon.components";
 
-export const Form = styled.form`
+export const Form2 = styled.form`
   margin: 1rem;
   display: flex;
   gap: 0.5rem;
@@ -25,6 +30,102 @@ export const Form = styled.form`
     flex-basis: 1;
   }
 `;
+
+export const CatagorySelect = styled.section`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 1rem;
+  justify-items: center;
+`;
+
+export const VariantGroup = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.5rem;
+  row-gap: 1rem;
+
+  .center {
+    margin: auto;
+  }
+`;
+
+export const Variant = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: start;
+  gap: 1rem;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 2/3;
+    border-radius: var(--border-curved);
+  }
+
+  .flexCol {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .flexbox {
+    display: flex;
+    align-items: end;
+    gap: 0.5rem;
+  }
+`;
+
+export const newPaths = {
+  men: {
+    topwear: ["T-shirt", "Casual Shirt", "Formal Shirts", "Suits", "Jackets"],
+    bottomwear: [
+      "Jeans",
+      "Casual Trousers",
+      "Formal Trousers",
+      "Shorts",
+      "Trackpants",
+    ],
+    ethnicwear: ["Kurta Sets", "Kurta", "Sherwanis", "Dhoti Sets"],
+    footwear: [
+      "Sport Shoes",
+      "Sneakers",
+      "Flipflops",
+      "Casual Shoes",
+      "Formal Shoes",
+      "Ethinic Footwear",
+      "Sandals",
+    ],
+  },
+  women: {
+    westernwear: [
+      "Dresses",
+      "Tops",
+      "Bottom Pants and Trousers",
+      "Jackets and Coats",
+      "Shirts",
+      "Skirts",
+    ],
+    indianwear: [
+      "Sarees",
+      "Salwar Suits and Sets",
+      "Kurtis Kurtas and Tunic",
+      "Ethinic Dresses",
+      "Lehengas",
+    ],
+    footwear: [
+      "Heels",
+      "Flats",
+      "Sandals",
+      "Sneakers",
+      "Sports Shoes",
+      "Flipflops",
+      "Casual Shoes",
+    ],
+  },
+};
 
 export const paths = [
   {
@@ -133,6 +234,9 @@ const AddProduct = () => {
   const currentUser = useCurrentUser();
   const [images, setImages] = useState<{ [myKey: number]: string[] }>({});
   const [selectedCategory, setSelectedCategory] = useState("men");
+  const [selectedSubCategory, setSelectedSubCategory] = useState<
+    { name: string; items: string[] }[]
+  >([]);
   const [path, setPath] = useState<string[] | null>([]);
 
   const { register, control, setValue, handleSubmit, formState, reset } =
@@ -143,6 +247,7 @@ const AddProduct = () => {
         postedBy: currentUser?.email,
         name: "",
         category: "",
+        subCategory: "",
         description: "",
         price: 0,
         sizes: "",
@@ -173,6 +278,12 @@ const AddProduct = () => {
       left: 0,
     });
   }, []);
+
+  useEffect(() => {
+    setSelectedSubCategory(
+      paths.filter((path) => path.category === selectedCategory)[0].subCategory
+    );
+  }, [selectedCategory]);
 
   const handleImagesAsFile = (
     e: ChangeEvent<HTMLInputElement>,
@@ -229,137 +340,148 @@ const AddProduct = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}>
-      <div>
-        <label htmlFor="name">Product Name</label>
-        <input
-          type="text"
-          {...register("name")}
-          placeholder="Name of your product"
-        />
-        {errors.name && <small>{errors.name.message}</small>}
-      </div>
+    <Form
+      formTitle="Add New Product"
+      onSubmit={handleSubmit(onSubmitSuccess, onSubmitError)}
+    >
+      <Input
+        label="Product Name:"
+        key="name"
+        type="text"
+        fieldName="name"
+        formRegister={register("name")}
+        error={errors.name}
+        placeholder="Name of your product"
+      />
 
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-          }}
-        >
-          <label htmlFor="category">Product Category: </label>
-          <small>{path?.join("/")}</small>
-        </div>
-
-        <div style={{ display: "flex" }}>
-          <select
-            name="main-category"
-            id="main-category"
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            {paths.map(({ category }) => (
-              <option key={category} value={category}>
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </option>
-            ))}
-          </select>
-          <select id="category" {...register("category")}>
-            {paths
-              .filter((path) => path.category === selectedCategory)
-              .map(({ subCategory }) =>
-                subCategory.map((list) => (
-                  <optgroup key={list.name} label={list.name}>
-                    {list.items.map((item) => (
-                      <option
-                        key={item.toLowerCase().split(" ").join("-")}
-                        value={`${selectedCategory}/${list.name}/${item
-                          .toLowerCase()
-                          .split(" ")
-                          .join("-")}`}
-                      >
-                        {item}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))
-              )}
-          </select>
-        </div>
-        {errors.category && <small>{errors.category.message}</small>}
-      </div>
-
-      <div>
-        <label htmlFor="description">Produt Description</label>
-        <textarea
-          rows={5}
-          {...register("description", { maxLength: 1000 })}
-          placeholder="Describe your product..."
-        />
-        {errors.description && <small>{errors.description.message}</small>}
-      </div>
-
-      <div>
-        <label htmlFor="price">Product Price</label>
-        <input
-          type="number"
-          {...register("price", { valueAsNumber: true })}
-          placeholder="Price of your product"
-        />
-        {errors.price && <small>{errors.price.message}</small>}
-      </div>
-
-      <div>
-        <label htmlFor="sizes">Sizes the Product is available in:</label>
-        <input type="text" {...register("sizes")} placeholder="sizes" />
-        {errors.sizes && <small>{errors.sizes.message}</small>}
-      </div>
-
-      <div>
-        <label htmlFor="colors">Colors the Product is available in:</label>
-        <div>
-          {colorsFields.map((color, index) => {
-            return (
-              <div key={color.id} style={{ marginBottom: "12px" }}>
-                <p>{`Color ${index + 1}`}</p>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <input
-                    key={`${color.id}-name`}
-                    type="text"
-                    {...register(`colors.${index}.name` as const)}
-                    placeholder="Color Name"
-                  />
-                  {index > 0 && (
-                    <button type="button" onClick={() => remove(index)}>
-                      -
-                    </button>
-                  )}
-                </div>
-                <input
-                  key={`${color.id}-images`}
-                  type="file"
-                  multiple
-                  accept="image/jpeg,image/jpg,image/png,image/webp"
-                  {...register(`colors.${index}.images` as const, {
-                    onChange: (e) =>
-                      setValue(
-                        `colors.${index}.images`,
-                        handleImagesAsFile(e, index)!
-                      ),
-                  })}
-                  placeholder="Select images"
-                />
-                {errors.colors && <small>{errors.colors.message}</small>}
-              </div>
-            );
+      <CatagorySelect>
+        <Select
+          label="Category"
+          fieldName="category"
+          selectRegister={register("category", {
+            onChange: (e) =>
+              setSelectedCategory((e.target as HTMLSelectElement).value),
+            value: selectedCategory,
           })}
-          <button
+          error={errors.category}
+        >
+          {paths.map(({ category }) => (
+            <Select.Option key={category} value={category}>
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </Select.Option>
+          ))}
+        </Select>
+        <Select
+          label="Sub-category"
+          fieldName="subCategory"
+          selectRegister={register("subCategory", {})}
+          error={errors.subCategory}
+        >
+          {selectedSubCategory.map((list) => (
+            <Select.OptGroup key={list.name} label={list.name}>
+              {list.items.map((item) => (
+                <Select.Option
+                  key={item.toLowerCase().split(" ").join("-")}
+                  value={`${selectedCategory}/${list.name}/${item
+                    .toLowerCase()
+                    .split(" ")
+                    .join("-")}`}
+                >
+                  {item}
+                </Select.Option>
+              ))}
+            </Select.OptGroup>
+          ))}
+        </Select>
+      </CatagorySelect>
+
+      <Input
+        label="Product Description:"
+        key="description"
+        type="textarea"
+        fieldName="description"
+        formRegister={register("description", { maxLength: 1000 })}
+        error={errors.description}
+        placeholder="Describe your product..."
+      />
+
+      <Input
+        label="Product Price:"
+        key="price"
+        type="number"
+        fieldName="price"
+        formRegister={register("price", { valueAsNumber: true })}
+        error={errors.price}
+        placeholder="Price your product"
+      />
+
+      <Input
+        label="Sizes the Product is available in:"
+        key="sizes"
+        type="text"
+        fieldName="sizes"
+        formRegister={register("sizes")}
+        error={errors.sizes}
+        placeholder="Available sizes..."
+      />
+
+      <VariantGroup>
+        <label htmlFor="product-variants">Product Variants:</label>
+
+        {colorsFields.map((color, index) => (
+          <Variant key={`${index}-${color}`}>
+            <img
+              src="https://maketuwetlands.org.nz/wp-content/uploads/2018/09/placeholder_portrait-1.jpg"
+              alt={`preview image`}
+            />
+            <div className="flexCol">
+              <div className="flexbox">
+                <Input
+                  label={`Product Variant ${index + 1}:`}
+                  key={`${color.id}-name`}
+                  type="text"
+                  fieldName="price"
+                  formRegister={register(`colors.${index}.name` as const)}
+                  error={errors?.colors?.[index]?.name}
+                  placeholder={`Variant ${index + 1} name`}
+                />
+
+                {index > 0 && (
+                  <Icon.Delete
+                    $secondary
+                    $ghosted
+                    $curved
+                    type="button"
+                    onClick={() => remove(index)}
+                  />
+                )}
+              </div>
+
+              <Input
+                label="Upload images:"
+                key={`${color.id}-images`}
+                type="file"
+                multiple
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                fieldName="sizes"
+                formRegister={register(`colors.${index}.images` as const, {
+                  onChange: (e) =>
+                    setValue(
+                      `colors.${index}.images`,
+                      handleImagesAsFile(e, index)!
+                    ),
+                })}
+                error={errors?.colors?.[index]?.images}
+                placeholder="Select images"
+              />
+            </div>
+          </Variant>
+        ))}
+        <div className="center">
+          <Button
+            $secondary
+            $outlined
+            $curved
             type="button"
             onClick={() =>
               append({
@@ -368,12 +490,14 @@ const AddProduct = () => {
               })
             }
           >
-            Add new product varient
-          </button>
+            Add New Variant
+          </Button>
         </div>
-      </div>
+      </VariantGroup>
 
-      <button type="submit">Submit product</button>
+      <Button type="submit" $curved>
+        Submit product
+      </Button>
     </Form>
   );
 };

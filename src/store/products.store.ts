@@ -2,6 +2,11 @@ import { StateCreator, create } from "zustand";
 import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
 import { getCollectionDocsFor } from "../utils/firebase/db.firebase";
 import { z } from "zod";
+import {
+  createNewProductDoc,
+  deleteProductDoc,
+  editProductDoc,
+} from "../utils/firebase/db.products.firebase";
 
 const MAX_FILE_SIZE = 15000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -22,6 +27,11 @@ export const productDataSchema = z.object({
     .string()
     .nonempty(
       "Category is required. It helps people to discover your product easily."
+    ),
+  subCategory: z
+    .string()
+    .nonempty(
+      "sub-category is required. It helps people to discover your product easily."
     ),
   description: z
     .string()
@@ -52,6 +62,12 @@ export const productDataSchema = z.object({
 
 export type ProductDataTypes = z.infer<typeof productDataSchema>;
 
+type StateAction = {
+  products: ProductDataTypes[];
+
+  getAllProducts: () => void;
+};
+
 type State = {
   products: ProductDataTypes[];
   productsByCategory: ProductDataTypes[];
@@ -61,11 +77,17 @@ type State = {
 };
 
 type Action = {
-  setProducts: () => void;
+  getAllProducts: () => void;
+  addNewProduct: (
+    data: ProductDataTypes,
+    images: { [myKey: number]: string[] }
+  ) => void;
+  editProduct: (id: string, fieldsToUpdate: Partial<ProductDataTypes>) => void;
+  deleteProduct: (id: string) => void;
+  filterSelectedProduct: (id: string) => void;
   filterProductsByCategrory: (category: string) => void;
   filterProductsBySubCategory: (subCategory: string) => void;
-  // filterProductsByFilter: (filters: { [key: string]: boolean }) => void;
-  filterSelectedProduct: (id: string) => void;
+  // filterProducts: (filters: { [key: string]: boolean }) => void;
   setProductFilters: (filters: string[]) => void;
 };
 
@@ -76,46 +98,64 @@ type PersistTypes = (
 
 export const productsStore = create<State & Action>(
   (persist as PersistTypes)(
-    (set) => ({
+    (set, get) => ({
       products: [],
       productsByCategory: [],
       productsBySubCategory: [],
       selectedProduct: {} as ProductDataTypes,
       productFilters: [],
 
-      setProducts: async () =>
+      getAllProducts: async () =>
         set({
           products: (await getCollectionDocsFor(
             "products"
           )) as ProductDataTypes[],
         }),
-      filterProductsByCategrory: (category) =>
-        set(({ products, setProducts }) => {
-          if (products.length === 0) setProducts();
+      addNewProduct: async (data, images) => {
+        try {
+          data.colors.map((color, index) => (color.images = images[index]));
+          console.log("submitted!!", data);
+          await createNewProductDoc(data);
+        } catch (error) {
+          console.error("addNewProduct:", error);
+        }
+      },
+      editProduct: async (id, fieldsToUpdate) => {
+        try {
+          await editProductDoc(id, fieldsToUpdate);
+        } catch (error) {
+          console.error("editProduct:", error);
+        }
+      },
+      deleteProduct: async (id) => {
+        try {
+          await deleteProductDoc(id);
+        } catch (error) {
+          console.error("deleteProduct:", error);
+        }
+      },
+      filterProductsByCategrory: (category) => {
+        if (get().products.length === 0) get().getAllProducts();
 
-          return {
-            productsByCategory: products.filter(
-              (product) => product.category.split("/")[0] === category
-            ),
-          };
-        }),
-      filterProductsBySubCategory: (subCategory) =>
-        set(({ products, setProducts }) => {
-          if (products.length === 0) setProducts();
+        set(({ products }) => ({
+          productsByCategory: products.filter(
+            (product) => product.category.split("/")[0] === category
+          ),
+        }));
+      },
+      filterProductsBySubCategory: (subCategory) => {
+        if (get().products.length === 0) get().getAllProducts();
 
-          return {
-            productsBySubCategory: products.filter(
-              (product) => product.category.split("/")[1] === subCategory
-            ),
-          };
-        }),
-      // filterProductsByFilter: (filters) => set(state => {
+        set(({ products }) => ({
+          productsBySubCategory: products.filter(
+            (product) => product.category.split("/")[1] === subCategory
+          ),
+        }));
+      },
+      filterSelectedProduct: (id) => {
+        if (get().products.length === 0) get().getAllProducts();
 
-      // }),
-      filterSelectedProduct: (id) =>
-        set(({ products, setProducts }) => {
-          if (products.length === 0) setProducts();
-
+        set(({ products }) => {
           const filteredProduct = products.filter(
             (product) => product.id === id
           )[0];
@@ -123,7 +163,8 @@ export const productsStore = create<State & Action>(
           return {
             selectedProduct: { ...filteredProduct },
           };
-        }),
+        });
+      },
       setProductFilters: (filters) =>
         set({
           productFilters: filters,

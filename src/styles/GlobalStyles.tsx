@@ -6,6 +6,10 @@ export const GlobalStyles = createGlobalStyle`
 ${ReseterCSS}
 
 :root {
+  --brand-color01: #fe9677;
+  --brand-color02: #f64668;
+  --brand-bg: #41436a;
+
   --primary: #3753cb; /* #1e484b */
   --on-primary: #ffffff;
   --primary-container: #dde1ff;
@@ -59,11 +63,11 @@ ${ReseterCSS}
   --brand02-container: #ffd8eb;
   --on-brand02-container: #3c002c;
 
+  --section-my: 24px;
+  --section-mx: 12px;
 
-
-
-  --border-curved: 12px;
-  --border-full: 180px;
+  --border-curved: 6px;
+  --border-rounded: 180px;
 
 
   font-family: "Schibsted Grotesk", system-ui, Avenir, Helvetica, Arial, sans-serif;

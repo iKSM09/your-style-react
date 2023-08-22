@@ -7,9 +7,10 @@ import {
   FilterMenuHeader,
   FilterSection,
 } from "./FilterMenu.styles";
-import CloseIcon from "../button/CloseIcon.component";
 import { ChangeEvent, useEffect, useState } from "react";
 import { productsStore } from "../../store/products.store";
+import Icon from "../_ui/button/Icon.components";
+import { Divider } from "../footer/Footer.styles";
 
 // const filterList = {
 //   categories: [
@@ -70,15 +71,10 @@ const FilterMenu = ({ filterFor, closeSidebar }: FilterMenuProps) => {
   return (
     <FilterMenuContainer>
       <FilterMenuHeader>
-        <Header>
-          <h2>Filters</h2>
-        </Header>
-        {closeSidebar && (
-          <span onClick={closeSidebar}>
-            <CloseIcon />
-          </span>
-        )}
+        <h2>Filters</h2>
+        {closeSidebar && <Icon.Close $pilled $ghosted onClick={closeSidebar} />}
       </FilterMenuHeader>
+      <Divider />
       {/* <FilterSection>
         <Header>
           <h3>Price</h3>

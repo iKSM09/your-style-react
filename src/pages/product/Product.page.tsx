@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "@tanstack/router";
+import { useParams } from "@tanstack/router";
 
 import { MdShoppingBag } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
@@ -13,15 +13,23 @@ import {
   ImagesSection,
   ProductContainer,
   ProductSizeButton,
+  ImageGallery,
+  ImageContainer,
 } from "./Product.styles";
-import { Button } from "../../components/button/Button.styles";
 import StarsRating from "../../components/stars-rating/StarsRating.component";
 import { cartStore } from "../../store/cart.store";
 import { ProductDataTypes, productsStore } from "../../store/products.store";
 import { productIndexRoute } from "./Product.route";
+import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { useAtom } from "jotai";
+import { postModalAtom } from "../../store/atoms";
+import UserPost from "../../components/user-post/UserPost.component";
+import { Button, IconButton } from "../../components/_ui/button/Button.styles";
 
 const Product = () => {
   const params = useParams({ from: productIndexRoute.id });
+  const [modalState, setModalState] = useAtom(postModalAtom);
+  const [selectedPost, setSelectedPost] = useState<UserPostTypes | null>(null!);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [toCart, setToCart] = useState(false);
@@ -32,22 +40,30 @@ const Product = () => {
     }
   );
 
-  const [product, setProducts, filterSelectedProduct] = productsStore(
-    (state) => [
+  const [products, selectedProduct, getAllProducts, filterSelectedProduct] =
+    productsStore((state) => [
+      state.products,
       state.selectedProduct,
-      state.setProducts,
+      state.getAllProducts,
       state.filterSelectedProduct,
-    ]
-  );
+    ]);
+
+  const [allPosts, setPosts] = postsStore((state) => [
+    state.allPosts,
+    state.setPosts,
+  ]);
 
   const [cartItems, addToCart] = cartStore((state) => [
     state.cartItems,
     state.addToCart,
   ]);
 
+  console.log({ products });
+
   useEffect(() => {
-    setProducts();
-  }, []);
+    if (products.length === 0) getAllProducts();
+    if (allPosts.length === 0) setPosts();
+  }, [products.length]);
 
   useEffect(() => {
     document.documentElement.scrollTo({
@@ -57,30 +73,36 @@ const Product = () => {
   }, [params, selectedColor]);
 
   useEffect(() => {
-    setProducts();
+    if (products.length === 0) getAllProducts();
     filterSelectedProduct(params.productId);
   }, [params.productId]);
 
   useEffect(() => {
-    let cartItem = cartItems.filter((item) => item.id === product.id)[0];
-    let selectedClothColor = product?.colors?.filter(
+    let cartItem = cartItems.filter(
+      (item) => item.id === selectedProduct.id
+    )[0];
+    let selectedClothColor = selectedProduct?.colors?.filter(
       (color) => color?.name === cartItem?.color
     )[0];
 
     setSelectedSize(
-      cartItem === undefined ? product?.sizes.split(", ")[0] : cartItem.size
+      cartItem === undefined
+        ? selectedProduct?.sizes?.split(", ")[0]
+        : cartItem.size
     );
     setSelectedColor(
-      cartItem === undefined ? product?.colors[0].name : cartItem.color
+      cartItem === undefined ? selectedProduct?.colors[0].name : cartItem.color
     );
     setClothColor(
-      cartItem === undefined ? product?.colors[0] : selectedClothColor
+      cartItem === undefined ? selectedProduct?.colors[0] : selectedClothColor
     );
-    setToCart(cartItems.filter((item) => item.id === product?.id).length === 1);
-  }, [product, cartItems]);
+    setToCart(
+      cartItems.filter((item) => item.id === selectedProduct?.id).length === 1
+    );
+  }, [selectedProduct, cartItems]);
 
   const handleChangeColor = (selectedColor: string) => {
-    const filtered = product?.colors.filter(
+    const filtered = selectedProduct?.colors.filter(
       (color) => color.name === selectedColor
     )[0];
 
@@ -88,31 +110,36 @@ const Product = () => {
     setSelectedColor(selectedColor);
   };
 
-  const handleAddToCart = (product: ProductDataTypes) => {
-    const selectedImage = product?.colors.filter(
+  const handleAddToCart = (selectedProduct: ProductDataTypes) => {
+    const selectedImage = selectedProduct?.colors.filter(
       (color) => color.name === selectedColor
     )[0].images[0];
 
     addToCart({
-      id: product.id,
-      category: product.category,
-      name: product.name,
-      postedBy: product.postedBy,
+      id: selectedProduct.id,
+      category: selectedProduct.category,
+      name: selectedProduct.name,
+      postedBy: selectedProduct.postedBy,
       color: selectedColor,
       image: selectedImage,
       size: selectedSize,
-      price: product.price,
+      price: selectedProduct.price,
       quantity: 1,
-      totalPrice: product?.price,
+      totalPrice: selectedProduct?.price,
     });
     setToCart(true);
+  };
+
+  const handleShowPost = (userPost: UserPostTypes) => {
+    setModalState((bool) => !bool);
+    setSelectedPost(userPost);
   };
 
   return (
     <div style={{ textAlign: "start" }}>
       <p
         style={{ padding: "2rem 1rem 0.5rem" }}
-      >{`${product?.category}/${product?.name}`}</p>
+      >{`${selectedProduct?.category}/${selectedProduct?.name}`}</p>
       <ProductContainer>
         <ImagesSection>
           {clothColor?.images?.map((img, idx) => (
@@ -120,10 +147,10 @@ const Product = () => {
           ))}
         </ImagesSection>
         <DetailsSection>
-          <h2>{product?.category?.toUpperCase().split("/")[2]}</h2>
-          <h1>{product?.name}</h1>
-          <small>By {product?.postedBy}</small>
-          <p>{product?.description}</p>
+          <h2>{selectedProduct?.category?.toUpperCase().split("/")[2]}</h2>
+          <h1>{selectedProduct?.name}</h1>
+          <small>By {selectedProduct?.postedBy}</small>
+          <p>{selectedProduct?.description}</p>
           <div
             style={{
               marginBlock: "16px",
@@ -167,7 +194,7 @@ const Product = () => {
                 color: "#7e7e7e",
               }}
             >
-              MRP ₹{product?.price}
+              MRP ₹{selectedProduct?.price}
             </p>
             <small style={{ margin: "0", color: "#0cc258" }}>
               ({productData.discount})
@@ -184,7 +211,7 @@ const Product = () => {
                 gap: "12px",
               }}
             >
-              {product?.sizes
+              {selectedProduct?.sizes
                 ?.toUpperCase()
                 .split(", ")
                 .map((size: string) =>
@@ -214,7 +241,7 @@ const Product = () => {
                 gap: "12px",
               }}
             >
-              {product?.colors?.map(({ name, images }) => (
+              {selectedProduct?.colors?.map(({ name, images }) => (
                 <Image
                   title={name}
                   key={name}
@@ -237,22 +264,45 @@ const Product = () => {
             }}
           >
             {toCart ? (
-              <Button $color="secondary">Added to Cart</Button>
+              <Button $secondary>Added to Cart</Button>
             ) : (
-              <Button
-                $color="primary"
+              <IconButton
+                $curved
                 style={{ maxWidth: "100%" }}
-                onClick={() => handleAddToCart(product!)}
+                onClick={() => handleAddToCart(selectedProduct!)}
               >
                 <MdShoppingBag /> ADD TO CART
-              </Button>
+              </IconButton>
             )}
-            <Button $outlined style={{ maxWidth: "100%" }}>
+            <IconButton
+              $secondary
+              $outlined
+              $curved
+              style={{ maxWidth: "100%" }}
+            >
               <IoMdHeartEmpty /> WISHLIST
-            </Button>
+            </IconButton>
           </div>
         </DetailsSection>
       </ProductContainer>
+      <Divider />
+      <h3 style={{ marginInline: "16px" }}>Posts by users</h3>
+      {modalState && <UserPost post={selectedPost!} closeOnOutsideClick />}
+      <ImageGallery>
+        {allPosts
+          .filter(
+            (post) => post.productLink.split("/").pop() === params.productId
+          )
+          .map((post) => (
+            <ImageContainer key={post.id}>
+              <img
+                src={post.image}
+                alt={`a photo by ${post.postedBy}`}
+                onClick={() => handleShowPost(post)}
+              />
+            </ImageContainer>
+          ))}
+      </ImageGallery>
     </div>
   );
 };

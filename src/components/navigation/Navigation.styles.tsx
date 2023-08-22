@@ -10,8 +10,8 @@ export const NavContainer = styled.nav`
 
   margin: 0;
   width: min(100wv, 425px);
-  color: var(--on-secondary);
-  background-color: var(--secondary);
+  color: var(--on-tertiary-container);
+  background-color: var(--tertiary-container);
 
   * {
     display: flex;
@@ -64,14 +64,20 @@ export const LogoContainer = styled.div`
   align-items: center;
 
   span > * {
-    color: var(--primary);
+    /* color: var(--primary); */
   }
 `;
 
 export const NavMainContent = styled.main`
   display: flex;
-  gap: 1.5rem;
+  gap: 0.5rem;
   align-items: center;
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
 `;
 
 // export const Nav = styled.nav`

@@ -51,3 +51,36 @@ export const ProductSizeButton = styled.button<{ $selected: boolean }>`
     background-color: var(--on-secondary);
   }
 `;
+
+export const ImageGallery = styled.section`
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 20px 20px 50px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  grid-auto-flow: dense;
+  gap: 8px;
+
+  @media screen and (${deviceWidth.gteTablet}) {
+    gap: minmax(1rem, 2rem);
+  }
+`;
+
+export const ImageContainer = styled.div`
+  position: relative;
+  aspect-ratio: 2 / 3;
+  background-color: #d7d7d8;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+`;

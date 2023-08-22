@@ -73,8 +73,9 @@ export const SidebarContainer = styled.div<{
 
   width: min(100vw, 425px);
   height: 100vh;
-  background-color: var(--tertiary);
-  color: var(--on-tertiary);
+
+  color: var(--on-secondary-container);
+  background-color: var(--secondary-container);
 `;
 
 export const Backdrop = styled.div<{ $open: boolean; $index?: number }>`

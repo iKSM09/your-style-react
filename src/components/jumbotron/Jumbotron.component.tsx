@@ -1,12 +1,20 @@
 import styled from "styled-components";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import JumbotronBanner from "../../assets/banner-placeholder.png";
 
-const Banner = styled.div`
+export const Banner = styled.div`
+  margin-bottom: 12px;
   height: 280px;
   background-color: lightblue;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
-const BannerNavigator = styled.div`
+export const BannerNavigator = styled.div`
   margin: 8px;
   display: flex;
   justify-content: center;
@@ -14,7 +22,7 @@ const BannerNavigator = styled.div`
   gap: 16px;
 `;
 
-const Circles = styled.span`
+export const Circles = styled.span`
   width: 8px;
   height: 8px;
   background-color: #f4ccad;
@@ -24,8 +32,10 @@ const Circles = styled.span`
 const Jumbotron = () => {
   return (
     <div>
-      <Banner>Jumbotron</Banner>
-      <BannerNavigator>
+      <Banner>
+        <img src={JumbotronBanner} alt="banner" />
+      </Banner>
+      {/* <BannerNavigator>
         <MdChevronLeft size="20px" />
         <Circles />
         <Circles />
@@ -33,7 +43,7 @@ const Jumbotron = () => {
         <Circles />
         <Circles />
         <MdChevronRight size="20px" />
-      </BannerNavigator>
+      </BannerNavigator> */}
     </div>
   );
 };

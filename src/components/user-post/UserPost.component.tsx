@@ -1,15 +1,15 @@
 import { useAtom } from "jotai";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { postModalAtom } from "../../store/atoms";
-import { UserPostTypes } from "../../store/posts.store";
+import { UserPostTypes, postsStore } from "../../store/posts.store";
 import { Link } from "@tanstack/router";
 import { productsStore } from "../../store/products.store";
-import { MdMoreHoriz, MdOutlineShare } from "react-icons/md";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { productRoute } from "../../pages/product/Product.route";
 import Dialog from "../dialog/Dialog.component";
 import UserPlaceholderImage from "../../assets/user-placeholder-image.jpg";
+import Icon from "../_ui/button/Icon.components";
+import { Divider } from "../footer/Footer.styles";
 
 export const PostHeadSection = styled.section`
   margin-bottom: 12px;
@@ -65,7 +65,7 @@ export const ProductSection = styled.section`
 
   img {
     width: 100px;
-    aspect-ratio: 1/1;
+    aspect-ratio: 2/3;
     object-fit: cover;
     border-radius: 2px;
   }
@@ -95,11 +95,19 @@ type UserPostProps = {
 
 const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
   const [modalState, setModalState] = useAtom(postModalAtom);
-  const [selectedProduct, filterSelectedProduct] = productsStore((state) => [
-    state.selectedProduct,
-    state.filterSelectedProduct,
-  ]);
+  const [getAllProducts, selectedProduct, filterSelectedProduct] =
+    productsStore((state) => [
+      state.getAllProducts,
+      state.selectedProduct,
+      state.filterSelectedProduct,
+    ]);
+  const setPosts = postsStore((state) => state.setPosts);
   const [like, toggleLike] = useState(false);
+
+  useEffect(() => {
+    getAllProducts();
+    setPosts();
+  });
 
   useEffect(() => {
     filterSelectedProduct(post.productLink.split("/").pop()!);
@@ -116,7 +124,7 @@ const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
           <img src={UserPlaceholderImage} alt="user profile image" />
           <p>{post.postedBy}</p>
         </div>
-        <MdMoreHoriz size={24} />
+        <Icon.MoreHoriz $secondary $ghosted $curved />
       </PostHeadSection>
       <img
         width="100%"
@@ -126,17 +134,22 @@ const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
       <PostInteraction>
         <div>
           <div onClick={() => toggleLike((bool) => !bool)}>
-            {like ? <FaHeart size={24} /> : <FaRegHeart size={24} />}
+            {like ? (
+              <Icon.HeartFilled $ghosted $highlight />
+            ) : (
+              <Icon.Heart $ghosted $highlight />
+            )}
           </div>
           <p>0 likes...</p>
         </div>
-        <MdOutlineShare size={24} />
+        <Icon.Share $secondary $ghosted $highlight />
       </PostInteraction>
       <PostCaption>{post.caption}</PostCaption>
+      <Divider />
       <ProductSectionHeader>Tagged Products :-</ProductSectionHeader>
       <ProductSection>
         <img
-          src={selectedProduct?.colors[0].images[0]}
+          src={selectedProduct?.colors[0]?.images[0]}
           alt={`${selectedProduct?.name} preview image`}
         />
         <div className="details">
