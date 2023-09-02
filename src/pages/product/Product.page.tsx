@@ -17,12 +17,12 @@ import {
   ImageContainer,
 } from "./Product.styles";
 import StarsRating from "../../components/stars-rating/StarsRating.component";
-import { cartStore } from "../../store/cart.store";
-import { ProductDataTypes, productsStore } from "../../store/products.store";
+import { cartStore } from "../../context/cart.store";
+import { ProductDataTypes, productsStore } from "../../context/products.store";
 import { productIndexRoute } from "./Product.route";
-import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { UserPostTypes, postsStore } from "../../context/posts.store";
 import { useAtom } from "jotai";
-import { postModalAtom } from "../../store/atoms";
+import { postModalAtom } from "../../context/atoms";
 import UserPost from "../../components/user-post/UserPost.component";
 import { Button, IconButton } from "../../components/_ui/button/Button.styles";
 
@@ -81,6 +81,7 @@ const Product = () => {
     let cartItem = cartItems.filter(
       (item) => item.id === selectedProduct.id
     )[0];
+    console.log({ cartItem });
     let selectedClothColor = selectedProduct?.colors?.filter(
       (color) => color?.name === cartItem?.color
     )[0];

@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 
 export const FormContainer = styled.form`
   margin: 1rem auto;
-  width: min(calc(100vw - 1rem), calc(425px - 1rem));
+  width: min(calc(100vw - 1rem), calc(380px - 1rem));
   display: flex;
   flex-direction: column;
   justify-content: center;

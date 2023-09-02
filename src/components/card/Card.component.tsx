@@ -2,7 +2,7 @@ import { Link } from "@tanstack/router";
 
 import { productRoute } from "../../pages/product/Product.route";
 import { CardContainer, CardInfo, Image, ImageContainer } from "./Card.styles";
-import { ProductDataTypes } from "../../store/products.store";
+import { ProductDataTypes } from "../../context/products.store";
 
 type CardProps = {
   productInfo: ProductDataTypes;

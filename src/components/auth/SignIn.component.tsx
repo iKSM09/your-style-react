@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
 import { userSignIn } from "../../utils/firebase/auth.firebase";
 
@@ -10,20 +9,7 @@ import { MdClose, MdLogin } from "react-icons/md";
 import Input from "../_ui/form/Input.component";
 import Form from "../_ui/form/Form.component";
 import { Button, IconButton } from "../_ui/button/Button.styles";
-
-const schema = z.object({
-  email: z
-    .string()
-    .nonempty("Email is required")
-    .email("Not a valid Email id."),
-  password: z
-    .string()
-    .nonempty("Password is required")
-    .min(6, "Password must be greater than 6 characters.")
-    .max(30, "Password must be lesser than 30 characters."),
-});
-
-type FormDataType = z.infer<typeof schema>;
+import { ExistingUser, ExistingUserType } from "../../context/atoms";
 
 type RegisterProps = {
   isNewUser: () => void;
@@ -33,20 +19,21 @@ type RegisterProps = {
 const SignIn = ({ isNewUser, onRequestClose }: RegisterProps) => {
   const currentUser = useCurrentUser();
 
-  const { register, handleSubmit, formState, reset } = useForm<FormDataType>({
-    mode: "onBlur",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    resolver: zodResolver(schema),
-  });
+  const { register, handleSubmit, formState, reset } =
+    useForm<ExistingUserType>({
+      mode: "onBlur",
+      defaultValues: {
+        email: "",
+        password: "",
+      },
+      resolver: zodResolver(ExistingUser),
+    });
 
   const { errors, isDirty, isSubmitting } = formState;
 
-  const onSubmitSuccess = async (data: FormDataType) => {
+  const onSubmitSuccess = async (data: ExistingUserType) => {
     try {
-      const { user } = await userSignIn(data.email, data.password);
+      await userSignIn(data.email, data.password);
       reset();
       onRequestClose?.();
     } catch (error) {
@@ -54,8 +41,8 @@ const SignIn = ({ isNewUser, onRequestClose }: RegisterProps) => {
     }
   };
 
-  const onSubmitError = (errors: FieldErrors<FormDataType>) => {
-    console.log(errors);
+  const onSubmitError = (errors: FieldErrors<ExistingUserType>) => {
+    console.error(errors);
   };
 
   return currentUser ? (

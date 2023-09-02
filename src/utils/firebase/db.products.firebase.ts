@@ -1,5 +1,5 @@
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { ProductDataTypes } from "../../store/products.store";
+import { ProductDataTypes } from "../../context/products.store";
 import { db } from "./db.firebase";
 
 const path = "products";

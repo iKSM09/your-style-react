@@ -9,7 +9,7 @@ import { rootRoute } from "../../router";
 import Dropdown from "../../components/dropdown/Dropdown.component";
 
 import { useEffect } from "react";
-import { productsStore } from "../../store/products.store";
+import { productsStore } from "../../context/products.store";
 
 const Home = () => {
   const params = useParams();

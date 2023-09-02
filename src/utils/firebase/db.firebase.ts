@@ -6,12 +6,17 @@ import {
   collection,
   getDocs,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { firebaseApp } from ".";
-import { UserPostTypes } from "../../store/posts.store";
+import { UserPostTypes } from "../../context/posts.store";
+import { ProductDataTypes } from "../../context/products.store";
+import { UserSchemaType } from "../../context/atoms";
+import { auth, updateUserProfile } from "./auth.firebase";
 
 export const db = getFirestore(firebaseApp);
+const path = "users";
 
 // Get all Collection Docs
 export const getCollectionDocsFor = async (collectionID: string) => {
@@ -53,6 +58,31 @@ export const createNewUserDoc = async (user: User, vendor: boolean) => {
       if (error instanceof Error)
         console.error(`error creating the user: ${error.message}`);
       else console.error("Unexpected error", error);
+    }
+  }
+};
+
+// Edit User collection in FireStore
+export const editUserDoc = async (fieldsToUpdate: Partial<UserSchemaType>) => {
+  const user = auth.currentUser;
+
+  if (!user) return;
+  const userDocRef = doc(db, path, user.uid);
+  const userSnapshot = await getDoc(userDocRef);
+
+  // if user doc exist
+  if (userSnapshot.exists()) {
+    try {
+      await updateDoc(userDocRef, fieldsToUpdate);
+
+      if (fieldsToUpdate.displayName || fieldsToUpdate.photoURL) {
+        await updateUserProfile(
+          fieldsToUpdate.displayName,
+          fieldsToUpdate.photoURL
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 };

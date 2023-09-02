@@ -1,15 +1,18 @@
 import { styled } from "styled-components";
 import { deviceWidth } from "../../styles/devices.breakpoints";
-import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { UserPostTypes, postsStore } from "../../context/posts.store";
 import { useEffect, useState } from "react";
 import useCurrentUser from "../../hooks/useAuthStateChange";
 import AuthState from "../../components/auth/AuthState.component";
 import UserPlaceholderImage from "../../assets/user-placeholder-image.jpg";
 import { useAtom } from "jotai";
-import { postModalAtom } from "../../store/atoms";
+import { postModalAtom } from "../../context/atoms";
 import UserPost from "../../components/user-post/UserPost.component";
 import { userSignOut } from "../../utils/firebase/auth.firebase";
 import { Button } from "../../components/_ui/button/Button.styles";
+import Dialog from "../../components/dialog/Dialog.component";
+import { Divider } from "../product/Product.styles";
+import EditProfileDialog from "../../components/edit-profile-dialog/EditProfileDialog";
 
 export const ImageGallery = styled.section`
   width: 100%;
@@ -78,10 +81,11 @@ export const ProfileDetails = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  div {
+  div.info {
     display: flex;
     flex-direction: column;
     align-items: start;
+    text-align: start;
 
     h4 {
       margin-block: 8px;
@@ -91,9 +95,17 @@ export const ProfileDetails = styled.div`
   }
 `;
 
+export const ProfileDetailsButtons = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1rem;
+`;
+
 const Feed = () => {
   const user = useCurrentUser();
   const [modalState, setModalState] = useAtom(postModalAtom);
+  const [dialogState, setDialogState] = useState(false);
   const [allPosts, setPosts] = postsStore((state) => [
     state.allPosts,
     state.setPosts,
@@ -119,23 +131,36 @@ const Feed = () => {
   return (
     <>
       {modalState && <UserPost post={selectedPost!} closeOnOutsideClick />}
+      <EditProfileDialog
+        dialogState={dialogState}
+        closeModal={() => setDialogState(false)}
+      />
+
       {user ? (
         <div>
           <ProfileContainer>
             <ProfilePicture>
-              <img src={UserPlaceholderImage} alt="user profile image" />
+              <img
+                src={user.photoURL ?? UserPlaceholderImage}
+                alt="user profile image"
+              />
             </ProfilePicture>
             <ProfileDetails>
-              <div>
-                <small>{user.email}</small>
+              <div className="info">
+                <small>{user.username ?? user.email}</small>
                 <h4>{user.displayName}</h4>
-                <p>User bio...</p>
+                <p>{user.bio}</p>
               </div>
-              {user && (
-                <Button $outlined onClick={userSignOut}>
-                  Logout
+              <ProfileDetailsButtons>
+                <Button $outlined $curved onClick={() => setDialogState(true)}>
+                  Edit Profile
                 </Button>
-              )}
+                {user && (
+                  <Button $secondary $outlined $curved onClick={userSignOut}>
+                    Logout
+                  </Button>
+                )}
+              </ProfileDetailsButtons>
             </ProfileDetails>
           </ProfileContainer>
 

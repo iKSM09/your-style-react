@@ -3,7 +3,7 @@ import useCurrentUser from "../../hooks/useAuthStateChange";
 import styled from "styled-components";
 import { deviceWidth } from "../../styles/devices.breakpoints";
 import { getAllPaths } from "../add-product/AddProduct.page";
-import { productsStore } from "../../store/products.store";
+import { productsStore } from "../../context/products.store";
 import { productRoute } from "../product/Product.route";
 import { useEffect } from "react";
 import { MdOutlineLibraryAdd } from "react-icons/md";

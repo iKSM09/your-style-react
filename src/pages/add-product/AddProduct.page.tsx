@@ -1,4 +1,9 @@
-import { FieldErrors, useFieldArray, useForm } from "react-hook-form";
+import {
+  FieldError,
+  FieldErrors,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styled from "styled-components";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -9,7 +14,7 @@ import useCurrentUser from "../../hooks/useAuthStateChange";
 import {
   ProductDataTypes,
   productDataSchema,
-} from "../../store/products.store";
+} from "../../context/products.store";
 import Form from "../../components/_ui/form/Form.component";
 import Input from "../../components/_ui/form/Input.component";
 import { Button } from "../../components/_ui/button/Button.styles";
@@ -471,7 +476,7 @@ const AddProduct = () => {
                       handleImagesAsFile(e, index)!
                     ),
                 })}
-                error={errors?.colors?.[index]?.images}
+                error={errors?.colors?.[index]?.images as FieldError}
                 placeholder="Select images"
               />
             </div>

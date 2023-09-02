@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/router";
 import { styled } from "styled-components";
-import { ProductDataTypes, productsStore } from "../../store/products.store";
+import { ProductDataTypes, productsStore } from "../../context/products.store";
 import { deviceWidth } from "../../styles/devices.breakpoints";
-import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { UserPostTypes, postsStore } from "../../context/posts.store";
 import { useEffect, useState } from "react";
 import { MdShoppingBag } from "react-icons/md";
 import UserPost from "../../components/user-post/UserPost.component";
 import { useAtom } from "jotai";
-import { postModalAtom } from "../../store/atoms";
+import { postModalAtom } from "../../context/atoms";
 import { productRoute } from "../product/Product.route";
 import SearchBar from "../../components/search-bar/SearchBar.component";
 

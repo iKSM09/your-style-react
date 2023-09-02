@@ -7,7 +7,7 @@ import Dropdown from "../../components/dropdown/Dropdown.component";
 import FilterMenu from "../../components/filter-menu/FilterMenu.component";
 import { useEffect, useState } from "react";
 import Card from "../../components/card/Card.component";
-import { ProductDataTypes, productsStore } from "../../store/products.store";
+import { ProductDataTypes, productsStore } from "../../context/products.store";
 import { productListRoute } from "./ProductList.route";
 
 const ProductList = () => {

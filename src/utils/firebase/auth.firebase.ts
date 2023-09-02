@@ -22,6 +22,21 @@ export const onAuthStateChangedListner = (callback: NextOrObserver<User>) =>
 // Sign Out
 export const userSignOut = () => signOut(auth);
 
+export const updateUserProfile = async (
+  displayName?: string,
+  photoURL?: string
+  // emailVerified?: boolean
+) => {
+  const user = auth.currentUser;
+
+  if (user !== null)
+    await updateProfile(user, {
+      displayName: displayName ?? user.displayName,
+      photoURL: photoURL ?? user.photoURL,
+      // emailVerified: emailVerified ?? user.emailVerified,
+    });
+};
+
 // Register
 export const userRegister = async (
   name: string,

@@ -1,6 +1,5 @@
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
 import { FirebaseError } from "firebase/app";
 import { userRegister } from "../../utils/firebase/auth.firebase";
@@ -10,27 +9,7 @@ import Input from "../_ui/form/Input.component";
 import Form from "../_ui/form/Form.component";
 import Icon from "../_ui/button/Icon.components";
 import { Button } from "../_ui/button/Button.styles";
-
-const schema = z
-  .object({
-    name: z.string().nonempty("Name is Required."),
-    email: z
-      .string()
-      .nonempty("Email is required")
-      .email("Not a valid Email id."),
-    password: z
-      .string()
-      .nonempty("Password is required")
-      .min(6, "Password must be greater than 6 characters.")
-      .max(30, "Password must be lesser than 30 characters."),
-    confirmPassword: z.string().nonempty("Password is required."),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Paswords don't match.",
-    path: ["confirmPassword"],
-  });
-
-export type FormDataType = z.infer<typeof schema>;
+import { NewUser, NewUserType } from "../../context/atoms";
 
 type RegisterProps = {
   isNewUser: () => void;
@@ -41,22 +20,26 @@ type RegisterProps = {
 const Register = ({ isNewUser, isVendor, onRequestClose }: RegisterProps) => {
   const currentUser = useCurrentUser();
 
-  const { register, handleSubmit, formState, reset } = useForm<FormDataType>({
+  const { register, handleSubmit, formState, reset } = useForm<NewUserType>({
     mode: "onBlur",
     defaultValues: {
-      name: "",
+      displayName: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(NewUser),
   });
 
   const { errors, isDirty, isSubmitting } = formState;
 
-  const onSubmitSuccess = async ({ name, email, password }: FormDataType) => {
+  const onSubmitSuccess = async ({
+    displayName,
+    email,
+    password,
+  }: NewUserType) => {
     try {
-      await userRegister(name, email, password, isVendor);
+      await userRegister(displayName, email, password, isVendor);
       reset();
       onRequestClose?.();
     } catch (error) {
@@ -68,8 +51,8 @@ const Register = ({ isNewUser, isVendor, onRequestClose }: RegisterProps) => {
     }
   };
 
-  const onSubmitError = (errors: FieldErrors<FormDataType>) => {
-    console.log(errors);
+  const onSubmitError = (errors: FieldErrors<NewUserType>) => {
+    console.error(errors);
   };
 
   return currentUser ? (
@@ -91,10 +74,10 @@ const Register = ({ isNewUser, isVendor, onRequestClose }: RegisterProps) => {
       <Input
         label="Name:"
         type="text"
-        fieldName="name"
-        formRegister={register("name")}
+        fieldName="displayName"
+        formRegister={register("displayName")}
         placeholder="Fullname"
-        error={errors.name}
+        error={errors.displayName}
       />
 
       <Input

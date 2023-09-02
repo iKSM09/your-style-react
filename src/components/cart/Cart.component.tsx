@@ -4,10 +4,11 @@ import styled from "styled-components";
 
 import Sidebar from "../sidebar/Sidebar.component";
 
-import { cartStore } from "../../store/cart.store";
+import { cartStore } from "../../context/cart.store";
 import { useEffect, useState } from "react";
 import Icon from "../_ui/button/Icon.components";
 import { Button } from "../_ui/button/Button.styles";
+import PaymentForm from "../payment-form/PaymentForm.component";
 
 export const CartContainer = styled.div<{ $open: boolean }>`
   position: fixed;
@@ -246,6 +247,7 @@ const Cart = ({ sidebar, closeSidebar }: CartProps) => {
             </div>
           </CartItem>
         ))}
+        <PaymentForm amount={cartTotalPrice} />
       </CartItems>
 
       <CartFooter>

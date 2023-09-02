@@ -8,7 +8,7 @@ import {
   FilterSection,
 } from "./FilterMenu.styles";
 import { ChangeEvent, useEffect, useState } from "react";
-import { productsStore } from "../../store/products.store";
+import { productsStore } from "../../context/products.store";
 import Icon from "../_ui/button/Icon.components";
 import { Divider } from "../footer/Footer.styles";
 

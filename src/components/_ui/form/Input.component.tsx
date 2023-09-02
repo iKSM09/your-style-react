@@ -55,6 +55,8 @@ type InputProps = {
   formRegister: any;
   placeholder: string;
   error: FieldError | undefined;
+  multiple?: boolean;
+  accept?: string;
 };
 
 const Input = ({
@@ -64,6 +66,8 @@ const Input = ({
   formRegister,
   placeholder,
   error,
+  multiple,
+  accept,
 }: InputProps) => {
   return (
     <InputContainer>
@@ -82,6 +86,8 @@ const Input = ({
         <div>
           <input
             type={type}
+            multiple={type === "file" && multiple}
+            accept={type === "file" && accept}
             {...formRegister}
             className={error && "error"}
             placeholder={placeholder}

@@ -1,15 +1,16 @@
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { postModalAtom } from "../../store/atoms";
-import { UserPostTypes, postsStore } from "../../store/posts.store";
+import { postModalAtom } from "../../context/atoms";
+import { UserPostTypes, postsStore } from "../../context/posts.store";
 import { Link } from "@tanstack/router";
-import { productsStore } from "../../store/products.store";
+import { productsStore } from "../../context/products.store";
 import { productRoute } from "../../pages/product/Product.route";
 import Dialog from "../dialog/Dialog.component";
 import UserPlaceholderImage from "../../assets/user-placeholder-image.jpg";
 import Icon from "../_ui/button/Icon.components";
 import { Divider } from "../footer/Footer.styles";
+import useCurrentUser from "../../hooks/useAuthStateChange";
 
 export const PostHeadSection = styled.section`
   margin-bottom: 12px;
@@ -94,6 +95,7 @@ type UserPostProps = {
 };
 
 const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
+  const user = useCurrentUser();
   const [modalState, setModalState] = useAtom(postModalAtom);
   const [getAllProducts, selectedProduct, filterSelectedProduct] =
     productsStore((state) => [
@@ -121,7 +123,10 @@ const UserPost = ({ post, closeOnOutsideClick }: UserPostProps) => {
     >
       <PostHeadSection>
         <div>
-          <img src={UserPlaceholderImage} alt="user profile image" />
+          <img
+            src={user?.photoURL ?? UserPlaceholderImage}
+            alt="user profile image"
+          />
           <p>{post.postedBy}</p>
         </div>
         <Icon.MoreHoriz $secondary $ghosted $curved />

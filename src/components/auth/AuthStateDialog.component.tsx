@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import Dialog from "../dialog/Dialog.component";
 import AuthState from "./AuthState.component";
 
-import { authModalAtom } from "../../store/atoms";
+import { authModalAtom } from "../../context/atoms";
 
 type UserAuthProps = {
   children?: ReactNode;

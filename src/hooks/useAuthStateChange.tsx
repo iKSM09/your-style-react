@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import { User } from "firebase/auth";
 import { useAtom } from "jotai";
 
 import { onAuthStateChangedListner } from "../utils/firebase/auth.firebase";
 import { getUserData } from "../utils/firebase/db.firebase";
-import { userAtom } from "../store/atoms";
+import { userAtom } from "../context/atoms";
 
 const useCurrentUser = () => {
   const [currentUser, setCurrentUser] = useAtom(userAtom);
@@ -14,6 +13,7 @@ const useCurrentUser = () => {
       if (user) {
         const userData = await getUserData(user);
         if (userData) setCurrentUser(userData);
+        console.log("USER:", userData);
       } else {
         setCurrentUser(null);
       }

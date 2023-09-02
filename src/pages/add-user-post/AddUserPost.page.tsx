@@ -6,7 +6,7 @@ import { MdAddCircleOutline } from "react-icons/md";
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createNewUserPostDoc } from "../../utils/firebase/db.firebase";
-import { UserPostTypes, userPostSchema } from "../../store/posts.store";
+import { UserPostTypes, userPostSchema } from "../../context/posts.store";
 import AuthState from "../../components/auth/AuthState.component";
 
 const AddUserPost = () => {
@@ -96,9 +96,7 @@ const AddUserPost = () => {
 
           <div>
             <div
-              onClick={() => {
-                trigger("image");
-              }}
+              onClick={() => trigger("image")}
               style={{
                 marginInline: "auto",
                 width: "320px",

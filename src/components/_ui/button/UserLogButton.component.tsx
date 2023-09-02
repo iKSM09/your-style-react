@@ -3,7 +3,7 @@ import { MdLogin, MdLogout } from "react-icons/md";
 
 import { IconButton } from "./Button.styles";
 import useCurrentUser from "../../../hooks/useAuthStateChange";
-import { authModalAtom } from "../../../store/atoms";
+import { authModalAtom } from "../../../context/atoms";
 import { userSignOut } from "../../../utils/firebase/auth.firebase";
 
 type UserLogButtonProps = {

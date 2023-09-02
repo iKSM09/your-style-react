@@ -15,11 +15,20 @@ The site architecture is as follows:
 
 The following features are implemented in this project:
 
-- **User registration and login:** Users can register for an account and login to their account.
-- **Product browsing:** Users can browse through the website's catalog of products.
-- **Product details:** Users can view detailed information about a product, such as its price, description, and reviews.
-- **Shopping cart:** Users can add products to their shopping cart.
-- **Checkout:** Users can checkout and complete their purchase.
+- **User / Customer**
+  - [x] User Authentication
+  - [ ] Product browsing
+  - [ ] Buy Product (Size and variant options)
+  - [ ] Reviews and Rating
+  - [ ] Wishlist
+  - [ ] Post related to product (Add, edit and delete)
+    - [ ] Like, share and comment on Post
+  - [ ] Edit user details and settings
+- **Vendor / Seller**
+  - [x] Vendor Authentication
+  - [ ] Add Products (edit and delete also)
+  - [ ] Account analytics
+  - [ ] Edit vendor details and settings
 
 ## Technologies Used
 
