@@ -28,6 +28,12 @@ export const productDataSchema = z.object({
     .nonempty(
       "Category is required. It helps people to discover your product easily."
     ),
+  // category: z
+  //   .array(z.string())
+  //   .length(3)
+  //   .nonempty(
+  //     "Category is required. It helps people to discover your product easily."
+  //   ),
   subCategory: z
     .string()
     .nonempty(
@@ -44,10 +50,12 @@ export const productDataSchema = z.object({
     .int()
     .positive({ message: "Please select an positive number." }),
   sizes: z.string().nonempty("Sizes are required."),
+  // sizes: z.array(z.string()).nonempty("Sizes are required."),
+  // variants: z.record(z.string().array().nonempty("Can't be empty.")),
   colors: z.array(
     z.object({
       name: z.string().nonempty(),
-      images: z.string().array(),
+      images: z.array(z.string()),
       // .refine(
       //   (files) => files?.[0]?.size <= MAX_FILE_SIZE,
       //   "Max image size is 5MB."
@@ -64,8 +72,10 @@ export type ProductDataTypes = z.infer<typeof productDataSchema>;
 
 type StateAction = {
   products: ProductDataTypes[];
+  filteredProducts: ProductDataTypes[];
 
   getAllProducts: () => void;
+  filterProductsBy: (filter: string) => ProductDataTypes[];
 };
 
 type State = {
@@ -89,6 +99,7 @@ type Action = {
   filterProductsBySubCategory: (subCategory: string) => void;
   // filterProducts: (filters: { [key: string]: boolean }) => void;
   setProductFilters: (filters: string[]) => void;
+  filteredProduct: (id: string) => ProductDataTypes;
 };
 
 type PersistTypes = (
@@ -111,6 +122,7 @@ export const productsStore = create<State & Action>(
             "products"
           )) as ProductDataTypes[],
         }),
+
       addNewProduct: async (data, images) => {
         try {
           data.colors.map((color, index) => (color.images = images[index]));
@@ -120,6 +132,7 @@ export const productsStore = create<State & Action>(
           console.error("addNewProduct:", error);
         }
       },
+
       editProduct: async (id, fieldsToUpdate) => {
         try {
           await editProductDoc(id, fieldsToUpdate);
@@ -127,6 +140,7 @@ export const productsStore = create<State & Action>(
           console.error("editProduct:", error);
         }
       },
+
       deleteProduct: async (id) => {
         try {
           await deleteProductDoc(id);
@@ -134,6 +148,7 @@ export const productsStore = create<State & Action>(
           console.error("deleteProduct:", error);
         }
       },
+
       filterProductsByCategrory: (category) => {
         if (get().products.length === 0) get().getAllProducts();
 
@@ -143,6 +158,7 @@ export const productsStore = create<State & Action>(
           ),
         }));
       },
+
       filterProductsBySubCategory: (subCategory) => {
         if (get().products.length === 0) get().getAllProducts();
 
@@ -152,19 +168,21 @@ export const productsStore = create<State & Action>(
           ),
         }));
       },
+
       filterSelectedProduct: (id) => {
         if (get().products.length === 0) get().getAllProducts();
 
-        set(({ products }) => {
-          const filteredProduct = products.filter(
-            (product) => product.id === id
-          )[0];
+        set(({ products }) => ({
+          selectedProduct: products.filter((product) => product.id === id)[0],
+        }));
 
-          return {
-            selectedProduct: { ...filteredProduct },
-          };
-        });
+        // console.log(get().selectedProduct);
+        // return get().selectedProduct
       },
+
+      filteredProduct: (id) =>
+        get().products.filter((product) => product.id === id)[0],
+
       setProductFilters: (filters) =>
         set({
           productFilters: filters,

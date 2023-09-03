@@ -40,13 +40,11 @@ const Product = () => {
     }
   );
 
-  const [products, selectedProduct, getAllProducts, filterSelectedProduct] =
-    productsStore((state) => [
-      state.products,
-      state.selectedProduct,
-      state.getAllProducts,
-      state.filterSelectedProduct,
-    ]);
+  const [products, getAllProducts, filteredProduct] = productsStore((state) => [
+    state.products,
+    state.getAllProducts,
+    state.filteredProduct,
+  ]);
 
   const [allPosts, setPosts] = postsStore((state) => [
     state.allPosts,
@@ -58,7 +56,11 @@ const Product = () => {
     state.addToCart,
   ]);
 
+  const thisProduct = filteredProduct(params.productId);
+
   console.log({ products });
+  console.log({ cartItems });
+  console.log({ thisProduct });
 
   useEffect(() => {
     if (products.length === 0) getAllProducts();
@@ -74,36 +76,33 @@ const Product = () => {
 
   useEffect(() => {
     if (products.length === 0) getAllProducts();
-    filterSelectedProduct(params.productId);
   }, [params.productId]);
 
   useEffect(() => {
-    let cartItem = cartItems.filter(
-      (item) => item.id === selectedProduct.id
-    )[0];
+    let cartItem = cartItems.filter((item) => item.id === thisProduct.id)[0];
     console.log({ cartItem });
-    let selectedClothColor = selectedProduct?.colors?.filter(
+    let selectedClothColor = thisProduct?.colors?.filter(
       (color) => color?.name === cartItem?.color
     )[0];
 
     setSelectedSize(
       cartItem === undefined
-        ? selectedProduct?.sizes?.split(", ")[0]
+        ? thisProduct?.sizes?.split(", ")[0]
         : cartItem.size
     );
     setSelectedColor(
-      cartItem === undefined ? selectedProduct?.colors[0].name : cartItem.color
+      cartItem === undefined ? thisProduct?.colors[0].name : cartItem.color
     );
     setClothColor(
-      cartItem === undefined ? selectedProduct?.colors[0] : selectedClothColor
+      cartItem === undefined ? thisProduct?.colors[0] : selectedClothColor
     );
     setToCart(
-      cartItems.filter((item) => item.id === selectedProduct?.id).length === 1
+      cartItems.filter((item) => item.id === thisProduct?.id).length === 1
     );
-  }, [selectedProduct, cartItems]);
+  }, [thisProduct, cartItems]);
 
   const handleChangeColor = (selectedColor: string) => {
-    const filtered = selectedProduct?.colors.filter(
+    const filtered = thisProduct?.colors.filter(
       (color) => color.name === selectedColor
     )[0];
 
@@ -111,22 +110,22 @@ const Product = () => {
     setSelectedColor(selectedColor);
   };
 
-  const handleAddToCart = (selectedProduct: ProductDataTypes) => {
-    const selectedImage = selectedProduct?.colors.filter(
+  const handleAddToCart = (thisProduct: ProductDataTypes) => {
+    const selectedImage = thisProduct?.colors.filter(
       (color) => color.name === selectedColor
     )[0].images[0];
 
     addToCart({
-      id: selectedProduct.id,
-      category: selectedProduct.category,
-      name: selectedProduct.name,
-      postedBy: selectedProduct.postedBy,
+      id: thisProduct.id,
+      category: thisProduct.category,
+      name: thisProduct.name,
+      postedBy: thisProduct.postedBy,
       color: selectedColor,
       image: selectedImage,
       size: selectedSize,
-      price: selectedProduct.price,
+      price: thisProduct.price,
       quantity: 1,
-      totalPrice: selectedProduct?.price,
+      totalPrice: thisProduct?.price,
     });
     setToCart(true);
   };
@@ -140,7 +139,7 @@ const Product = () => {
     <div style={{ textAlign: "start" }}>
       <p
         style={{ padding: "2rem 1rem 0.5rem" }}
-      >{`${selectedProduct?.category}/${selectedProduct?.name}`}</p>
+      >{`${thisProduct?.category}/${thisProduct?.name}`}</p>
       <ProductContainer>
         <ImagesSection>
           {clothColor?.images?.map((img, idx) => (
@@ -148,10 +147,10 @@ const Product = () => {
           ))}
         </ImagesSection>
         <DetailsSection>
-          <h2>{selectedProduct?.category?.toUpperCase().split("/")[2]}</h2>
-          <h1>{selectedProduct?.name}</h1>
-          <small>By {selectedProduct?.postedBy}</small>
-          <p>{selectedProduct?.description}</p>
+          <h2>{thisProduct?.category?.toUpperCase().split("/")[2]}</h2>
+          <h1>{thisProduct?.name}</h1>
+          <small>By {thisProduct?.postedBy}</small>
+          <p>{thisProduct?.description}</p>
           <div
             style={{
               marginBlock: "16px",
@@ -195,7 +194,7 @@ const Product = () => {
                 color: "#7e7e7e",
               }}
             >
-              MRP ₹{selectedProduct?.price}
+              MRP ₹{thisProduct?.price}
             </p>
             <small style={{ margin: "0", color: "#0cc258" }}>
               ({productData.discount})
@@ -212,7 +211,7 @@ const Product = () => {
                 gap: "12px",
               }}
             >
-              {selectedProduct?.sizes
+              {thisProduct?.sizes
                 ?.toUpperCase()
                 .split(", ")
                 .map((size: string) =>
@@ -242,7 +241,7 @@ const Product = () => {
                 gap: "12px",
               }}
             >
-              {selectedProduct?.colors?.map(({ name, images }) => (
+              {thisProduct?.colors?.map(({ name, images }) => (
                 <Image
                   title={name}
                   key={name}
@@ -270,7 +269,7 @@ const Product = () => {
               <IconButton
                 $curved
                 style={{ maxWidth: "100%" }}
-                onClick={() => handleAddToCart(selectedProduct!)}
+                onClick={() => handleAddToCart(thisProduct!)}
               >
                 <MdShoppingBag /> ADD TO CART
               </IconButton>

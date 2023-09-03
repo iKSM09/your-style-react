@@ -87,7 +87,7 @@ const Input = ({
           <input
             type={type}
             multiple={type === "file" && multiple}
-            accept={type === "file" && accept}
+            accept={type === "file" ? accept : null}
             {...formRegister}
             className={error && "error"}
             placeholder={placeholder}
