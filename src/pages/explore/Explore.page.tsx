@@ -17,7 +17,7 @@ export const ImageGallery = styled.section`
   margin: 0 auto;
   padding: 8px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  grid-template-columns: repeat(3, minmax(calc((100% - 16px) / 3), 1fr));
   grid-auto-flow: dense;
   grid-gap: 8px;
 

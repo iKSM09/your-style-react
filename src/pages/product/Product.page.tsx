@@ -80,7 +80,6 @@ const Product = () => {
 
   useEffect(() => {
     let cartItem = cartItems.filter((item) => item.id === thisProduct.id)[0];
-    console.log({ cartItem });
     let selectedClothColor = thisProduct?.colors?.filter(
       (color) => color?.name === cartItem?.color
     )[0];
